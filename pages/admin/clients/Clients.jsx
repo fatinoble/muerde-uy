@@ -1,4 +1,4 @@
-import Layout from '../../../components/AdminLayout';
+import Layout from '../../../src/components/AdminLayout';
 
 const Clients = () => {
 
