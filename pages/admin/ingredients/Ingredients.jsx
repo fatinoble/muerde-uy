@@ -1,8 +1,9 @@
+import Layout from '../../../components/AdminLayout';
 import axios from 'axios';
 
 import { useEffect, useState } from 'react';
 
-const Ingredient = () => {
+const Ingredients = () => {
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
@@ -20,6 +21,7 @@ const Ingredient = () => {
   };
 
   return (
+    <Layout>
     <div>
       <h1>Ingredientes</h1>
       <ul>
@@ -30,7 +32,8 @@ const Ingredient = () => {
         ))}
       </ul>
     </div>
+     </Layout>
   );
 };
 
-export default Ingredient;
+export default Ingredients;
