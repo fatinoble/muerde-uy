@@ -128,6 +128,7 @@ const Products = () => {
               open={open}
               handleClose={handleClose}
               data={selectedProduct}
+              title={"Detalle del producto"}
             />
             <StyledButton variant="outlined" onClick={() => setEditModalOpen(true)}>Editar producto</StyledButton>
             <StyledButton variant="outlined" onClick={() => setDeleteModalOpen(true)}>Eliminar producto</StyledButton>

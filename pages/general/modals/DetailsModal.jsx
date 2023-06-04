@@ -1,42 +1,40 @@
 import { Modal, Box, Typography, Button } from '@mui/material';
-import { styled } from '@mui/system';
 
-const ModalContent = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '80%',
-  maxWidth: '500px',
-  bgcolor: 'background.paper',
-  borderRadius: '10px',
-  padding: theme.spacing(2, 4, 3),
-  '& .MuiTypography-root': {
-    marginBottom: theme.spacing(2),
-  },
-}));
-
-const CloseButton = styled(Button)(({ theme }) => ({
-  display: 'block',
-  marginTop: theme.spacing(2),
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  backgroundColor: '#EDCBA2', // Cambia a tu color de elección
-  color: '#7B3E19', // Cambia a tu color de elección
-  '&:hover': {
-    backgroundColor: '#CCA870', // Cambia a tu color de elección
-  },
-}));
-
-function DetailsModal({ open, handleClose, data }) {
+const ProductModal = ({ open, handleClose, data, title }) => {
   return (
     <Modal
       open={open}
       onClose={handleClose}
     >
-      <ModalContent>
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '80%',
+          maxWidth: '500px',
+          bgcolor: 'background.paper',
+          borderRadius: '10px',
+          p: 3,
+          '& .MuiTypography-root': {
+            mb: 2,
+          },
+        }}
+      >
+        <Typography
+          variant="h5"
+          align="center"
+          sx={{
+            fontWeight: 'bold',
+            color: '#f1e5d5',
+            marginBottom: 2,
+          }}
+        >
+          {title}
+        </Typography>
         {data && Object.keys(data).map(key => {
-          if (key !== 'price') { // Hasta solucionar el problema del precio en el back
+          if (key !== 'price') {
             return (
               <Typography variant="body1" key={key}>
                 <strong>{key}: </strong>
@@ -44,14 +42,27 @@ function DetailsModal({ open, handleClose, data }) {
               </Typography>
             );
           }
-          return null; // Asegúrate de devolver null en caso de que la clave sea 'price'
+          return null;
         })}
-        <CloseButton onClick={handleClose}>
+        <Button
+          sx={{
+            display: 'block',
+            mt: 2,
+            ml: 'auto',
+            mr: 'auto',
+            backgroundColor: '#EDCBA2',
+            color: '#7B3E19',
+            '&:hover': {
+              backgroundColor: '#CCA870',
+            },
+          }}
+          onClick={handleClose}
+        >
           Cerrar
-        </CloseButton>
-      </ModalContent>
+        </Button>
+      </Box>
     </Modal>
   );
 }
 
-export default DetailsModal;
+export default ProductModal;
