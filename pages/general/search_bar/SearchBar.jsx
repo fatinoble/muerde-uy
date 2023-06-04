@@ -20,15 +20,15 @@ const SearchBar = () => {
     const SearchBar = styled(TextField)(({ theme }) => ({
         marginBottom: theme.spacing(2), 
         marginTop: theme.spacing(2), 
-        borderRadius: '5px', // esquinas redondeadas
+        borderRadius: '5px',
         borderColor: 'black',
         backgroundColor: '#ffffff',
         color: 'black',
     }));
 
     const SearchButton = styled(Button)(({ theme }) => ({
-        borderRadius: '10px', // esquinas redondeadas
-        borderColor: 'black', // borde beige
+        borderRadius: '10px',
+        borderColor: 'black',
         color: 'black',
         '&:hover': {
             backgroundColor: 'beige',

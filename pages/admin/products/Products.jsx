@@ -4,7 +4,7 @@ import axios from 'axios';
 import SearchBar from '../../general/search_bar/SearchBar';
 import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
-
+import DetailsModal from '../../general/modals/DetailsModal';
 
 const Products = () => {
   const [products, setProducts] = useState({});
@@ -12,6 +12,8 @@ const Products = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [image, setImage] = useState(null);
+  const [open, setOpen] = useState(false); // Controla si el modal está abierto o no
+  const [selectedProduct, setSelectedProduct] = useState(null); // Para almacenar el producto seleccionado para mostrar en el modal
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -61,20 +63,29 @@ const Products = () => {
       .catch(error => console.error('Error:', error));
   }
 
+  const handleOpen = (product) => {
+    setSelectedProduct(product);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   if (loading) {
     return <p>Cargando productos...</p>;
   }
 
   const ProductPaper = styled(Paper)(({ theme }) => ({
-    borderRadius: '10px', // esquinas redondeadas
-    borderColor: 'brown', // borde marrón
+    borderRadius: '10px',
+    borderColor: 'brown',
     padding: theme.spacing(2),
     marginBottom: theme.spacing(2),
   }));
 
   const StyledButton = styled(Button)(({ theme }) => ({
-    borderRadius: '10px', // esquinas redondeadas
-    borderColor: 'beige', // borde beige
+    borderRadius: '10px',
+    borderColor: 'beige',
     backgroundColor: '#f1e5d5',
     color: 'black',
     '&:hover': {
@@ -84,11 +95,11 @@ const Products = () => {
 
   const InvertedButton = styled(Button)(({ theme }) => ({
     marginBottom: theme.spacing(2),
-    borderRadius: '10px', // esquinas redondeadas
-    backgroundColor: 'beige', // fondo beige
+    borderRadius: '10px',
+    backgroundColor: 'beige',
     backgroundColor: '#ffff',
     color: 'black',
-    borderColor: 'black', // borde negro
+    borderColor: 'black',
     '&:hover': {
       backgroundColor: 'f1e5d5',
     },
@@ -97,7 +108,7 @@ const Products = () => {
   return (
     <Layout>
       <Box display="flex" justifyContent="center" alignItems="center">
-        <SearchBar/>
+        <SearchBar />
         <InvertedButton variant="outlined">Nuevo producto</InvertedButton>
       </Box>
       {products.map((product) => (
@@ -110,7 +121,14 @@ const Products = () => {
             <span className="product-price">{product.price.amount}</span>
           </div>
           <div className="product-admin-actions-container">
-            <StyledButton variant="outlined">Ver detalles</StyledButton>
+            <StyledButton variant="outlined" onClick={() => handleOpen(product)}>
+              Ver detalles
+            </StyledButton>
+            <DetailsModal
+              open={open}
+              handleClose={handleClose}
+              data={selectedProduct}
+            />
             <StyledButton variant="outlined" onClick={() => setEditModalOpen(true)}>Editar producto</StyledButton>
             <StyledButton variant="outlined" onClick={() => setDeleteModalOpen(true)}>Eliminar producto</StyledButton>
             <Switch onChange={() => {/* Acción de desactivar/activar producto */ }} />
