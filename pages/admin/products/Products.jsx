@@ -29,6 +29,10 @@ const Products = () => {
   /* Los nuevos datos resultado de editar un producto*/
   const editProduct = (editedProduct) => {
     console.log("edited product ", editedProduct); // Añadir esta línea
+    // Convertir el precio al formato correcto hasta poder arreglar errro en backend
+    if(editedProduct.price && Array.isArray(editedProduct.price.d)) {
+      editedProduct.price = editedProduct.price.d[0];
+    }
     axios.put(`http://localhost:8000/product?id=${editedProduct.id_product}`, { product: editedProduct }) // en el controlador esperamos los dayos dentro de un objeto product
     .then(response => {
         console.log("response en edit product: ", response);
