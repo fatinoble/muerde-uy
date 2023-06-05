@@ -5,23 +5,17 @@ import SearchBar from '../../general/search_bar/SearchBar';
 import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
 import DetailsModal from '../../general/modals/DetailsModal';
+import EditModal from '../../general/modals/EditModal';
 
 const Products = () => {
   const [products, setProducts] = useState({});
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [productToEdit, setProductToEdit] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [image, setImage] = useState(null);
   const [open, setOpen] = useState(false); // Controla si el modal está abierto o no
   const [selectedProduct, setSelectedProduct] = useState(null); // Para almacenar el producto seleccionado para mostrar en el modal
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    price: '',
-    tags: '',
-    status: '',
-  });
 
+  /* Todos los productos a recorrer */
   useEffect(() => {
     fetch(`http://localhost:8000/product`)
       .then(response => response.json())
@@ -32,28 +26,30 @@ const Products = () => {
       });
   }, []);
 
-  const editProduct = () => {
-    axios.post(`http://localhost:8000/product/${id}`, formData)
-      .then(response => {
-        console.log(response);
-        setProducts(response.data);
+  /* Los nuevos datos resultado de editar un producto*/
+  const editProduct = (editedProduct) => {
+    console.log("edited product ", editedProduct); // Añadir esta línea
+    axios.put(`http://localhost:8000/product?id=${editedProduct.id_product}`, { product: editedProduct }) // en el controlador esperamos los dayos dentro de un objeto product
+    .then(response => {
+        console.log("response en edit product: ", response);
+        setProducts(prevProducts =>
+          prevProducts.map(product =>
+            product.id === editedProduct.id ? editedProduct : product
+          )
+        );
         setEditModalOpen(false); // Cerrar el modal después de editar
       })
       .catch(error => console.error('Error:', error));
   }
 
   const handleInputChange = (event) => {
-    setFormData({
-      ...formData,
+    setProductToEdit({
+      ...productToEdit,
       [event.target.name]: event.target.value
     });
   };
 
-  const handleImageChange = (event) => {
-    setImage(event.target.files[0]);
-  };
-
-  const deleteProduct = () => {
+  /*const deleteProduct = () => {
     axios.delete(`http://localhost:8000/product/${id}`) // Verificar
       .then(response => {
         console.log(response);
@@ -61,7 +57,9 @@ const Products = () => {
         setDeleteModalOpen(false); // Cerrar el modal después de eliminar
       })
       .catch(error => console.error('Error:', error));
-  }
+  }*/
+
+  /* Modal de ver detalles */
 
   const handleOpen = (product) => {
     setSelectedProduct(product);
@@ -75,6 +73,8 @@ const Products = () => {
   if (loading) {
     return <p>Cargando productos...</p>;
   }
+
+  /* Estilos */
 
   const ProductPaper = styled(Paper)(({ theme }) => ({
     borderRadius: '10px',
@@ -130,12 +130,27 @@ const Products = () => {
               data={selectedProduct}
               title={"Detalle del producto"}
             />
-            <StyledButton variant="outlined" onClick={() => setEditModalOpen(true)}>Editar producto</StyledButton>
+            <StyledButton
+              variant="outlined"
+              onClick={() => {
+                setProductToEdit(product);
+                setEditModalOpen(true);
+              }}
+            >
+              Editar producto
+            </StyledButton>
             <StyledButton variant="outlined" onClick={() => setDeleteModalOpen(true)}>Eliminar producto</StyledButton>
             <Switch onChange={() => {/* Acción de desactivar/activar producto */ }} />
           </div>
         </ProductPaper>
       ))}
+      <EditModal
+        open={editModalOpen}
+        handleClose={() => setEditModalOpen(false)}
+        data={productToEdit} // En lugar de product={productToEdit}
+        handleInputChange={handleInputChange}
+        handleUpdate={editProduct}
+      />
     </Layout>
   );
 };
