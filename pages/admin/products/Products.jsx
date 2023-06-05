@@ -154,6 +154,7 @@ const Products = () => {
         data={productToEdit} // En lugar de product={productToEdit}
         handleInputChange={handleInputChange}
         handleUpdate={editProduct}
+        title={"Editar producto"}
       />
     </Layout>
   );

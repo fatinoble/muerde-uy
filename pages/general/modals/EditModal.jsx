@@ -1,7 +1,7 @@
-import { Modal, Box, TextField, Button } from '@mui/material';
+import { Modal, Box, TextField, Button, Typography } from '@mui/material';
 import React, { useState, useEffect } from "react";
 
-const EditModal = ({ open, handleClose, data, handleUpdate }) => {
+const EditModal = ({ open, handleClose, data, handleUpdate, title }) => {
     const [productData, setProductData] = useState(data || {});
 
     useEffect(() => {
@@ -38,6 +38,17 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                     p: 3,
                 }}
             >
+                <Typography
+                    variant="h5"
+                    align="center"
+                    sx={{
+                        fontWeight: 'bold',
+                        color: '#f1e5d5',
+                        marginBottom: 2,
+                    }}
+                >
+                    {title}
+                </Typography>
                 {productData && Object.keys(productData).map(key => {
                     if (key !== 'price' && key !== 'id_product' && key !== 'recipe_id') { // ToDo fix price en backend
                         return (
@@ -56,7 +67,19 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                     }
                     return null;
                 })}
-                <Button type="submit">Actualizar producto</Button>
+                <Button type="submit"
+                sx={{
+                    display: 'block',
+                    mt: 2,
+                    ml: 'auto',
+                    mr: 'auto',
+                    backgroundColor: '#EDCBA2',
+                    color: '#7B3E19',
+                    '&:hover': {
+                        backgroundColor: '#CCA870',
+                    },
+                }}
+                >Actualizar producto</Button>
             </Box>
         </Modal>
     );
