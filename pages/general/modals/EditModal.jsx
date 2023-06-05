@@ -23,9 +23,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate, title }) => {
 
     return (
         <Modal open={open} onClose={handleClose}>
-            <Box
-                component="form"
-                onSubmit={handleSubmit}
+            <Box component="form" onSubmit={handleSubmit}
                 sx={{
                     position: 'absolute',
                     top: '50%',
@@ -38,15 +36,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate, title }) => {
                     p: 3,
                 }}
             >
-                <Typography
-                    variant="h5"
-                    align="center"
-                    sx={{
-                        fontWeight: 'bold',
-                        color: '#f1e5d5',
-                        marginBottom: 2,
-                    }}
-                >
+                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: '#f1e5d5', marginBottom: 2}} >
                     {title}
                 </Typography>
                 {productData && Object.keys(productData).map(key => {
@@ -68,18 +58,20 @@ const EditModal = ({ open, handleClose, data, handleUpdate, title }) => {
                     return null;
                 })}
                 <Button type="submit"
-                sx={{
-                    display: 'block',
-                    mt: 2,
-                    ml: 'auto',
-                    mr: 'auto',
-                    backgroundColor: '#EDCBA2',
-                    color: '#7B3E19',
-                    '&:hover': {
-                        backgroundColor: '#CCA870',
-                    },
-                }}
-                >Actualizar producto</Button>
+                    sx={{
+                        display: 'block',
+                        mt: 2,
+                        ml: 'auto',
+                        mr: 'auto',
+                        backgroundColor: '#EDCBA2',
+                        color: '#7B3E19',
+                        '&:hover': {
+                            backgroundColor: '#CCA870',
+                        },
+                    }}
+                >
+                    Actualizar producto
+                </Button>
             </Box>
         </Modal>
     );

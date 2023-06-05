@@ -6,6 +6,7 @@ import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
 import DetailsModal from '../../general/modals/DetailsModal';
 import EditModal from '../../general/modals/EditModal';
+import DeleteModal from '../../general/modals/DeleteModal';
 
 const Products = () => {
   const [products, setProducts] = useState({});
@@ -14,6 +15,8 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false); // Controla si el modal está abierto o no
   const [selectedProduct, setSelectedProduct] = useState(null); // Para almacenar el producto seleccionado para mostrar en el modal
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
 
   /* Todos los productos a recorrer */
   useEffect(() => {
@@ -30,11 +33,11 @@ const Products = () => {
   const editProduct = (editedProduct) => {
     console.log("edited product ", editedProduct); // Añadir esta línea
     // Convertir el precio al formato correcto hasta poder arreglar errro en backend
-    if(editedProduct.price && Array.isArray(editedProduct.price.d)) {
+    if (editedProduct.price && Array.isArray(editedProduct.price.d)) {
       editedProduct.price = editedProduct.price.d[0];
     }
     axios.put(`http://localhost:8000/product?id=${editedProduct.id_product}`, { product: editedProduct }) // en el controlador esperamos los dayos dentro de un objeto product
-    .then(response => {
+      .then(response => {
         console.log("response en edit product: ", response);
         setProducts(prevProducts =>
           prevProducts.map(product =>
@@ -53,15 +56,17 @@ const Products = () => {
     });
   };
 
-  /*const deleteProduct = () => {
-    axios.delete(`http://localhost:8000/product/${id}`) // Verificar
+  /* Eliminar producto */
+  const deleteProduct = (product) => {
+    console.log("producto a eliminar ", product.id_product); // Añadir esta línea
+    axios.delete(`http://localhost:8000/product?id=${product.id_product}`)
       .then(response => {
         console.log(response);
-        // Aquí puedes redirigir al usuario, actualizar el estado global, etc.
-        setDeleteModalOpen(false); // Cerrar el modal después de eliminar
+        setProducts(prevProducts => prevProducts.filter(p => p.id_product !== product.id_product));
+        setDeleteModalOpen(false);
       })
       .catch(error => console.error('Error:', error));
-  }*/
+  }
 
   /* Modal de ver detalles */
 
@@ -128,22 +133,11 @@ const Products = () => {
             <StyledButton variant="outlined" onClick={() => handleOpen(product)}>
               Ver detalles
             </StyledButton>
-            <DetailsModal
-              open={open}
-              handleClose={handleClose}
-              data={selectedProduct}
-              title={"Detalle del producto"}
-            />
-            <StyledButton
-              variant="outlined"
-              onClick={() => {
-                setProductToEdit(product);
-                setEditModalOpen(true);
-              }}
-            >
+            <DetailsModal open={open} handleClose={handleClose} data={selectedProduct} title={"Detalle del producto"} />
+            <StyledButton variant="outlined" onClick={() => { setProductToEdit(product); setEditModalOpen(true); }}>
               Editar producto
             </StyledButton>
-            <StyledButton variant="outlined" onClick={() => setDeleteModalOpen(true)}>Eliminar producto</StyledButton>
+            <StyledButton variant="outlined" onClick={() => { setProductToDelete(product); setDeleteModalOpen(true); }}>Eliminar producto</StyledButton>
             <Switch onChange={() => {/* Acción de desactivar/activar producto */ }} />
           </div>
         </ProductPaper>
@@ -155,6 +149,13 @@ const Products = () => {
         handleInputChange={handleInputChange}
         handleUpdate={editProduct}
         title={"Editar producto"}
+      />
+      <DeleteModal
+        open={deleteModalOpen}
+        handleClose={() => setDeleteModalOpen(false)}
+        product={productToDelete}
+        handleDelete={deleteProduct}
+        title={"Eliminar producto"}
       />
     </Layout>
   );

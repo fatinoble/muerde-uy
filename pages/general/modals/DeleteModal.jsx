@@ -1,13 +1,12 @@
 import { Modal, Box, Typography, Button } from '@mui/material';
+import React from 'react';
 
-const DetailsModal = ({ open, handleClose, data, title }) => {
-    const formatKey = (key) => {
-        const words = key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1));
-        return words.join(' ');
-    };
-
+const DeleteModal = ({ open, handleClose, product, handleDelete, title }) => {
     return (
-        <Modal open={open} onClose={handleClose}>
+        <Modal
+            open={open}
+            onClose={handleClose}
+        >
             <Box
                 sx={{
                     position: 'absolute',
@@ -19,9 +18,6 @@ const DetailsModal = ({ open, handleClose, data, title }) => {
                     bgcolor: 'background.paper',
                     borderRadius: '10px',
                     p: 3,
-                    '& .MuiTypography-root': {
-                        mb: 2,
-                    },
                 }}
             >
                 <Typography variant="h5" align="center"
@@ -33,18 +29,10 @@ const DetailsModal = ({ open, handleClose, data, title }) => {
                 >
                     {title}
                 </Typography>
-                {data && Object.keys(data).map(key => {
-                    if (key !== 'price') {
-                        return (
-                            <Typography variant="body1" key={key}>
-                                <strong>{formatKey(key)}: </strong>
-                                <span>{data[key]}</span>
-                            </Typography>
-                        );
-                    }
-                    return null;
-                })}
-                <Button
+                <Typography variant="h6" component="div">
+                    ¿Estás seguro de que quieres eliminar {product?.title}?
+                </Typography>
+                <Button onClick={() => handleDelete(product)}
                     sx={{
                         display: 'block',
                         mt: 2,
@@ -56,13 +44,25 @@ const DetailsModal = ({ open, handleClose, data, title }) => {
                             backgroundColor: '#CCA870',
                         },
                     }}
-                    onClick={handleClose}
-                >
-                    Cerrar
+                >Confirmar
+                </Button>
+                <Button onClick={handleClose}
+                    sx={{
+                        display: 'block',
+                        mt: 2,
+                        ml: 'auto',
+                        mr: 'auto',
+                        backgroundColor: '#EDCBA2',
+                        color: '#7B3E19',
+                        '&:hover': {
+                            backgroundColor: '#CCA870',
+                        },
+                    }}
+                >Cancelar
                 </Button>
             </Box>
         </Modal>
     );
 }
 
-export default DetailsModal;
+export default DeleteModal;
