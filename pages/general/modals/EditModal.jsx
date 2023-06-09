@@ -70,7 +70,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate, title }) => {
                         },
                     }}
                 >
-                    Actualizar producto
+                    Actualizar
                 </Button>
             </Box>
         </Modal>
