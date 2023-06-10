@@ -6,7 +6,7 @@ import { styled } from '@mui/system';
 import DetailsModal from '../../general/modals/DetailsModal';
 import EditModal from '../../general/modals/EditModal';
 import DeleteModal from '../../general/modals/DeleteModal';
-import UnitConverter from '../../general/units_conversor/UnitConverter';
+import UnitConverter from '../../general/units_converter/UnitConverter';
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -27,9 +27,8 @@ const Recipes = () => {
       });
   }, []);
 
-   /* Modal de ver detalles */
-
-   const handleOpen = (recipe) => {
+  /* Modal de ver detalles */
+  const handleOpen = (recipe) => {
     setSelectedRecipe(recipe);
     setOpen(true);
   };
@@ -100,7 +99,6 @@ const Recipes = () => {
           </div>
         </ProductPaper>
       ))}
-      <UnitConverter initialUnit="k" initialQuantity={2} render={true} />
       <EditModal
         open={editModalOpen}
         handleClose={() => setEditModalOpen(false)}
