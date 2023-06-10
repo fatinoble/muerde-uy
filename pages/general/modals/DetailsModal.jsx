@@ -1,9 +1,69 @@
 import { Modal, Box, Typography, Button } from '@mui/material';
 
-const DetailsModal = ({ open, handleClose, data, title }) => {
-    const formatKey = (key) => {
-        const words = key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1));
-        return words.join(' ');
+const DetailsModal = ({ open, handleClose, data, data_type, title }) => {
+    console.log("la data que llega al modal ", data);
+    console.log("open ", open);
+
+    const renderContent = () => {
+        if (data_type === 'product') {
+            return renderProductContent();
+        }
+    };
+
+    const renderProductContent = () => {
+        return (
+            !open ? null :
+            <>
+                <Typography variant="body1">
+                    <strong>Id: </strong>
+                    <span>{data.id_product}</span>
+                </Typography>
+                <Typography variant="body1">
+                    <strong>Nombre: </strong>
+                    <span>{data.title}</span>
+                </Typography>
+                <Typography variant="body1">
+                    <strong>Precio: </strong>
+                    <span>{data.price}</span>
+                </Typography>
+                <Typography variant="body1">
+                    <strong>Foto: </strong>
+                    <span>{data.image}</span>
+                </Typography>
+                <Typography variant="body1">
+                    <strong>Descripción: </strong>
+                    <span>{data.description}</span>
+                </Typography>
+                <Typography variant="body1">
+                    <strong>Tags: </strong>
+                    <span>{data.tags}</span>
+                </Typography>
+                <Typography variant="body1">
+                    <strong>Tipo de catálogo: </strong>
+                    <span>{data.catalog.catalog_id}</span>
+                </Typography>
+                <Typography variant="body1">
+                    <strong>Nombre del catálogo: </strong>
+                    <span>{data.catalog.type}</span>
+                </Typography>
+                <Typography variant="body1">
+                    <strong>ID de Receta: </strong>
+                    <span>{data.recipe.id_recipe}</span>
+                </Typography>
+                <Typography variant="body1">
+                    <strong>Nombre de la receta: </strong>
+                    <span>{data.recipe.name}</span>
+                </Typography>
+                <Typography variant="body1">
+                    <strong>Instrucciones de la receta: </strong>
+                    <span>{data.recipe.instructions}</span>
+                </Typography>
+                <Typography variant="body1">
+                    <strong>Tiempo de preparación de la receta: </strong>
+                    <span>{data.recipe.preparation_time_minutes}</span>
+                </Typography>
+            </>
+        );
     };
 
     return (
@@ -33,17 +93,7 @@ const DetailsModal = ({ open, handleClose, data, title }) => {
                 >
                     {title}
                 </Typography>
-                {data && Object.keys(data).map(key => {
-                    if (key !== 'price') {
-                        return (
-                            <Typography variant="body1" key={key}>
-                                <strong>{formatKey(key)}: </strong>
-                                <span>{data[key]}</span>
-                            </Typography>
-                        );
-                    }
-                    return null;
-                })}
+                {renderContent()}
                 <Button
                     sx={{
                         display: 'block',

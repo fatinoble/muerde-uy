@@ -1,7 +1,7 @@
 import { Modal, Box, TextField, Button, Typography } from '@mui/material';
 import React, { useState, useEffect } from "react";
 
-const EditModal = ({ open, handleClose, data, handleUpdate, title }) => {
+const EditModal = ({ open, handleClose, data, data_type, handleUpdate, title }) => {
     const [productData, setProductData] = useState(data || {});
 
     useEffect(() => {
@@ -21,6 +21,89 @@ const EditModal = ({ open, handleClose, data, handleUpdate, title }) => {
         handleUpdate(productData); // Llamada a la función de actualización
     };
 
+    const renderContent = () => {
+        if (data_type === 'product') {
+            return renderProductContent();
+        }
+    }
+
+    const renderProductContent = () => {
+        return (
+            <>
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="title"
+                    label="Título"
+                    value={title}
+                    onChange={handleChange}
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="price"
+                    label="Precio"
+                    value={price}
+                    onChange={handleChange}
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="image"
+                    label="Imagen"
+                    value={image}
+                    onChange={handleChange}
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="description"
+                    label="Descripción"
+                    value={description}
+                    onChange={handleChange}
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="tags"
+                    label="Tags"
+                    value={tags}
+                    onChange={handleChange}
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="catalog_id"
+                    label="ID de Catálogo"
+                    value={catalog_id}
+                    onChange={handleChange}
+                />
+                <TextField
+                    variant="outlined"
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="status"
+                    label="Estado"
+                    value={status}
+                    onChange={handleChange}
+                />
+            </>
+        );
+    }
+
     return (
         <Modal open={open} onClose={handleClose}>
             <Box component="form" onSubmit={handleSubmit}
@@ -36,27 +119,10 @@ const EditModal = ({ open, handleClose, data, handleUpdate, title }) => {
                     p: 3,
                 }}
             >
-                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: '#f1e5d5', marginBottom: 2}} >
+                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: '#f1e5d5', marginBottom: 2 }} >
                     {title}
                 </Typography>
-                {productData && Object.keys(productData).map(key => {
-                    if (key !== 'price' && key !== 'id_product' && key !== 'recipe_id') { // ToDo fix price en backend
-                        return (
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                required
-                                fullWidth
-                                key={key}
-                                name={key}
-                                label={key.charAt(0).toUpperCase() + key.slice(1)}
-                                value={productData[key]}
-                                onChange={handleChange}
-                            />
-                        );
-                    }
-                    return null;
-                })}
+                {renderContent()}
                 <Button type="submit"
                     sx={{
                         display: 'block',

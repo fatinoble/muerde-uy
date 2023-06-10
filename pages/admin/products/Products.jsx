@@ -1,52 +1,38 @@
 import Layout from '../../../src/components/AdminLayout';
 import React, { useState, useEffect } from "react";
-import axios from 'axios';
 import SearchBar from '../../general/search_bar/SearchBar';
 import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
 import DetailsModal from '../../general/modals/DetailsModal';
 import EditModal from '../../general/modals/EditModal';
-import DeleteModal from '../../general/modals/DeleteModal';
+import DeleteModal from '../../general/modals/DeleteModal'; 
+import { getAllProducts, modifyProduct, deleteProduct} from '../../../services/recipeService';  
 
 const Products = () => {
   const [products, setProducts] = useState({});
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false); // Controla si el modal está abierto o no
-  const [selectedProduct, setSelectedProduct] = useState(null); // Para almacenar el producto seleccionado para mostrar en el modal
+  const [open, setOpen] = useState(false); 
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
-  /* Todos los productos a recorrer */
   useEffect(() => {
-    fetch(`http://localhost:8000/product`)
-      .then(response => response.json())
-      .then(data => {
-        console.log("los productos del fetch ", data);
-        setProducts(data.Products);
-        setLoading(false);
-      });
+    getAllProducts()
+    .then(products => {
+      console.log("then", products)
+      setProducts(products);
+      setLoading(false);
+    });
   }, []);
 
-  /* Los nuevos datos resultado de editar un producto*/
   const editProduct = (editedProduct) => {
-    console.log("edited product ", editedProduct); // Añadir esta línea
-    // Convertir el precio al formato correcto hasta poder arreglar errro en backend
-    if (editedProduct.price && Array.isArray(editedProduct.price.d)) {
-      editedProduct.price = editedProduct.price.d[0];
-    }
-    axios.put(`http://localhost:8000/product?id=${editedProduct.id_product}`, { product: editedProduct }) // en el controlador esperamos los dayos dentro de un objeto product
-      .then(response => {
-        console.log("response en edit product: ", response);
-        setProducts(prevProducts =>
-          prevProducts.map(product =>
-            product.id === editedProduct.id ? editedProduct : product
-          )
-        );
-        setEditModalOpen(false); // Cerrar el modal después de editar
+    modifyProduct(editedProduct)
+      .then(() => {
+        setProducts(products.map(product => product.id === editedProduct.id ? editedProduct : product));
+        setEditModalOpen(false);
       })
-      .catch(error => console.error('Error:', error));
   }
 
   const handleInputChange = (event) => {
@@ -56,21 +42,9 @@ const Products = () => {
     });
   };
 
-  /* Eliminar producto */
-  const deleteProduct = (product) => {
-    console.log("producto a eliminar ", product.id_product); // Añadir esta línea
-    axios.delete(`http://localhost:8000/product?id=${product.id_product}`)
-      .then(response => {
-        console.log(response);
-        setProducts(prevProducts => prevProducts.filter(p => p.id_product !== product.id_product));
-        setDeleteModalOpen(false);
-      })
-      .catch(error => console.error('Error:', error));
-  }
-
   /* Modal de ver detalles */
-
   const handleOpen = (product) => {
+    console.log("product en el handle open ", product);
     setSelectedProduct(product);
     setOpen(true);
   };
@@ -84,7 +58,6 @@ const Products = () => {
   }
 
   /* Estilos */
-
   const ProductPaper = styled(Paper)(({ theme }) => ({
     borderRadius: '10px',
     borderColor: 'brown',
@@ -133,7 +106,7 @@ const Products = () => {
             <StyledButton variant="outlined" onClick={() => handleOpen(product)}>
               Ver detalles
             </StyledButton>
-            <DetailsModal open={open} handleClose={handleClose} data={selectedProduct} title={"Detalle del producto"} />
+            <DetailsModal open={open} handleClose={handleClose} data={selectedProduct} data_type={"product"} title={"Detalle del producto"} />
             <StyledButton variant="outlined" onClick={() => { setProductToEdit(product); setEditModalOpen(true); }}>
               Editar producto
             </StyledButton>
@@ -145,7 +118,8 @@ const Products = () => {
       <EditModal
         open={editModalOpen}
         handleClose={() => setEditModalOpen(false)}
-        data={productToEdit} // En lugar de product={productToEdit}
+        data={productToEdit}
+        dataType={"product"}
         handleInputChange={handleInputChange}
         handleUpdate={editProduct}
         title={"Editar producto"}
