@@ -1,9 +1,6 @@
 import { Modal, Box, Typography, Button } from '@mui/material';
 
 const DetailsModal = ({ open, handleClose, data, data_type, title }) => {
-    console.log("la data que llega al modal ", data);
-    console.log("open ", open);
-
     const renderContent = () => {
         if (data_type === 'product') {
             return renderProductContent();
