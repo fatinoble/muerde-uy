@@ -45,26 +45,26 @@ export const getAllProducts = () => {
   };
   
 
-export const modifyProduct = (editedProduct) => {
-    console.log("edited product ", editedProduct);
-    return axios.put(`http://localhost:8000/product?id=${editedProduct.id_product}`, { product: editedProduct })
+  export const modifyProduct = (editedProduct) => {
+    const { title, price, image, description, tags, status, catalog } = editedProduct;
+    const { catalog_id } = catalog;
+    const product = { title, price, image, description, tags, catalog_id, status };
+
+    return axios.put(`http://localhost:8000/product?id=${editedProduct.id_product}`, { product })
     .then(response => {
-      console.log("response en edit product: ", response);
-      return response.data; // Opcional: puedes devolver la respuesta si lo necesitas en otro lugar
+      return response.data; 
     })
     .catch(error => {
       console.error('Error:', error);
-      throw error; // Lanza el error para que se pueda capturar en el código que llama a modifyProduct si es necesario
+      throw error;
     });
 }
 
+
 export const deleteProduct = (product) => {
-    console.log("producto a eliminar ", product.id_product);
-    axios.delete(`http://localhost:8000/product?id=${product.id_product}`)
-        .then(response => {
-            console.log(response);
-            setProducts(prevProducts => prevProducts.filter(p => p.id_product !== product.id_product));
-            setDeleteModalOpen(false);
-        })
-        .catch(error => console.error('Error:', error));
+    return axios.delete(`http://localhost:8000/product?id=${product.id_product}`)
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => console.error('Error:', error));
 }

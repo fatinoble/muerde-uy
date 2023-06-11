@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 
 const EditModal = ({ open, handleClose, data, dataType, handleUpdate, title }) => {
     const [productData, setProductData] = useState({
-        status: 'ENABLED',  // Valor predeterminado si el status es undefined
+        status: 'ENABLED',
         ...data,
     });
     const [imageFileName, setImageFileName] = useState("");
@@ -27,7 +27,6 @@ const EditModal = ({ open, handleClose, data, dataType, handleUpdate, title }) =
 
     const handleImageUpload = (event) => {
         const file = event.target.files[0];
-        // Aquí guardamos el nombre del archivo en el estado separado y en productData.
         setImageFileName(file.name);
         setProductData({
             ...productData,
@@ -106,7 +105,7 @@ const EditModal = ({ open, handleClose, data, dataType, handleUpdate, title }) =
                         },
                     }}
                 >
-                    Actualizar producto
+                    Actualizar
                 </Button>
             </Box>
         </Modal>

@@ -6,7 +6,7 @@ import { styled, Box } from '@mui/system';
 import DetailsModal from '../../general/modals/DetailsModal';
 import EditModal from '../../general/modals/EditModal';
 import DeleteModal from '../../general/modals/DeleteModal'; 
-import { getAllProducts, modifyProduct, deleteProduct} from '../../../services/recipeService';  
+import { getAllProducts, modifyProduct, deleteProduct} from '../../../services/productService';  
 
 const Products = () => {
   const [products, setProducts] = useState({});
@@ -28,11 +28,21 @@ const Products = () => {
   }, []);
 
   const editProduct = (editedProduct) => {
+    console.log("edited product en products.jsx", editedProduct);
     modifyProduct(editedProduct)
       .then(() => {
         setProducts(products.map(product => product.id === editedProduct.id ? editedProduct : product));
         setEditModalOpen(false);
       })
+  }
+
+  const removeProduct = (product) => {
+    console.log("producto que llega a delete prod  ", product);
+    deleteProduct(product)
+    .then(() => {
+      setProducts(prevProducts => prevProducts.filter(p => p.id_product !== product.id_product));
+      setDeleteModalOpen(false);
+    })
   }
 
   const handleInputChange = (event) => {
@@ -128,7 +138,7 @@ const Products = () => {
         open={deleteModalOpen}
         handleClose={() => setDeleteModalOpen(false)}
         product={productToDelete}
-        handleDelete={deleteProduct}
+        handleDelete={removeProduct}
         title={"Eliminar producto"}
       />
     </Layout>
