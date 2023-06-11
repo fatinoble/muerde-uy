@@ -1,7 +1,7 @@
-import { Modal, Box, TextField, Button, Typography } from '@mui/material';
+import { Modal, Box, TextField, Button, Typography, Select, MenuItem } from '@mui/material';
 import React, { useState, useEffect } from "react";
 
-const EditModal = ({ open, handleClose, data, data_type, handleUpdate, title }) => {
+const EditModal = ({ open, handleClose, data, handleUpdate, title }) => {
     const [productData, setProductData] = useState(data || {});
 
     useEffect(() => {
@@ -21,88 +21,16 @@ const EditModal = ({ open, handleClose, data, data_type, handleUpdate, title }) 
         handleUpdate(productData); // Llamada a la función de actualización
     };
 
-    const renderContent = () => {
-        if (data_type === 'product') {
-            return renderProductContent();
-        }
-    }
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0];
+        // Aquí puedes manejar la subida del archivo, por ejemplo, subiéndolo a un servidor o convirtiéndolo a base64.
+        // Para el propósito de este ejemplo, simplemente actualizamos el estado de productData con el objeto de archivo.
+        setProductData({
+            ...productData,
+            image: file,
+        });
+    };
 
-    const renderProductContent = () => {
-        return (
-            <>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="title"
-                    label="Título"
-                    value={title}
-                    onChange={handleChange}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="price"
-                    label="Precio"
-                    value={price}
-                    onChange={handleChange}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="image"
-                    label="Imagen"
-                    value={image}
-                    onChange={handleChange}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="description"
-                    label="Descripción"
-                    value={description}
-                    onChange={handleChange}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="tags"
-                    label="Tags"
-                    value={tags}
-                    onChange={handleChange}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="catalog_id"
-                    label="ID de Catálogo"
-                    value={catalog_id}
-                    onChange={handleChange}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="status"
-                    label="Estado"
-                    value={status}
-                    onChange={handleChange}
-                />
-            </>
-        );
-    }
 
     return (
         <Modal open={open} onClose={handleClose}>
@@ -119,10 +47,39 @@ const EditModal = ({ open, handleClose, data, data_type, handleUpdate, title }) 
                     p: 3,
                 }}
             >
-                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: '#f1e5d5', marginBottom: 2 }} >
+                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: '#f1e5d5', marginBottom: 2}} >
                     {title}
                 </Typography>
-                {renderContent()}
+                { productData && 
+                    <>
+                        <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title" value={productData.title} onChange={handleChange} />
+                        <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price" value={productData.price} onChange={handleChange} />
+                        <input
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            id="raised-button-file"
+                            multiple
+                            type="file"
+                            onChange={handleImageUpload}
+                        />
+                        <label htmlFor="raised-button-file">
+                            <Button variant="raised" component="span">
+                                Subir imagen
+                            </Button>
+                        </label>
+                        <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} />
+                        <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={productData.tags} onChange={handleChange} />
+                        <Select value={productData.catalog?.catalog_id} onChange={handleChange} name="catalog?id">
+                            <MenuItem value={"1"}>Catálogo de usuario</MenuItem>
+                            <MenuItem value={"2"}>Catálogo de servicios</MenuItem>
+                        </Select>
+                        <Select value={productData.status} onChange={handleChange} name="status">
+                            <MenuItem value={"ENABLED"}>Activo</MenuItem>
+                            <MenuItem value={"DISABLED"}>Inactivo</MenuItem>
+                            <MenuItem value={"OUT_OF_STOCK"}>Sin stock</MenuItem>
+                        </Select>
+                    </>
+                }
                 <Button type="submit"
                     sx={{
                         display: 'block',
@@ -136,7 +93,7 @@ const EditModal = ({ open, handleClose, data, data_type, handleUpdate, title }) 
                         },
                     }}
                 >
-                    Actualizar
+                    Actualizar producto
                 </Button>
             </Box>
         </Modal>
