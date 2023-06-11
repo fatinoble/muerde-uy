@@ -26,6 +26,8 @@ const Products = () => {
         console.log("los productos del fetch ", data);
         setProducts(data.Products);
         setLoading(false);
+      }).catch(error => {
+        console.log(error)
       });
   }, []);
 
