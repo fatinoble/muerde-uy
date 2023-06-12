@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useMemo} from 'react';
 import ProductCard from './ProductCard';
 import { Grid } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -9,92 +9,73 @@ const products = [
     title: 'Cruasán',
     price: '$2.99',
     image: '/images/croassant.jpg',
+    tags: ['Dulce', 'Tradicional', 'Crujiente'],
   },
   {
     id: 2,
     title: 'Tarta de Chocolate',
     price: '$19.99',
     image: '/images/croassant.jpg',
+    tags: ['Dulce', 'Decorado'],
   },
   {
     id: 3,
     title: 'Muffin de Arándanos',
     price: '$1.99',
     image: '/images/croassant.jpg',
+    tags: ['Dulce', 'Esponjoso'],
   },
   {
     id: 4,
     title: 'Galletas de Avena y Pasas',
     price: '$3.49',
     image: '/images/croassant.jpg',
+    tags: ['Dulce', 'Saludable'],
   },
   {
     id: 5,
     title: 'Croissant de Almendra',
     price: '$4.99',
     image: '/images/croassant.jpg',
+    tags: ['Dulce', 'Crujiente'],
   },
   {
     id: 6,
     title: 'Donas de Vainilla',
     price: '$1.49',
     image: '/images/croassant.jpg',
+    tags: ['Dulce', 'Esponjoso'],
   },
   {
     id: 7,
     title: 'Pan de Plátano',
     price: '$5.99',
     image: '/images/croassant.jpg',
+    tags: ['Dulce', 'Tradicional', 'Saludable'],
   },
   {
     id: 8,
     title: 'Éclair de Frambuesa',
     price: '$3.99',
     image: '/images/croassant.jpg',
+    tags: ['Dulce', 'Relleno', 'Decorado'],
   },
   {
     id: 9,
     title: 'Tartaleta de Manzana',
     price: '$2.49',
     image: '/images/croassant.jpg',
+    tags: ['Dulce', 'Tradicional'],
   },
   {
     id: 10,
     title: 'Brownie de Nuez',
     price: '$2.99',
     image: '/images/croassant.jpg',
-  },
-  {
-    id: 11,
-    title: 'Cupcakes de Fresa',
-    price: '$2.49',
-    image: '/images/croassant.jpg',
-  },
-  {
-    id: 12,
-    title: 'Galletas de Chocolate',
-    price: '$1.99',
-    image: '/images/croassant.jpg',
-  },
-  {
-    id: 13,
-    title: 'Tarta de Limón',
-    price: '$17.99',
-    image: '/images/croassant.jpg',
-  },
-  {
-    id: 14,
-    title: 'Magdalenas de Naranja',
-    price: '$1.49',
-    image: '/images/croassant.jpg',
-  },
-  {
-    id: 15,
-    title: 'Rollos de Canela',
-    price: '$3.99',
-    image: '/images/croassant.jpg',
+    tags: ['Dulce', 'Nueces'],
   },
 ];
+
 
 const theme = createTheme({
   palette: {
@@ -107,11 +88,33 @@ const theme = createTheme({
   },
 });
 
-const ProductCatalog = ({searchQuery = ''}) => {
+const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
+  const filteredProducts = useMemo(() => {
+    if (searchQuery && selectedTags.length > 0) {
+      return products.filter((product) => {
+        return (
+          product.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+          selectedTags.every((tag) => product.tags?.includes(tag))
+        );
+      });
+    } else if (searchQuery) {
+      return products.filter((product) => {
+        return product.title.toLowerCase().includes(searchQuery.toLowerCase());
+      });
+    } else if (selectedTags.length > 0) {
+      return products.filter((product) => {
+        return selectedTags.every((tag) => product.tags?.includes(tag));
+      });
+    } else {
+      return products;
+    }
+  }, [products, searchQuery, selectedTags]);
+  
 
-  const filteredProducts = products.filter((product) =>
-    product.title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    const allTags = [...new Set(products.flatMap((product) => product.tags))];
+    setAllTags(allTags);
+  })
 
   return (
     <ThemeProvider theme={theme}>

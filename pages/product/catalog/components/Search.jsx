@@ -14,7 +14,7 @@ const theme = createTheme({
   },
   typography: {
     fontSize: 14,
-  },
+  }
 });
 
 const Search = ({ handleSearchChange, searchQuery }) => {
