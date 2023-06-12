@@ -1,0 +1,21 @@
+.user-menu-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: #533b2d;
+}
+
+.user-name-container {
+  font-size: 20px;
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.user-icon {
+  color: #533b2d;
+}
+
+.user-icon svg {
+  font-size: 40px;
+}
