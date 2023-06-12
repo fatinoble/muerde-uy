@@ -6,7 +6,8 @@ import { styled, Box } from '@mui/system';
 import DetailsModal from '../../general/modals/DetailsModal';
 import EditModal from '../../general/modals/EditModal';
 import DeleteModal from '../../general/modals/DeleteModal'; 
-import { getAllProducts, modifyProduct, deleteProduct} from '../../../services/productService';  
+import CreateModal from '../../general/modals/CreateModal'; 
+import { getAllProducts, modifyProduct, deleteProduct, createProduct } from '../../../services/productService';  
 
 const Products = () => {
   const [products, setProducts] = useState({});
@@ -17,6 +18,8 @@ const Products = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
+  const [newProductData, setNewProductData] = useState({});
+  const [isCreateModalOpen, setCreateModalOpen] = useState(false);
 
   useEffect(() => {
     getAllProducts()
@@ -28,7 +31,7 @@ const Products = () => {
   }, []);
 
   const editProduct = (editedProduct) => {
-    console.log("edited product en products.jsx", editedProduct);
+    console.log("editedProduct ", editedProduct);
     modifyProduct(editedProduct)
       .then(() => {
         setProducts(products.map(product => product.id === editedProduct.id ? editedProduct : product));
@@ -37,13 +40,29 @@ const Products = () => {
   }
 
   const removeProduct = (product) => {
-    console.log("producto que llega a delete prod  ", product);
     deleteProduct(product)
     .then(() => {
       setProducts(prevProducts => prevProducts.filter(p => p.id_product !== product.id_product));
       setDeleteModalOpen(false);
     })
   }
+
+  const newProduct = (newProductData) => {
+    console.log("producto en products.jsx", newProductData);
+    createProduct(newProductData)
+    .then(() => {
+      setNewProductData(newProductData);
+      handleCloseCreateModal();
+    })
+  }
+
+  const handleOpenCreateModal = () => {
+    setCreateModalOpen(true);
+  };
+
+  const handleCloseCreateModal = () => {
+    setCreateModalOpen(false);
+  };
 
   const handleInputChange = (event) => {
     setProductToEdit({
@@ -54,7 +73,6 @@ const Products = () => {
 
   /* Modal de ver detalles */
   const handleOpen = (product) => {
-    console.log("product en el handle open ", product);
     setSelectedProduct(product);
     setOpen(true);
   };
@@ -101,7 +119,7 @@ const Products = () => {
     <Layout>
       <Box display="flex" justifyContent="center" alignItems="center">
         <SearchBar />
-        <InvertedButton variant="outlined">Nuevo producto</InvertedButton>
+        <InvertedButton variant="outlined" onClick={handleOpenCreateModal }>Nuevo producto</InvertedButton>
       </Box>
       {products.map((product) => (
         <ProductPaper elevation={3} key={product.id}>
@@ -110,7 +128,7 @@ const Products = () => {
           </div>
           <div className="price-name-container">
             <h1 className="product-name"> {product.title} </h1>
-            <span className="product-price">{product.price.amount}</span>
+            <span className="product-price">{product.price}</span>
           </div>
           <div className="product-admin-actions-container">
             <StyledButton variant="outlined" onClick={() => handleOpen(product)}>
@@ -140,6 +158,12 @@ const Products = () => {
         product={productToDelete}
         handleDelete={removeProduct}
         title={"Eliminar producto"}
+      />
+      <CreateModal
+        open={isCreateModalOpen}
+        handleClose={handleCloseCreateModal}
+        handleAdd={newProduct}
+        title="Agregar Producto"
       />
     </Layout>
   );

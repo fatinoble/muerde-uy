@@ -44,11 +44,12 @@ export const getAllProducts = () => {
       });
   };
   
-
   export const modifyProduct = (editedProduct) => {
     const { title, price, image, description, tags, status, catalog } = editedProduct;
     const { catalog_id } = catalog;
     const product = { title, price, image, description, tags, catalog_id, status };
+
+    console.log("producto a mandar para editar: ", product);
 
     return axios.put(`http://localhost:8000/product?id=${editedProduct.id_product}`, { product })
     .then(response => {
@@ -60,10 +61,20 @@ export const getAllProducts = () => {
     });
 }
 
-
 export const deleteProduct = (product) => {
     return axios.delete(`http://localhost:8000/product?id=${product.id_product}`)
     .then(response => {
+      return response.data;
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+export const createProduct = (newProduct) => {
+  console.log("producto recibido: ", newProduct);
+
+  return axios.post(`http://localhost:8000/product`, { product: newProduct })
+    .then(response => {
+      console.log("response data: ", response.data);
       return response.data;
     })
     .catch(error => console.error('Error:', error));
