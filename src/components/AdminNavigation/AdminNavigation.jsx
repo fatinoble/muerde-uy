@@ -13,6 +13,7 @@ import {
 import {
   Receipt,
   Storefront,
+  RestaurantMenu,
   Kitchen,
   BarChart,
   People
@@ -45,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 const routingList = [
   { name: "Pedidos", icon: <Receipt />, route: "/admin/orders" },
   { name: "Productos", icon: <Storefront />, route: "/admin/products" },
+  { name: "Recetas", icon: <RestaurantMenu />, route: "/admin/recipes" },
   { name: "Ingredientes", icon: <Kitchen />, route: "/admin/ingredients" },
   { name: "Reportes", icon: <BarChart />, route: "/admin/reports" },
   { name: "Clientes", icon: <People />, route: "/admin/clients" },
