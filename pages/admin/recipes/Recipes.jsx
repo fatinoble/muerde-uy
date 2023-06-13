@@ -84,7 +84,8 @@ const Recipes = () => {
     <Layout>
       {recipes.map((recipe) => (
         <ProductPaper elevation={3} key={recipe.id}>
-          <div className="price-name-container">
+          <div className="image-name-container">
+            <img src={recipe.product.image} alt="Product Image" />
             <h1 className="recipe-name"> {recipe.name} </h1>
           </div>
           <div className="recipe-admin-actions-container">

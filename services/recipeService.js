@@ -49,6 +49,7 @@ export const getAllRecipes = () => {
         return Promise.all([ingredientsPromise, productsPromise])
           .then(([ingredients, products]) => ({
             id_recipe: recipe.id_recipe,
+            name: recipe.name,
             instructions: recipe.instructions,
             preparationTimeMinutes: recipe.preparation_time_minutes,
             ingredients: ingredients,
