@@ -7,6 +7,7 @@ import DetailsModal from '../../general/modals/DetailsModal';
 import EditModal from '../../general/modals/EditModal';
 import DeleteModal from '../../general/modals/DeleteModal';
 import UnitConverter from '../../general/units_converter/UnitConverter';
+import { getAllRecipes } from '../../../services/recipeService';
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -19,12 +20,11 @@ const Recipes = () => {
 
   /* Todas las recetas a recorrer */
   useEffect(() => {
-    fetch(`http://localhost:8000/recipe`)
-      .then(response => response.json())
-      .then(data => {
-        console.log("las recetas del fetch ", data.recipes);
-        setRecipes(data.recipes);
-      });
+    getAllRecipes()
+    .then(recipes => {
+      console.log("then", recipes)
+      setRecipes(recipes);
+    });
   }, []);
 
   /* Modal de ver detalles */
