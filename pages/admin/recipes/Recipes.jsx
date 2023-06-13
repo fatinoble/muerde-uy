@@ -92,7 +92,7 @@ const Recipes = () => {
             <StyledButton variant="outlined" onClick={() => handleOpen(recipe)}>
               Ver detalles
             </StyledButton>
-            <DetailsModal open={open} handleClose={handleClose} data={selectedRecipe} title={"Detalle de la receta"} />
+            <DetailsModal open={open} handleClose={handleClose} data={selectedRecipe} data_type={"recipe"} title={"Detalle de la receta"} />
             <StyledButton variant="outlined" onClick={() => { setRecipeToEdit(recipe); setEditModalOpen(true); }}>
               Editar receta
             </StyledButton>

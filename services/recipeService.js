@@ -17,7 +17,7 @@ export const getAllRecipes = () => {
               ingredient_id: ingredient.ingredient_id,
               name: ingredient.ingredient.name,
               unit: ingredient.ingredient.unit,
-              last_purchase_date: ingredient.ingredient.last_purchase_date,
+              last_purchase_cost: ingredient.ingredient.last_purchase_cost,
               quantity: ingredient.quantity
             }));
             return ingredients;
