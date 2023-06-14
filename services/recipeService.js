@@ -83,6 +83,7 @@ export const getAllRecipes = () => {
 }
 
 export const deleteRecipe = (recipe) => {
+  console.log("receta a eliminar ", recipe);
     return axios.delete(`http://localhost:8000/recipe?id=${recipe.id_recipe}`)
     .then(response => {
       return response.data;

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Magnifier from '../search_bar/image/magnifier.png';
 import { styled } from '@mui/system';
 import { TextField, Button } from '@mui/material';
 
@@ -44,7 +43,6 @@ const SearchBar = () => {
                 value={searchTerm}
             />
             <SearchButton type="submit">
-                <img src={Magnifier}></img>
             </SearchButton>
         </form>
     );
