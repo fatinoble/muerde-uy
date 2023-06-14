@@ -1,12 +1,12 @@
 import Layout from '../../../src/components/AdminLayout';
 import React, { useState, useEffect } from "react";
-import SearchBar from '../../general/search_bar/SearchBar';
+import SearchBar from '../../../public/search-bar/SearchBar';
 import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
-import DetailsModal from '../../general/modals/DetailsModal';
-import EditModal from '../../general/modals/EditModal';
-import DeleteModal from '../../general/modals/DeleteModal'; 
-import CreateModal from '../../general/modals/CreateModal'; 
+import DetailsModal from '../../../public/modals/DetailsModal';
+import EditModal from '../../../public/modals/EditModal';
+import DeleteModal from '../../../public/modals/DeleteModal'; 
+import CreateModal from '../../../public/modals/CreateModal'; 
 import { getAllProducts, modifyProduct, deleteProduct, createProduct } from '../../../services/productService';  
 
 const Products = () => {
@@ -163,6 +163,7 @@ const Products = () => {
         open={isCreateModalOpen}
         handleClose={handleCloseCreateModal}
         handleAdd={newProduct}
+        data_type={"product"}
         title="Agregar Producto"
       />
     </Layout>

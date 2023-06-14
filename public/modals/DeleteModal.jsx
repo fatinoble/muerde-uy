@@ -2,6 +2,7 @@ import { Modal, Box, Typography, Button } from '@mui/material';
 import React from 'react';
 
 const DeleteModal = ({ open, handleClose, product, handleDelete, title }) => {
+    console.log("la data que llega al modal de eliminar es ", product);
     return (
         <Modal
             open={open}
@@ -30,7 +31,7 @@ const DeleteModal = ({ open, handleClose, product, handleDelete, title }) => {
                     {title}
                 </Typography>
                 <Typography variant="h6" component="div">
-                    ¿Estás seguro de que quieres eliminar {product?.title}?
+                    ¿Estás seguro de que quieres eliminar {product?.title ? product.title : product?.name}?
                 </Typography>
                 <Button onClick={() => handleDelete(product)}
                     sx={{
