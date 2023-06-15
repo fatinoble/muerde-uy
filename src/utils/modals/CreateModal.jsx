@@ -1,7 +1,7 @@
 
 import { Modal, Box, TextField, InputLabel, FormControl, Button, Typography, Select, MenuItem } from '@mui/material';
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
-import { getAllIngredients } from '../../services/ingredientService';
+import { getAllIngredients } from '../../../services/ingredientService';
 import React, { useState, useEffect } from "react";
 
 const CreateModal = ({ open, handleClose, handleAdd, data_type, title }) => {

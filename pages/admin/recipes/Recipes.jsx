@@ -3,11 +3,11 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
-import DetailsModal from '../../../public/modals/DetailsModal';
-import EditModal from '../../../public/modals/EditModal';
-import DeleteModal from '../../../public/modals/DeleteModal';
-import CreateModal from '../../../public/modals/CreateModal';
-import UnitConverter from '../../../public/units_converter/UnitConverter';
+import DetailsModal from '../../../src/utils/modals/DetailsModal';
+import EditModal from '../../../src/utils/modals/EditModal';
+import DeleteModal from '../../../src/utils/modals/DeleteModal';
+import CreateModal from '../../../src/utils/modals/CreateModal';
+import UnitConverter from '../../../src/utils/units_converter/UnitConverter';
 import { getAllRecipes, modifyRecipe, deleteRecipe } from '../../../services/recipeService';
 
 const Recipes = () => {

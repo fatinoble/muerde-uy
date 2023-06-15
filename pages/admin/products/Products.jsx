@@ -1,12 +1,12 @@
 import Layout from '../../../src/components/AdminLayout';
 import React, { useState, useEffect } from "react";
-import SearchBar from '../../../public/search-bar/SearchBar';
+import SearchBar from '../../../src/utils/search_bar/SearchBar';
 import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
-import DetailsModal from '../../../public/modals/DetailsModal';
-import EditModal from '../../../public/modals/EditModal';
-import DeleteModal from '../../../public/modals/DeleteModal'; 
-import CreateModal from '../../../public/modals/CreateModal'; 
+import DetailsModal from '../../../src/utils/modals/DetailsModal';
+import EditModal from '../../../src/utils/modals/EditModal';
+import DeleteModal from '../../../src/utils/modals/DeleteModal'; 
+import CreateModal from '../../../src/utils/modals/CreateModal'; 
 import { getAllProducts, modifyProduct, deleteProduct, createProduct } from '../../../services/productService';  
 
 const Products = () => {
