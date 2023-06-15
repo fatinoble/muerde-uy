@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, MenuItem, Select } from '@mui/material';
+import {UNIT_MEASURES} from '../../../../src/utils'
 
-const AddDialog = ({ fetchIngredients, unitMeasures }) => {
+const AddDialog = ({ fetchIngredients }) => {
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [newIngredient, setNewIngredient] = useState({
@@ -66,9 +67,9 @@ const AddDialog = ({ fetchIngredients, unitMeasures }) => {
             margin="normal"
             variant="outlined"
           >
-            {unitMeasures.map((unitMeasure) => (
-              <MenuItem key={unitMeasure} value={unitMeasure}>
-                {unitMeasure}
+            {UNIT_MEASURES.map((unitMeasure) => (
+              <MenuItem key={unitMeasure.key} value={unitMeasure.key}>
+                {unitMeasure.text}
               </MenuItem>
             ))}
           </Select>
