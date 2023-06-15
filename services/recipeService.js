@@ -101,3 +101,14 @@ export const createRecipe = (newRecipe) => {
     })
     .catch(error => console.error('Error:', error));
 }
+
+export const getAllRecipesWithProducts = () => {
+  return fetch('http://localhost:8000/recipe/withoutProducts')
+    .then(response => {
+      return response.json();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error;
+    });
+};  
