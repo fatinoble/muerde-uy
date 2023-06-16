@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Layout from '../../../src/components/UserLayout';
+import WhatsAppButton from '../../../src/components/WhatsAppButton';
 import { useRouter } from 'next/router';
 import { Typography, Button, Box, Snackbar } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Alert } from '@mui/material';
 import { CircularProgress } from '@mui/material';
 import axios from 'axios';
+
+//TODO: Manejar user con lógica de usuario
+const user = {name: 'Pedro'}
 
 const theme = createTheme({
   palette: {
@@ -88,12 +92,17 @@ const Detail = () => {
 
   const { image, title, description, price } = product;
 
+  const whatsappDetailMessage = `!Hola! Soy ${user.name}, y quisiera saber un poco más sobre el producto ${title}.`;
+
   return (
     <Layout>
       <ThemeProvider theme={theme}>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <img src="/images/croassant.jpg" alt={title} />
-          <Typography variant="h5">{title}</Typography>
+          <Typography variant="h5">
+            {title}
+          <WhatsAppButton message={whatsappDetailMessage} />
+          </Typography>
           <Typography variant="body1">{description}</Typography>
           <Typography variant="h6">Precio: ${price}</Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '1rem' }}>
