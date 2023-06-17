@@ -6,10 +6,11 @@ import { Typography, Button, Box, Snackbar } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Alert } from '@mui/material';
 import { CircularProgress } from '@mui/material';
+import SaleDialog from './components/SaleDialog';
 import axios from 'axios';
 
 //TODO: Manejar user con lógica de usuario
-const user = {name: 'Pedro'}
+const user = { name: 'Pedro' }
 
 const theme = createTheme({
   palette: {
@@ -61,10 +62,6 @@ const Detail = () => {
     setQuantity(quantity + 1);
   };
 
-  const handleBuy = () => {
-  //TODO hacer la compra usando la quantity del state. Tal vez poner un modal de resumen de compra y de confiramcion
-  };
-
   const handleSnackbarClose = () => {
     setError(null);
   };
@@ -90,7 +87,7 @@ const Detail = () => {
     );
   }
 
-  const { image, title, description, price } = product;
+  const { image, title, description, price, status } = product;
 
   const whatsappDetailMessage = `!Hola! Soy ${user.name}, y quisiera saber un poco más sobre el producto ${title}.`;
 
@@ -101,28 +98,31 @@ const Detail = () => {
           <img src="/images/croassant.jpg" alt={title} />
           <Typography variant="h5">
             {title}
-          <WhatsAppButton message={whatsappDetailMessage} />
+            <WhatsAppButton message={whatsappDetailMessage} />
           </Typography>
           <Typography variant="body1">{description}</Typography>
           <Typography variant="h6">Precio: ${price}</Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '1rem' }}>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ marginRight: '0.5rem' }}
-            onClick={handleDecrease}
-            disabled={quantity === 1}
-          >
-            -
-          </Button>
-          <Typography variant="body1">{quantity}</Typography>
-          <Button variant="contained" color="primary" sx={{ marginLeft: '0.5rem' }} onClick={handleIncrease}>
-            +
-          </Button>
-        </Box>
-        <Button variant="contained" color="primary" sx={{ marginTop: '1rem' }} onClick={handleBuy}>
-          Comprar
-        </Button>
+          {status === 'OUT_OF_STOCK' ?
+            <span className='oos-pill'>SIN STOCK</span>
+            : (
+              <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '1rem' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ marginRight: '0.5rem' }}
+                  onClick={handleDecrease}
+                  disabled={quantity === 1}
+                >
+                  -
+                </Button>
+                <Typography variant="body1">{quantity}</Typography>
+                <Button variant="contained" color="primary" sx={{ marginLeft: '0.5rem' }} onClick={handleIncrease}>
+                  +
+                </Button>
+              </Box>
+            )
+          }
+          <SaleDialog product={product} quantity={quantity} />
         </Box>
       </ThemeProvider>
     </Layout>
