@@ -98,7 +98,7 @@ const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
               imageSrc="/images/croassant.jpg"
               title={product.title}
               price={product.price}
-              
+              status={product.status}
             />
             </a>
           </Grid>
