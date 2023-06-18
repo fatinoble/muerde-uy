@@ -74,7 +74,7 @@ const Ingredients = () => {
                       )}
                       {ingredient.last_purchase_cost && (
                         <>
-                          {` • Costo: $${ingredient.last_purchase_cost}`}
+                          {` • Costo por unidad: $${ingredient.last_purchase_cost.toFixed(2)}`}
                         </>
                       )}
                       {' • '}
