@@ -66,6 +66,9 @@ const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
     }
   };
 
+  const handleSnackbarClose = () => {
+    setError(null);
+  };
 
   if (isLoading) {
     return (
