@@ -96,12 +96,12 @@ const Detail = () => {
       <ThemeProvider theme={theme}>
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <img src="/images/croassant.jpg" alt={title} />
-          <Typography variant="h5">
+          <Typography variant="h6">
             {title}
             <WhatsAppButton message={whatsappDetailMessage} />
           </Typography>
           <Typography variant="body1">{description}</Typography>
-          <Typography variant="h6">Precio: ${price}</Typography>
+          <Typography variant="h6">Precio: ${price * quantity}</Typography>
           {status === 'OUT_OF_STOCK' ?
             <span className='oos-pill'>SIN STOCK</span>
             : (
