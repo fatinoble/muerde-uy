@@ -1,6 +1,6 @@
 import Layout from '../../../src/components/AdminLayout';
 import axios from 'axios';
-import { Button, List, ListItem, ListItemText } from '@mui/material';
+import { List, ListItem, ListItemText } from '@mui/material';
 
 import DeleteDialog from './components/DeleteDialog';
 import AddDialog from './components/AddDialog';
@@ -12,11 +12,11 @@ import { useEffect, useState } from 'react';
 
 const Ingredients = () => {
   const [ingredients, setIngredients] = useState([]);
-  const [unitMeasures, setUnitMeasures] = useState([]);
 
   useEffect(() => {
-    fetchIngredients();
-    fetchUnitMeasures();
+    if (!ingredients.length) {
+      fetchIngredients();
+    }
   }, []);
 
   const fetchIngredients = async () => {
@@ -27,24 +27,6 @@ const Ingredients = () => {
     } catch (error) {
       console.error('Error fetching ingredients:', error);
     }
-  };
-
-  const fetchUnitMeasures = async () => {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient/unit`);
-      const data = response.data;
-      setUnitMeasures(data.available_unit_measures);
-    } catch (error) {
-      console.error('Error fetching unit measures:', error);
-    }
-  };
-
-  const handleModify = (ingredient) => {
-    // Handle modify logic here, such as opening a dialog or redirecting to a modify page
-  };
-
-  const handlePurchase = () => {
-    // Handle add logic here, such as opening a dialog or redirecting to an add page
   };
 
   const getRecipieUsingCountText = (count) => {
@@ -71,7 +53,7 @@ const Ingredients = () => {
     <Layout>
       <div>
         <h1>Ingredientes</h1>
-        <AddDialog fetchIngredients={fetchIngredients} unitMeasures={unitMeasures}/>
+        <AddDialog fetchIngredients={fetchIngredients}/>
         <List>
           {ingredients.map((ingredient) => {
             const { text: totalQuantityText, color: totalQuantityColor } = getTotalQuantityDisplayData(ingredient.total_quantity, ingredient.unit);
@@ -92,7 +74,7 @@ const Ingredients = () => {
                       )}
                       {ingredient.last_purchase_cost && (
                         <>
-                          {` • Costo: $${ingredient.last_purchase_cost}`}
+                          {` • Costo por unidad: $${ingredient.last_purchase_cost.toFixed(2)}`}
                         </>
                       )}
                       {' • '}

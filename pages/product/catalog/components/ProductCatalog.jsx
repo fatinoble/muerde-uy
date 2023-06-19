@@ -1,81 +1,10 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import ProductCard from './ProductCard';
-import { Grid } from '@mui/material';
+import { Grid, Snackbar, Typography, Box, } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-const products = [
-  {
-    id: 1,
-    title: 'Cruasán',
-    price: '$2.99',
-    image: '/images/croassant.jpg',
-    tags: ['Dulce', 'Tradicional', 'Crujiente'],
-  },
-  {
-    id: 2,
-    title: 'Tarta de Chocolate',
-    price: '$19.99',
-    image: '/images/croassant.jpg',
-    tags: ['Dulce', 'Decorado'],
-  },
-  {
-    id: 3,
-    title: 'Muffin de Arándanos',
-    price: '$1.99',
-    image: '/images/croassant.jpg',
-    tags: ['Dulce', 'Esponjoso'],
-  },
-  {
-    id: 4,
-    title: 'Galletas de Avena y Pasas',
-    price: '$3.49',
-    image: '/images/croassant.jpg',
-    tags: ['Dulce', 'Saludable'],
-  },
-  {
-    id: 5,
-    title: 'Croissant de Almendra',
-    price: '$4.99',
-    image: '/images/croassant.jpg',
-    tags: ['Dulce', 'Crujiente'],
-  },
-  {
-    id: 6,
-    title: 'Donas de Vainilla',
-    price: '$1.49',
-    image: '/images/croassant.jpg',
-    tags: ['Dulce', 'Esponjoso'],
-  },
-  {
-    id: 7,
-    title: 'Pan de Plátano',
-    price: '$5.99',
-    image: '/images/croassant.jpg',
-    tags: ['Dulce', 'Tradicional', 'Saludable'],
-  },
-  {
-    id: 8,
-    title: 'Éclair de Frambuesa',
-    price: '$3.99',
-    image: '/images/croassant.jpg',
-    tags: ['Dulce', 'Relleno', 'Decorado'],
-  },
-  {
-    id: 9,
-    title: 'Tartaleta de Manzana',
-    price: '$2.49',
-    image: '/images/croassant.jpg',
-    tags: ['Dulce', 'Tradicional'],
-  },
-  {
-    id: 10,
-    title: 'Brownie de Nuez',
-    price: '$2.99',
-    image: '/images/croassant.jpg',
-    tags: ['Dulce', 'Nueces'],
-  },
-];
-
+import { Alert } from '@mui/material';
+import { CircularProgress } from '@mui/material';
+import axios from 'axios';
 
 const theme = createTheme({
   palette: {
@@ -89,6 +18,10 @@ const theme = createTheme({
 });
 
 const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   const filteredProducts = useMemo(() => {
     if (searchQuery && selectedTags.length > 0) {
       return products.filter((product) => {
@@ -112,20 +45,65 @@ const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
   
 
   useEffect(() => {
+    if (!products.length) {
+      fetchProducts();
+    }
     const allTags = [...new Set(products.flatMap((product) => product.tags))];
     setAllTags(allTags);
   })
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`);
+      const data = response.data;
+      const catalogProducts = data.Products.filter(product => product.catalog_id !== undefined && product.catalog_id !== null);
+      setProducts(catalogProducts);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      setError('Algo salió mal');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSnackbarClose = () => {
+    setError(null);
+  };
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+        <Typography variant="body1" sx={{ marginLeft: '0.5rem' }}>
+          Cargando productos...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert severity="error" onClose={handleSnackbarClose}>
+          {error}
+        </Alert>
+      </Snackbar>
+    );
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <Grid container spacing={3} sx={{ display: 'flex', alignItems: 'stretch' }}>
         {filteredProducts.map((product) => (
           <Grid item key={product.id} xs={12} sm={6} md={4}>
+            <a className="product-card-link" href={`/product/detail?id=${product.id_product}`}>
             <ProductCard
-              imageSrc={product.image}
+              imageSrc="/images/croassant.jpg"
               title={product.title}
               price={product.price}
+              status={product.status}
             />
+            </a>
           </Grid>
         ))}
       </Grid>

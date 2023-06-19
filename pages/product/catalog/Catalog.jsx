@@ -4,7 +4,11 @@ import ProductCatalog from './components/ProductCatalog';
 import ServiceCatalog from './components/ServiceCatalog';
 import Search from './components/Search';
 import TagFilter from './components/TagFilter';
+import WhatsAppButton from '../../../src/components/WhatsAppButton';
 import { ToggleButton, ToggleButtonGroup, Grid, Button } from '@mui/material';
+
+//TODO: Manejar user con lógica de usuario
+const user = {name: 'Pedro'}
 
 const Catalog = () => {
   const [selectedCatalog, setSelectedCatalog] = useState('products');
@@ -28,6 +32,8 @@ const Catalog = () => {
     setSearchQuery('');
     setSelectedTags([]);
   };
+
+  const whatsappCatalogMessage = `!Hola! Soy ${user.name}, y quisiera saber un poco más sobre los productos en Muerde.`;
 
   return (
     <Layout>
@@ -70,6 +76,7 @@ const Catalog = () => {
             </>
           )
           }
+          <WhatsAppButton message={whatsappCatalogMessage} />
         </Grid>
       </Grid>
 
