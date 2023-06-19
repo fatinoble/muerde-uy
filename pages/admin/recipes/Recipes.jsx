@@ -142,6 +142,7 @@ const Recipes = () => {
         open={deleteModalOpen}
         handleClose={() => setDeleteModalOpen(false)}
         product={recipeToDelete}
+        dataType={"recipe"}
         handleDelete={removeRecipe}
         title={"Eliminar receta"}
       />

@@ -1,6 +1,5 @@
 import Layout from '../../../src/components/AdminLayout';
 import React, { useState, useEffect } from "react";
-import SearchBar from '../../../src/utils/search_bar/SearchBar';
 import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
 import DetailsModal from '../../../src/utils/modals/DetailsModal';
@@ -118,7 +117,6 @@ const Products = () => {
   return (
     <Layout>
       <Box display="flex" justifyContent="center" alignItems="center">
-        <SearchBar />
         <InvertedButton variant="outlined" onClick={handleOpenCreateModal }>Nuevo producto</InvertedButton>
       </Box>
       {products.map((product) => (
