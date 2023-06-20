@@ -92,7 +92,7 @@ export const deleteRecipe = (recipe) => {
 }
 
 export const createRecipe = (newRecipe) => {
-  console.log("receta recibida: ", newRecipe);
+  console.log("receta recibida en recipeService create recipe: ", newRecipe);
 
   return axios.post(`http://localhost:8000/recipe`, { recipe: newRecipe })
     .then(response => {

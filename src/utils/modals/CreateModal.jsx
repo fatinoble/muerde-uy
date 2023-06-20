@@ -18,6 +18,9 @@ const CreateModal = ({ open, handleClose, handleAdd, data_type, title }) => {
   const [selectedRecipeId, setSelectedRecipeId] = useState('');
   const [selectedCatalog, setSelectedRecipeIdlectedCatalog] = useState('');
 
+  console.log("los ingredientes luego de ingresar cantidades en receta ", ingredientQuantities);
+  console.log("productDatafinalllll ", productData);
+
   const handleChangeSelectedRecipe = (event) => {
     setSelectedRecipeId(event.target.value);
     const { value } = event.target;
@@ -46,6 +49,7 @@ const CreateModal = ({ open, handleClose, handleAdd, data_type, title }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log("productData handleSubmit: ", productData);
     handleAdd(productData);
   };
 
@@ -58,28 +62,37 @@ const CreateModal = ({ open, handleClose, handleAdd, data_type, title }) => {
     });
   };
 
-
   const handleQuantityChange = (event, ingredientId) => {
-    const { value } = event.target;
-    setIngredientQuantities((prevQuantities) => ({
-      ...prevQuantities,
+    console.log("ingredientId handleQuantityChange: ", ingredientId);
+    const quantity = event.target.value;
+    console.log("quantity handleQuantityChange: ", quantity);
+    setIngredientQuantities(prevState => ({
+      ...prevState,
       [ingredientId]: {
-        ...prevQuantities[ingredientId],
-        quantity: value
+        ...prevState[ingredientId],
+        quantity: quantity
       }
     }));
+    setProductData({
+      ...productData,
+      ingredients: ingredientQuantities,
+    });
   };
-
+  
   const handleUnitChange = (event, ingredientId) => {
-    const { value } = event.target;
-    setIngredientQuantities((prevQuantities) => ({
-      ...prevQuantities,
+    const unit = event.target.value;
+    setIngredientQuantities(prevState => ({
+      ...prevState,
       [ingredientId]: {
-        ...prevQuantities[ingredientId],
-        unit: value
+        ...prevState[ingredientId],
+        unit: unit
       }
     }));
-  };
+    setProductData({
+      ...productData,
+      ingredients: ingredientQuantities,
+    });
+  };  
 
   const renderContent = () => {
     if (data_type === 'product') {
@@ -152,7 +165,7 @@ const CreateModal = ({ open, handleClose, handleAdd, data_type, title }) => {
       <>
         <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} />
         <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions} onChange={handleChange} />
-        <TextField variant="outlined" margin="normal" required fullWidth name="prepTime" label="Tiempo de preparación en minutos" value={productData.preparation_time} onChange={handleChange} />
+        <TextField variant="outlined" margin="normal" required fullWidth name="preparation_time_minutes" label="Tiempo de preparación en minutos" value={productData.preparation_time} onChange={handleChange} />
         <TableContainer>
           <Table>
             <TableHead>
@@ -164,16 +177,15 @@ const CreateModal = ({ open, handleClose, handleAdd, data_type, title }) => {
             </TableHead>
             <TableBody>
               {ingredients.map((ingredient) => {
-                const ingredientQuantity = ingredientQuantities[ingredient.id] || {};
+                const ingredientQuantity = ingredientQuantities[ingredient.id_ingredient] || {};
                 const { quantity = '', unit = '' } = ingredientQuantity;
-
                 return (
-                  <TableRow key={ingredient.id}>
+                  <TableRow key={ingredient.id_ingredient}>
                     <TableCell>{ingredient.name}</TableCell>
                     <TableCell>
                       <TextField
                         value={quantity}
-                        onChange={(event) => handleQuantityChange(event, ingredient.id)}
+                        onChange={(event) => handleQuantityChange(event, ingredient.id_ingredient)}
                       />
                     </TableCell>
                     <TableCell>
@@ -181,7 +193,7 @@ const CreateModal = ({ open, handleClose, handleAdd, data_type, title }) => {
                         <InputLabel>Unidad</InputLabel>
                         <Select
                           value={unit}
-                          onChange={(event) => handleUnitChange(event, ingredient.id)}
+                          onChange={(event) => handleUnitChange(event, ingredient.id_ingredient)}
                         >
                           {unitOptions.map((unitOption) => (
                             <MenuItem key={unitOption} value={unitOption}>{unitOption}</MenuItem>
@@ -216,8 +228,6 @@ const CreateModal = ({ open, handleClose, handleAdd, data_type, title }) => {
         setCatalogs(response.Catalogs);
       })
   }, []);
-
-
 
   return (
     <Modal open={open} onClose={handleClose}>

@@ -8,7 +8,7 @@ import EditModal from '../../../src/utils/modals/EditModal';
 import DeleteModal from '../../../src/utils/modals/DeleteModal';
 import CreateModal from '../../../src/utils/modals/CreateModal';
 import UnitConverter from '../../../src/utils/units_converter/UnitConverter';
-import { getAllRecipes, modifyRecipe, deleteRecipe } from '../../../services/recipeService';
+import { getAllRecipes, modifyRecipe, deleteRecipe, createRecipe } from '../../../services/recipeService';
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -19,7 +19,7 @@ const Recipes = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
   const [recipeToDelete, setRecipeToDelete] = useState(null);
-  const [newRecipe, setNewRecipe] = useState({});
+  const [newRecipeToAdd, setNewRecipe] = useState({});
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
 
   /* Todas las recetas a recorrer */
@@ -67,14 +67,24 @@ const Recipes = () => {
     });
   };
 
-  const removeRecipe = (recipe) => {
+  const removeRecipe = (newRecipeToAdd) => {
     console.log("elimianr receta ", recipe);
-    deleteRecipe(recipe)
+    deleteRecipe(newRecipeToAdd)
     .then(() => {
       setRecipes(prevRecipes => prevRecipes.filter(r => r.id_recipe !== recipe.id_recipe));
       setDeleteModalOpen(false);
     })
   }
+
+  const newRecipe = (recipe) => {
+    console.log("newRecipe ", recipe);
+    createRecipe(recipe)
+    .then(() => {
+      setRecipes(prevRecipes => [...prevRecipes, recipe]);
+      setCreateModalOpen(false);
+    })
+  }
+
 
   /* Estilos */
   const ProductPaper = styled(Paper)(({ theme }) => ({
