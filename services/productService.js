@@ -77,5 +77,5 @@ export const createProduct = (newProduct) => {
       console.log("response data: ", response.data);
       return response.data;
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => console.error('Error:', error.response.data));
 }

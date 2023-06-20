@@ -49,9 +49,28 @@ const CreateModal = ({ open, handleClose, handleAdd, data_type, title }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("productData handleSubmit: ", productData);
-    handleAdd(productData);
-  };
+  
+    if (data_type === "recipe") {
+      const transformedIngredients = Object.keys(ingredientQuantities).map((ingredientId) => {
+        const ingredient = ingredientQuantities[ingredientId];
+        return {
+          ingredient_id: ingredientId,
+          quantity: ingredient.quantity,
+        };
+      });
+      
+      const transformedProductData = {
+        ...productData,
+        ingredients: transformedIngredients,
+      };
+      
+      console.log("transformedProductData: ", transformedProductData);
+      handleAdd(transformedProductData);
+    } else {
+      console.log("productData: ", productData);
+      handleAdd(productData);
+    }
+  };  
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -63,34 +82,42 @@ const CreateModal = ({ open, handleClose, handleAdd, data_type, title }) => {
   };
 
   const handleQuantityChange = (event, ingredientId) => {
-    console.log("ingredientId handleQuantityChange: ", ingredientId);
     const quantity = event.target.value;
-    console.log("quantity handleQuantityChange: ", quantity);
-    setIngredientQuantities(prevState => ({
-      ...prevState,
-      [ingredientId]: {
+    setIngredientQuantities(prevState => {
+      const updatedIngredient = {
         ...prevState[ingredientId],
         quantity: quantity
-      }
-    }));
-    setProductData({
-      ...productData,
-      ingredients: ingredientQuantities,
+      };
+      const updatedQuantities = {
+        ...prevState,
+        [ingredientId]: updatedIngredient
+      };
+      const updatedIngredients = Object.values(updatedQuantities);
+      setProductData(prevData => ({
+        ...prevData,
+        ingredients: updatedIngredients
+      }));
+      return updatedQuantities;
     });
   };
   
   const handleUnitChange = (event, ingredientId) => {
     const unit = event.target.value;
-    setIngredientQuantities(prevState => ({
-      ...prevState,
-      [ingredientId]: {
+    setIngredientQuantities(prevState => {
+      const updatedIngredient = {
         ...prevState[ingredientId],
         unit: unit
-      }
-    }));
-    setProductData({
-      ...productData,
-      ingredients: ingredientQuantities,
+      };
+      const updatedQuantities = {
+        ...prevState,
+        [ingredientId]: updatedIngredient
+      };
+      const updatedIngredients = Object.values(updatedQuantities);
+      setProductData(prevData => ({
+        ...prevData,
+        ingredients: updatedIngredients
+      }));
+      return updatedQuantities;
     });
   };  
 
@@ -136,11 +163,11 @@ const CreateModal = ({ open, handleClose, handleAdd, data_type, title }) => {
             </MenuItem>
           ))}
         </Select>
-        <Select value={productData.status} onChange={handleChange} name="status">
+        {/* <Select value={productData.status} onChange={handleChange} name="status">
           <MenuItem value={"ENABLED"}>ENABLED</MenuItem>
           <MenuItem value={"DISABLED"}>DISABLED</MenuItem>
           <MenuItem value={"OUT_OF_STOCK"}>OUT OF STOCK</MenuItem>
-        </Select>
+        </Select> */}
         <Button variant="contained" component="span" 
          sx={{
           display: 'block',
