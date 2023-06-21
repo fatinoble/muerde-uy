@@ -1,28 +1,26 @@
 import Layout from '../../../src/components/AdminLayout';
-import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import React, { useState, useEffect, useRef } from "react";
 import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
-import DetailsModal from '../../../src/utils/modals/DetailsModal';
+import DetailsModal from '../../../src/utils/modals/recipe_modal/DetailsModal';
 import EditModal from '../../../src/utils/modals/EditModal';
-import DeleteModal from '../../../src/utils/modals/DeleteModal';
-import CreateModal from '../../../src/utils/modals/CreateModal';
-import UnitConverter from '../../../src/utils/units_converter/UnitConverter';
+import DeleteModal from '../../../src/utils/modals/recipe_modal/DeleteModal';
+import CreateModal from '../../../src/utils/modals/recipe_modal/CreateModal';
+import { calculateQuantity } from '../../../src/utils/units_converter/helper';
 import { getAllRecipes, modifyRecipe, deleteRecipe, createRecipe } from '../../../services/recipeService';
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [recipeToEdit, setRecipeToEdit] = useState(null);
-  const [open, setOpen] = useState(false); // Controla si el modal está abierto o no
-  const [selectedRecipe, setSelectedRecipe] = useState(null); // Para almacenar la receta seleccionada para mostrar en el modal
+  const [open, setOpen] = useState(false); 
+  const [selectedRecipe, setSelectedRecipe] = useState(null); 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
   const [recipeToDelete, setRecipeToDelete] = useState(null);
   const [newRecipeToAdd, setNewRecipe] = useState({});
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
 
-  /* Todas las recetas a recorrer */
   useEffect(() => {
     getAllRecipes()
     .then(recipes => {
@@ -40,8 +38,8 @@ const Recipes = () => {
       })
   }
 
-  /* Modal de ver detalles */
   const handleOpen = (recipe) => {
+    console.log("selected recipe", recipe);
     setSelectedRecipe(recipe);
     setOpen(true);
   };
@@ -49,8 +47,6 @@ const Recipes = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  /* Editar receta */
 
   const handleOpenCreateModal = () => {
     setCreateModalOpen(true);
@@ -67,9 +63,8 @@ const Recipes = () => {
     });
   };
 
-  const removeRecipe = (newRecipeToAdd) => {
-    console.log("elimianr receta ", recipe);
-    deleteRecipe(newRecipeToAdd)
+  const removeRecipe = (recipe) => {
+    deleteRecipe(recipe)
     .then(() => {
       setRecipes(prevRecipes => prevRecipes.filter(r => r.id_recipe !== recipe.id_recipe));
       setDeleteModalOpen(false);
@@ -78,15 +73,29 @@ const Recipes = () => {
 
   const newRecipe = (recipe) => {
     console.log("newRecipe ", recipe);
-    createRecipe(recipe)
-    .then(() => {
-      setRecipes(prevRecipes => [...prevRecipes, recipe]);
-      setCreateModalOpen(false);
-    })
+    const modifiedRecipe = JSON.parse(JSON.stringify(recipe));
+
+    modifiedRecipe.ingredients = modifiedRecipe.ingredients.map(ingredient => {
+        const newQuantity = calculateQuantity(ingredient.unit, ingredient.quantity);
+        return {
+            ...ingredient,
+            quantity: newQuantity,
+            unit: undefined, // esto elimina la propiedad unit
+        };
+    });
+
+    createRecipe(modifiedRecipe)
+        .then(() => {
+            setRecipes((prevRecipes) => [...prevRecipes, modifiedRecipe]);
+            setCreateModalOpen(false);
+        });;
+  };
+  
+  const showDeleteModal = (recipe) => {
+    setRecipeToDelete(recipe);
+    setDeleteModalOpen(true);
   }
 
-
-  /* Estilos */
   const ProductPaper = styled(Paper)(({ theme }) => ({
     borderRadius: '10px',
     borderColor: 'brown',
@@ -131,11 +140,13 @@ const Recipes = () => {
             <StyledButton variant="outlined" onClick={() => handleOpen(recipe)}>
               Ver detalles
             </StyledButton>
-            <DetailsModal open={open} handleClose={handleClose} data={selectedRecipe} data_type={"recipe"} title={"Detalle de la receta"} />
+            { selectedRecipe ? ( 
+              <DetailsModal open={open} handleClose={handleClose} data={selectedRecipe} />
+            ) : null }
             <StyledButton variant="outlined" onClick={() => { setRecipeToEdit(recipe); setEditModalOpen(true); }}>
               Editar receta
             </StyledButton>
-            <StyledButton variant="outlined" onClick={() => { setRecipeToDelete(recipe); setDeleteModalOpen(true); }}>Eliminar receta</StyledButton>
+            <StyledButton variant="outlined" onClick={() => { showDeleteModal(recipe) }}>Eliminar receta</StyledButton>
           </div>
         </ProductPaper>
       ))}
@@ -143,25 +154,21 @@ const Recipes = () => {
         open={editModalOpen}
         handleClose={() => setEditModalOpen(false)}
         data={recipeToEdit}
-        dataType={"recipe"}
         handleInputChange={handleInputChange}
         handleUpdate={editRecipe}
-        title={"Editar receta"}
       />
-      <DeleteModal
-        open={deleteModalOpen}
-        handleClose={() => setDeleteModalOpen(false)}
-        product={recipeToDelete}
-        dataType={"recipe"}
-        handleDelete={removeRecipe}
-        title={"Eliminar receta"}
-      />
+      { deleteModalOpen ? (
+        <DeleteModal
+          open={deleteModalOpen}
+          handleClose={() => setDeleteModalOpen(false)}
+          data={recipeToDelete}
+          handleDelete={removeRecipe}
+        />
+      ) : null}
       <CreateModal
         open={isCreateModalOpen}
         handleClose={handleCloseCreateModal}
         handleAdd={newRecipe}
-        data_type={"recipe"}
-        title="Agregar receta"
       />
     </Layout>
   );

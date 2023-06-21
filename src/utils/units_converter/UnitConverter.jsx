@@ -1,38 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Container, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { Box } from '@mui/system';
-
-const unitToGrams = {
-    k: 1000,
-    g: 1,
-    l: 1000,
-    oz: 28.3495,
-    ml: 1,
-    cc: 1,
-};
+import { calculateQuantity } from '../units_converter/helper';
 
 const UnitConverter = ({ initialUnit, initialQuantity, render }) => {
     const [unit, setUnit] = useState(initialUnit);
     const [quantity, setQuantity] = useState(initialQuantity);
-    const [result, setResult] = useState(0);
+    const [result, setResult] = useState(calculateQuantity(initialUnit, initialQuantity));
 
     const handleUnitChange = (event) => {
         setUnit(event.target.value);
-        calculateResult(event.target.value, quantity);
+        setResult(calculateQuantity(event.target.value, quantity));
     };
 
     const handleQuantityChange = (event) => {
         setQuantity(event.target.value);
-        calculateResult(unit, event.target.value);
-    };
-
-    const calculateResult = (unit, quantity) => {
-        const resultInGrams = quantity * unitToGrams[unit];
-        setResult(resultInGrams);
+        setResult(calculateQuantity(unit, event.target.value));
     };
 
     useEffect(() => {
-        calculateResult(unit, quantity);
+        setResult(calculateQuantity(unit, quantity));
     }, [unit, quantity]);
 
     return (
@@ -56,7 +43,7 @@ const UnitConverter = ({ initialUnit, initialQuantity, render }) => {
                             value={unit}
                             onChange={handleUnitChange}
                         >
-                            {Object.keys(unitToGrams).map((unitOption) => (
+                            {Object.keys(calculateQuantity).map((unitOption) => (
                                 <MenuItem key={unitOption} value={unitOption}>
                                     {unitOption}
                                 </MenuItem>
