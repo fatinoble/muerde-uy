@@ -18,6 +18,7 @@ export const getAllProducts = () => {
               image: product.image,
               description: product.description,
               tags: product.tags,
+              status: product.status,
               catalog: {
                 catalog_id: product.catalog_id,
                 type: catalog.type,
