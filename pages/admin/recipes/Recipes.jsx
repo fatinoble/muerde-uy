@@ -72,7 +72,6 @@ const Recipes = () => {
   }
 
   const newRecipe = (recipe) => {
-    console.log("newRecipe ", recipe);
     const modifiedRecipe = JSON.parse(JSON.stringify(recipe));
 
     modifiedRecipe.ingredients = modifiedRecipe.ingredients.map(ingredient => {
@@ -80,7 +79,7 @@ const Recipes = () => {
         return {
             ...ingredient,
             quantity: newQuantity,
-            unit: undefined, // esto elimina la propiedad unit
+            unit: undefined, 
         };
     });
 

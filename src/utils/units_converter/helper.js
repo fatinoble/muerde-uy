@@ -7,5 +7,10 @@ export function calculateQuantity(unit, initialQuantity) {
         ml: 1,
         cc: 1,
     };
-    return initialQuantity * unitToGrams[unit];
+    
+    if(unitToGrams.hasOwnProperty(unit)){
+        return initialQuantity * unitToGrams[unit];
+    }
+    
+    return initialQuantity;
 }
