@@ -97,7 +97,18 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                         type="file"
                         onChange={handleImageUpload}
                     />
-                    <Button variant="contained" component="span">
+                    <Button variant="contained" component="span"
+                    sx={{
+                        display: 'block',
+                        mt: 2,
+                        ml: 'auto',
+                        mr: 'auto',
+                        backgroundColor: '#EDCBA2',
+                        color: '#7B3E19',
+                        '&:hover': {
+                            backgroundColor: '#CCA870',
+                        },
+                    }}>
                         Subir imagen
                     </Button>
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
