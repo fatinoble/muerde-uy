@@ -2,6 +2,7 @@ import { Modal, Box, TextField, Button, Typography, Select, MenuItem } from '@mu
 import React, { useState, useEffect } from "react";
 import { getAllRecipesWithProducts } from '../../../../services/recipeService';
 import { getAllCatalogs } from '../../../../services/catalogService';
+import { useRouter } from 'next/router';
 
 const CreateModal = ({ open, handleClose, handleAdd }) => {
     const [productData, setProductData] = useState([]);
@@ -10,6 +11,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
     const [imageFileName, setImageFileName] = useState("");
     const [selectedRecipeId, setSelectedRecipeId] = useState('');
     const [selectedCatalog, setSelectedRecipeIdlectedCatalog] = useState('');
+    const router = useRouter();
 
     useEffect(() => {
         getAllRecipesWithProducts()
@@ -117,14 +119,14 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     ))}
                 </Select>
                 <Typography variant="h6" sx={{ mt: 2 }}>Si la receta no se encuentra en la lista debes crearla para dar de alta el producto</Typography>
-                <Button variant="contained" component="span"
+                <Button variant="contained" onClick={() => router.push('/admin/recipes')}
                     sx={{
                         display: 'block',
                         mt: 2,
                         ml: 'auto',
                         mr: 'auto',
                         backgroundColor: '#EDCBA2',
-                        color: 'black',
+                        color: '#7B3E19',
                         '&:hover': {
                             backgroundColor: '#CCA870',
                         },

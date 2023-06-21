@@ -189,8 +189,6 @@ const Products = () => {
         open={isCreateModalOpen}
         handleClose={handleCloseCreateModal}
         handleAdd={newProduct}
-        data_type={"product"}
-        title="Agregar Producto"
       />
     </Layout>
   );
