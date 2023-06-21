@@ -1,20 +1,19 @@
 import Layout from '../../../src/components/AdminLayout';
 import React, { useState, useEffect } from "react";
-import SearchBar from '../../../public/search-bar/SearchBar';
 import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
-import DetailsModal from '../../../public/modals/DetailsModal';
-import EditModal from '../../../public/modals/EditModal';
-import DeleteModal from '../../../public/modals/DeleteModal'; 
-import CreateModal from '../../../public/modals/CreateModal'; 
-import { getAllProducts, modifyProduct, deleteProduct, createProduct } from '../../../services/productService';  
+import DetailsModal from '../../../src/utils/modals/product_modal/DetailsModal';
+import EditModal from '../../../src/utils/modals/EditModal';
+import DeleteModal from '../../../src/utils/modals/product_modal/DeleteModal';
+import CreateModal from '../../../src/utils/modals/product_modal/CreateModal';
+import { getAllProducts, modifyProduct, deleteProduct, createProduct } from '../../../services/productService';
 
 const Products = () => {
-  const [products, setProducts] = useState({});
+  const [products, setProducts] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false); 
+  const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
@@ -23,15 +22,13 @@ const Products = () => {
 
   useEffect(() => {
     getAllProducts()
-    .then(products => {
-      console.log("then", products)
-      setProducts(products);
-      setLoading(false);
-    });
+      .then(products => {
+        setProducts(products);
+        setLoading(false);
+      });    
   }, []);
 
   const editProduct = (editedProduct) => {
-    console.log("editedProduct ", editedProduct);
     modifyProduct(editedProduct)
       .then(() => {
         setProducts(products.map(product => product.id === editedProduct.id ? editedProduct : product));
@@ -41,19 +38,18 @@ const Products = () => {
 
   const removeProduct = (product) => {
     deleteProduct(product)
-    .then(() => {
-      setProducts(prevProducts => prevProducts.filter(p => p.id_product !== product.id_product));
-      setDeleteModalOpen(false);
-    })
+      .then(() => {
+        setProducts(prevProducts => prevProducts.filter(p => p.id_product !== product.id_product));
+        setDeleteModalOpen(false);
+      })
   }
 
   const newProduct = (newProductData) => {
-    console.log("producto en products.jsx", newProductData);
     createProduct(newProductData)
-    .then(() => {
-      setNewProductData(newProductData);
-      handleCloseCreateModal();
-    })
+      .then(() => {
+        setNewProductData(newProductData);
+        handleCloseCreateModal();
+      })
   }
 
   const handleOpenCreateModal = () => {
@@ -71,7 +67,6 @@ const Products = () => {
     });
   };
 
-  /* Modal de ver detalles */
   const handleOpen = (product) => {
     setSelectedProduct(product);
     setOpen(true);
@@ -81,25 +76,40 @@ const Products = () => {
     setOpen(false);
   };
 
+  const toggleProductStatus = async (targetProduct) => {
+    const newStatus = targetProduct.status === 'ENABLED' ? 'DISABLE' : 'ENABLED';
+    const editedProduct = { ...targetProduct, status: newStatus };
+    modifyProduct(editedProduct).then(() => {
+      setProducts(prevProducts => prevProducts.map(product => product.id_product === editedProduct.id_product ? editedProduct : product));
+    });
+  };
+
+  const showDeleteModal = (product) => {
+    setProductToDelete(product);
+    setDeleteModalOpen(true);
+  };
+
   if (loading) {
     return <p>Cargando productos...</p>;
   }
 
-  /* Estilos */
-  const ProductPaper = styled(Paper)(({ theme }) => ({
+  const ProductPaper = styled(Paper)(({ theme, status }) => ({
     borderRadius: '10px',
-    borderColor: 'brown',
+    borderColor: status === 'ENABLED' ? 'brown' : 'lightgrey',
     padding: theme.spacing(2),
     marginBottom: theme.spacing(2),
+    background: status === 'ENABLED' ? 'white' : 'lightgrey',
+    color: status === 'ENABLED' ? '#black' : 'grey'
   }));
 
-  const StyledButton = styled(Button)(({ theme }) => ({
+  const StyledButton = styled(Button)(({ theme, status }) => ({
     borderRadius: '10px',
-    borderColor: 'beige',
-    backgroundColor: '#f1e5d5',
-    color: 'black',
+    borderColor: status === 'ENABLED' ? 'beige' : 'lightgrey',
+    backgroundColor: status === 'ENABLED' ? '#f1e5d5' : 'lightgrey',
+    color: status === 'ENABLED' ? 'black' : 'grey',
     '&:hover': {
-      backgroundColor: '#ffffff',
+      borderColor: status === 'ENABLED' ? 'brown' : 'grey',
+      backgroundColor: status === 'ENABLED' ? 'fff' : 'lightgrey',
     },
   }));
 
@@ -118,11 +128,10 @@ const Products = () => {
   return (
     <Layout>
       <Box display="flex" justifyContent="center" alignItems="center">
-        <SearchBar />
-        <InvertedButton variant="outlined" onClick={handleOpenCreateModal }>Nuevo producto</InvertedButton>
+        <InvertedButton variant="outlined" onClick={handleOpenCreateModal}>Nuevo producto</InvertedButton>
       </Box>
       {products.map((product) => (
-        <ProductPaper elevation={3} key={product.id}>
+        <ProductPaper elevation={3} key={product.id_product} status={product.status}>
           <div className="small-image-container">
             <img className="product-image-small" src={product.image} alt={product.title}></img>
           </div>
@@ -131,15 +140,17 @@ const Products = () => {
             <span className="product-price">{product.price}</span>
           </div>
           <div className="product-admin-actions-container">
-            <StyledButton variant="outlined" onClick={() => handleOpen(product)}>
+            <StyledButton status={product.status} variant="outlined" onClick={() => handleOpen(product)}>
               Ver detalles
             </StyledButton>
-            <DetailsModal open={open} handleClose={handleClose} data={selectedProduct} data_type={"product"} title={"Detalle del producto"} />
-            <StyledButton variant="outlined" onClick={() => { setProductToEdit(product); setEditModalOpen(true); }}>
+            { selectedProduct ? ( 
+              <DetailsModal open={open} handleClose={handleClose} data={selectedProduct} />
+            ) : null }
+            <StyledButton status={product.status} variant="outlined" onClick={() => { setProductToEdit(product); setEditModalOpen(true); }}>
               Editar producto
             </StyledButton>
-            <StyledButton variant="outlined" onClick={() => { setProductToDelete(product); setDeleteModalOpen(true); }}>Eliminar producto</StyledButton>
-            <Switch onChange={() => {/* Acción de desactivar/activar producto */ }} />
+            <StyledButton status={product.status} variant="outlined" onClick={() => { showDeleteModal(product) }}>Eliminar producto</StyledButton>
+            <Switch checked={product.status === 'ENABLED'} onChange={() => toggleProductStatus(product)} />
           </div>
         </ProductPaper>
       ))}
@@ -152,19 +163,18 @@ const Products = () => {
         handleUpdate={editProduct}
         title={"Editar producto"}
       />
-      <DeleteModal
-        open={deleteModalOpen}
-        handleClose={() => setDeleteModalOpen(false)}
-        product={productToDelete}
-        handleDelete={removeProduct}
-        title={"Eliminar producto"}
-      />
+      {deleteModalOpen ? (
+        <DeleteModal
+          open={deleteModalOpen}
+          handleClose={() => setDeleteModalOpen(false)}
+          data={productToDelete}
+          handleDelete={removeProduct}
+        />
+      ) : null}
       <CreateModal
         open={isCreateModalOpen}
         handleClose={handleCloseCreateModal}
         handleAdd={newProduct}
-        data_type={"product"}
-        title="Agregar Producto"
       />
     </Layout>
   );

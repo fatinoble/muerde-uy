@@ -1,13 +1,10 @@
 import axios from 'axios';
 
 export const getAllProducts = () => {
-    console.log("entra a get products");
     return fetch('http://localhost:8000/product')
       .then(response => response.json())
       .then(data => {
-        const originalProducts = data.Products;
-        console.log("productos originales: ", originalProducts);
-  
+        const originalProducts = data.Products;  
         const productPromises = originalProducts.map(product => {
           return Promise.all([
             fetch(`http://localhost:8000/recipe?id=${product.recipe_id}`).then(response => response.json()),
@@ -21,6 +18,7 @@ export const getAllProducts = () => {
               image: product.image,
               description: product.description,
               tags: product.tags,
+              status: product.status,
               catalog: {
                 catalog_id: product.catalog_id,
                 type: catalog.type,
@@ -35,7 +33,6 @@ export const getAllProducts = () => {
           });
         });
   
-        console.log("productos finales ", productPromises);
         return Promise.all(productPromises);
       })
       .catch(error => {
@@ -77,5 +74,5 @@ export const createProduct = (newProduct) => {
       console.log("response data: ", response.data);
       return response.data;
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => console.error('Error:', error.response.data));
 }
