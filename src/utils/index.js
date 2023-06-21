@@ -5,4 +5,19 @@ const formatDate = (dateString) => {
 
 const UNIT_MEASURES = [{key: 'G', text: 'Gramo'}, {key: 'UN', text: 'Unidad'}];
 
-export { formatDate, UNIT_MEASURES };
+const getOrderStateName = (state) => {
+  if (state === 'TODO') {
+    return "Pendiente..."
+  }
+  else if (state === 'WIP') {
+    return "En preparación"
+  }
+  else if (state === 'DONE_PICK_UP') {
+    return "Listo retiro"
+  }
+  else if (state === 'DONE_DELIVERY') {
+    return "Listo envío"
+  }
+}
+
+export { formatDate, UNIT_MEASURES, getOrderStateName };

@@ -3,6 +3,7 @@ import Layout from '../../../../src/components/AdminLayout';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { Container, Grid, List, ListItem, ListItemText, MenuItem, Paper, Select, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import { getOrderStateName } from '@/utils';
 
 function OrderScreen() {
 
@@ -11,6 +12,10 @@ function OrderScreen() {
 
     const { query } = useRouter();
     const orderId = query.id;
+    if (orderId != undefined) {
+        localStorage.setItem('orderId', orderId);
+    }
+
 
 
     const [order, setOrder] = useState({});
@@ -28,7 +33,7 @@ function OrderScreen() {
         try {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale`, {
                 params: {
-                    id: orderId,
+                    id: localStorage.getItem('orderId'),
                 },
             });
             const data = response.data;
@@ -47,21 +52,6 @@ function OrderScreen() {
             console.error('Error fetching order states:', error);
         }
     };
-
-    const getOrderStateName = (state) => {
-        if (state === ordersState[0]) {
-            return "Pendiente..."
-        }
-        else if (state === ordersState[1]) {
-            return "En preparación"
-        }
-        else if (state === ordersState[2]) {
-            return "Listo retiro"
-        }
-        else if (state === ordersState[3]) {
-            return "Listo envío"
-        }
-    }
 
     const handleConfirm = async () => {
         try {
@@ -89,7 +79,7 @@ function OrderScreen() {
 
     return (
         
-        <Layout>{console.log(order)}
+        <Layout>
             <Container style={{ marginTop: '16px', marginBottom: '16px' }} maxWidth="lg">
             <Button style={{marginBottom: '20px'}}variant="contained" onClick={(e) => {
                         e.preventDefault();

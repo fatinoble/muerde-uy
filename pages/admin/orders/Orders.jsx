@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@material-ui/core';
+import { getOrderStateName } from '@/utils';
 
 const Orders = () => {
 
@@ -42,22 +43,6 @@ const Orders = () => {
       console.error('Error fetching order states:', error);
     }
   };
-
-
-  const getOrderStateName = (state) => {
-    if (state === ordersState[0]) {
-      return "Pendiente..."
-    }
-    else if (state === ordersState[1]) {
-      return "En preparación"
-    }
-    else if (state === ordersState[2]) {
-      return "Listo retiro"
-    }
-    else if (state === ordersState[3]) {
-      return "Listo envío"
-    }
-  }
 
   const handleConfirm = async () => {
     try {
@@ -105,10 +90,6 @@ const Orders = () => {
         <title>Pedidos</title>
       </Head>
       <h1>Pedidos</h1>
-      <div className="grid md:grid-cols-4 md:gap-5">
-        <div className="overflow-x-auto md:col-span-3">
-          <div className='overflow-x-auto'></div>
-          <div style={{ height: 400, width: '100%' }}>
             <TableContainer component={Paper} style={{ maxWidth: '500', margin: '0 auto' }}>
               <Table aria-label="My Table">
                 <TableHead>
@@ -208,9 +189,6 @@ const Orders = () => {
                 </Dialog>
               )
             }
-          </div>
-        </div>
-      </div>
     </Layout>
   );
 };
