@@ -93,20 +93,23 @@ const Products = () => {
     return <p>Cargando productos...</p>;
   }
 
-  const ProductPaper = styled(Paper)(({ theme }) => ({
+  const ProductPaper = styled(Paper)(({ theme, status }) => ({
     borderRadius: '10px',
-    borderColor: 'brown',
+    borderColor: status === 'ENABLED' ? 'brown' : 'lightgrey',
     padding: theme.spacing(2),
     marginBottom: theme.spacing(2),
+    background: status === 'ENABLED' ? 'white' : 'lightgrey',
+    color: status === 'ENABLED' ? '#black' : 'grey'
   }));
 
-  const StyledButton = styled(Button)(({ theme }) => ({
+  const StyledButton = styled(Button)(({ theme, status }) => ({
     borderRadius: '10px',
-    borderColor: 'beige',
-    backgroundColor: '#f1e5d5',
-    color: 'black',
+    borderColor: status === 'ENABLED' ? 'beige' : 'lightgrey',
+    backgroundColor: status === 'ENABLED' ? '#f1e5d5' : 'lightgrey',
+    color: status === 'ENABLED' ? 'black' : 'grey',
     '&:hover': {
-      backgroundColor: '#ffffff',
+      borderColor: status === 'ENABLED' ? 'brown' : 'grey',
+      backgroundColor: status === 'ENABLED' ? 'fff' : 'lightgrey',
     },
   }));
 
@@ -128,7 +131,7 @@ const Products = () => {
         <InvertedButton variant="outlined" onClick={handleOpenCreateModal}>Nuevo producto</InvertedButton>
       </Box>
       {products.map((product) => (
-        <ProductPaper elevation={3} key={product.id_product}>
+        <ProductPaper elevation={3} key={product.id_product} status={product.status}>
           <div className="small-image-container">
             <img className="product-image-small" src={product.image} alt={product.title}></img>
           </div>
@@ -137,16 +140,16 @@ const Products = () => {
             <span className="product-price">{product.price}</span>
           </div>
           <div className="product-admin-actions-container">
-            <StyledButton variant="outlined" onClick={() => handleOpen(product)}>
+            <StyledButton status={product.status} variant="outlined" onClick={() => handleOpen(product)}>
               Ver detalles
             </StyledButton>
             { selectedProduct ? ( 
               <DetailsModal open={open} handleClose={handleClose} data={selectedProduct} />
             ) : null }
-            <StyledButton variant="outlined" onClick={() => { setProductToEdit(product); setEditModalOpen(true); }}>
+            <StyledButton status={product.status} variant="outlined" onClick={() => { setProductToEdit(product); setEditModalOpen(true); }}>
               Editar producto
             </StyledButton>
-            <StyledButton variant="outlined" onClick={() => { showDeleteModal(product) }}>Eliminar producto</StyledButton>
+            <StyledButton status={product.status} variant="outlined" onClick={() => { showDeleteModal(product) }}>Eliminar producto</StyledButton>
             <Switch checked={product.status === 'ENABLED'} onChange={() => toggleProductStatus(product)} />
           </div>
         </ProductPaper>
