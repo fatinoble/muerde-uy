@@ -39,8 +39,8 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
     const handleChange = (event) => {
         const { name, value } = event.target;
         setProductData({
-          ...productData,
-          [name]: value,
+            ...productData,
+            [name]: value,
         });
     };
 
@@ -134,9 +134,13 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                                                     value={unit}
                                                     onChange={(event) => handleUnitChange(event, ingredient.id_ingredient)}
                                                 >
-                                                    {unitOptions.map((unitOption) => (
-                                                        <MenuItem key={unitOption} value={unitOption}>{unitOption}</MenuItem>
-                                                    ))}
+                                                    {
+                                                        ingredient.unit === 'UN' ?
+                                                            <MenuItem value="UN">Unidad/es</MenuItem> :
+                                                            unitOptions.map((unitOption) => (
+                                                                <MenuItem key={unitOption} value={unitOption}>{unitOption}</MenuItem>
+                                                            ))
+                                                    }
                                                 </Select>
                                             </FormControl>
                                         </TableCell>

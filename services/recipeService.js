@@ -53,7 +53,7 @@ export const getAllRecipes = () => {
             instructions: recipe.instructions,
             preparationTimeMinutes: recipe.preparation_time_minutes,
             ingredients: ingredients,
-            product: products[0] || null // Tomar el primer producto o null si no hay productos
+            product: products[0] || null
           }));
       });
 
@@ -103,8 +103,10 @@ export const createRecipe = (newRecipe) => {
 }
 
 export const getAllRecipesWithProducts = () => {
+  console.log("entra a get recipes");
   return fetch('http://localhost:8000/recipe/withoutProducts')
     .then(response => {
+      console.log("response: ", response);
       return response.json();
     })
     .catch(error => {

@@ -2,7 +2,6 @@ import { Modal, Box, TextField, Button, Typography, Select, MenuItem } from '@mu
 import React, { useState, useEffect } from "react";
 
 const EditModal = ({ open, handleClose, data, dataType, handleUpdate, title }) => {
-    console.log("data que llega en edit modal: ", dataType, data);
     const [productData, setProductData] = useState({
         status: 'ENABLED',
         ...data,
