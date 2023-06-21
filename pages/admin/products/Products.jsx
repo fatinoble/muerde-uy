@@ -6,10 +6,10 @@ import DetailsModal from '../../../src/utils/modals/product_modal/DetailsModal';
 import EditModal from '../../../src/utils/modals/EditModal';
 import DeleteModal from '../../../src/utils/modals/product_modal/DeleteModal';
 import CreateModal from '../../../src/utils/modals/product_modal/CreateModal';
-import { getAllProducts, modifyProduct, deleteProduct, createProduct, changeStatus } from '../../../services/productService';
+import { getAllProducts, modifyProduct, deleteProduct, createProduct } from '../../../services/productService';
 
 const Products = () => {
-  const [products, setProducts] = useState({});
+  const [products, setProducts] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -19,35 +19,16 @@ const Products = () => {
   const [productToDelete, setProductToDelete] = useState(null);
   const [newProductData, setNewProductData] = useState({});
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
-  const [isActive, setIsActive] = useState(true);
-  const [idProductStatus, setIdProductStatus] = useState(null);
 
   useEffect(() => {
     getAllProducts()
       .then(products => {
         setProducts(products);
         setLoading(false);
-      });
-
-    if (idProductStatus !== null) {
-      console.log('entra a idProductoStatus ', idProductStatus)
-      const modifiedProduct = {
-        productId: idProductStatus,
-        status: !isActive ? 'ENABLED' : 'DISABLED'
-      };
-
-      changeStatus(modifiedProduct)
-        .then(() => {
-          setIsActive(!isActive);
-        })
-        .catch(error => {
-          console.error('Error al cambiar el estado del producto:', error);
-        });
-    }
-  }, [idProductStatus]);
+      });    
+  }, []);
 
   const editProduct = (editedProduct) => {
-    console.log("editedProduct ", editedProduct);
     modifyProduct(editedProduct)
       .then(() => {
         setProducts(products.map(product => product.id === editedProduct.id ? editedProduct : product));
@@ -64,7 +45,6 @@ const Products = () => {
   }
 
   const newProduct = (newProductData) => {
-    console.log("producto en products.jsx", newProductData);
     createProduct(newProductData)
       .then(() => {
         setNewProductData(newProductData);
@@ -96,9 +76,12 @@ const Products = () => {
     setOpen(false);
   };
 
-  const handleClickToggle = (productId) => {
-    console.log('entra a handleClickToggle ', productId)
-    setIdProductStatus(productId);
+  const toggleProductStatus = async (targetProduct) => {
+    const newStatus = targetProduct.status === 'ENABLED' ? 'DISABLE' : 'ENABLED';
+    const editedProduct = { ...targetProduct, status: newStatus };
+    modifyProduct(editedProduct).then(() => {
+      setProducts(prevProducts => prevProducts.map(product => product.id_product === editedProduct.id_product ? editedProduct : product));
+    });
   };
 
   const showDeleteModal = (product) => {
@@ -164,7 +147,7 @@ const Products = () => {
               Editar producto
             </StyledButton>
             <StyledButton variant="outlined" onClick={() => { showDeleteModal(product) }}>Eliminar producto</StyledButton>
-            <Switch onChange={handleClickToggle} checked={isActive} onClick={() => handleClickToggle(product.id_product)} />
+            <Switch checked={product.status === 'ENABLED'} onChange={() => toggleProductStatus(product)} />
           </div>
         </ProductPaper>
       ))}

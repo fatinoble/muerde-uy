@@ -75,13 +75,3 @@ export const createProduct = (newProduct) => {
     })
     .catch(error => console.error('Error:', error.response.data));
 }
-
-export const changeStatus = (product) => {
-  console.log("producto a cambiar status: ", product);
-  const { id_product, status } = product;
-  return axios.put(`http://localhost:8000/product/status?id=${id_product}`, { status })
-    .then(response => {
-      return response.data;
-    })
-    .catch(error => console.error('Error:', error.response.data));
-}
