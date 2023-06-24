@@ -6,7 +6,7 @@ export const getAllRecipes = () => {
     .then(data => {
       const originalRecipes = data.recipes;
       const recipePromises = originalRecipes.map(recipe => {
-        const ingredientsPromise = fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredients?id=${recipe.id_recipe}`)
+        const ingredientsPromise = fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe/ingredients?id=${recipe.id_recipe}`)
           .then(response => response.json())
           .then(recipeIngredients => {
             const ingredients = recipeIngredients.recipeIngredients.map(ingredient => ({
@@ -19,7 +19,7 @@ export const getAllRecipes = () => {
             return ingredients;
           });
 
-        const productsPromise = fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?id=${recipe.id_recipe}`)
+        const productsPromise = fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/recipe?id=${recipe.id_recipe}`)
           .then(response => response.json())
           .then(data => {
             const products = data.Products;
