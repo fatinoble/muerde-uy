@@ -2,6 +2,7 @@ import { Modal, Box, TextField, InputLabel, FormControl, Button, Typography, Sel
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import { getAllIngredients } from '../../../../services/ingredientService';
 import React, { useState, useEffect } from "react";
+import { UNIT_MEASURES_CONVERTER } from '@/utils/units_converter/helper';
 
 const CreateModal = ({ open, handleClose, handleAdd }) => {
     const [productData, setProductData] = useState({});
@@ -12,7 +13,6 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
     useEffect(() => {
         getAllIngredients()
             .then(response => {
-                console.log("then ingredients create modal", response.ingredients);
                 setIngredients(response.ingredients);
             })
     }, []);
@@ -137,8 +137,8 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                                                     {
                                                         ingredient.unit === 'UN' ?
                                                             <MenuItem value="UN">Unidad/es</MenuItem> :
-                                                            unitOptions.map((unitOption) => (
-                                                                <MenuItem key={unitOption} value={unitOption}>{unitOption}</MenuItem>
+                                                            UNIT_MEASURES_CONVERTER.map((unitOption) => (
+                                                                <MenuItem key={unitOption.key} value={unitOption.key}>{unitOption.text}</MenuItem>
                                                             ))
                                                     }
                                                 </Select>

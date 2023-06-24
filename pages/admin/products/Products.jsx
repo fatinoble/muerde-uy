@@ -4,7 +4,6 @@ import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
 import DetailsModal from '../../../src/utils/modals/product_modal/DetailsModal';
 import EditModal from '../../../src/utils/modals/EditModal';
-import DeleteModal from '../../../src/utils/modals/product_modal/DeleteModal';
 import CreateModal from '../../../src/utils/modals/product_modal/CreateModal';
 import { getAllProducts, modifyProduct, deleteProduct, createProduct } from '../../../services/productService';
 
@@ -15,8 +14,6 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [productToDelete, setProductToDelete] = useState(null);
   const [newProductData, setNewProductData] = useState({});
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
 
@@ -84,11 +81,6 @@ const Products = () => {
     });
   };
 
-  const showDeleteModal = (product) => {
-    setProductToDelete(product);
-    setDeleteModalOpen(true);
-  };
-
   if (loading) {
     return <p>Cargando productos...</p>;
   }
@@ -149,7 +141,6 @@ const Products = () => {
             <StyledButton status={product.status} variant="outlined" onClick={() => { setProductToEdit(product); setEditModalOpen(true); }}>
               Editar producto
             </StyledButton>
-            <StyledButton status={product.status} variant="outlined" onClick={() => { showDeleteModal(product) }}>Eliminar producto</StyledButton>
             <Switch checked={product.status === 'ENABLED'} onChange={() => toggleProductStatus(product)} />
           </div>
         </ProductPaper>
@@ -163,14 +154,6 @@ const Products = () => {
         handleUpdate={editProduct}
         title={"Editar producto"}
       />
-      {deleteModalOpen ? (
-        <DeleteModal
-          open={deleteModalOpen}
-          handleClose={() => setDeleteModalOpen(false)}
-          data={productToDelete}
-          handleDelete={removeProduct}
-        />
-      ) : null}
       <CreateModal
         open={isCreateModalOpen}
         handleClose={handleCloseCreateModal}
