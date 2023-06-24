@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 export const getAllProducts = () => {
-    return fetch('http://localhost:8000/product')
+    return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`)
       .then(response => response.json())
       .then(data => {
         const originalProducts = data.Products;  
         const productPromises = originalProducts.map(product => {
           return Promise.all([
-            fetch(`http://localhost:8000/recipe?id=${product.recipe_id}`).then(response => response.json()),
-            fetch(`http://localhost:8000/catalog?id=${product.catalog_id}`).then(response => response.json()),
+            fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?id=${product.recipe_id}`).then(response => response.json()),
+            fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog?id=${product.catalog_id}`).then(response => response.json()),
           ])
           .then(([recipe, catalog]) => {
             return {
@@ -48,7 +48,7 @@ export const getAllProducts = () => {
 
     console.log("producto a mandar para editar: ", product);
 
-    return axios.put(`http://localhost:8000/product?id=${editedProduct.id_product}`, { product })
+    return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product?id=${editedProduct.id_product}`, { product })
     .then(response => {
       return response.data; 
     })
@@ -59,7 +59,7 @@ export const getAllProducts = () => {
 }
 
 export const deleteProduct = (product) => {
-    return axios.delete(`http://localhost:8000/product?id=${product.id_product}`)
+    return axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product?id=${product.id_product}`)
     .then(response => {
       return response.data;
     })
@@ -67,9 +67,7 @@ export const deleteProduct = (product) => {
 }
 
 export const createProduct = (newProduct) => {
-  console.log("producto recibido: ", newProduct);
-
-  return axios.post(`http://localhost:8000/product`, { product: newProduct })
+  return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`, { product: newProduct })
     .then(response => {
       console.log("response data: ", response.data);
       return response.data;

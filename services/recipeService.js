@@ -1,16 +1,12 @@
 import axios from 'axios';
 
 export const getAllRecipes = () => {
-  console.log("entra a get recipes");
-  return fetch('http://localhost:8000/recipe')
+  return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe`)
     .then(response => response.json())
     .then(data => {
       const originalRecipes = data.recipes;
-      console.log("recipes originales: ", originalRecipes);
-
       const recipePromises = originalRecipes.map(recipe => {
-        console.log("receta: ", recipe);
-        const ingredientsPromise = fetch(`http://localhost:8000/recipe/ingredients?id=${recipe.id_recipe}`)
+        const ingredientsPromise = fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe/ingredients?id=${recipe.id_recipe}`)
           .then(response => response.json())
           .then(recipeIngredients => {
             const ingredients = recipeIngredients.recipeIngredients.map(ingredient => ({
@@ -23,7 +19,7 @@ export const getAllRecipes = () => {
             return ingredients;
           });
 
-        const productsPromise = fetch(`http://localhost:8000/product/recipe?id=${recipe.id_recipe}`)
+        const productsPromise = fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/recipe?id=${recipe.id_recipe}`)
           .then(response => response.json())
           .then(data => {
             const products = data.Products;
@@ -57,7 +53,6 @@ export const getAllRecipes = () => {
           }));
       });
 
-      console.log("receta final ", recipePromises);
       return Promise.all(recipePromises);
     })
     .catch(error => {
@@ -72,7 +67,7 @@ export const getAllRecipes = () => {
 
     console.log("receta a mandar para editar: ", recipe);
 
-    return axios.put(`http://localhost:8000/recipe?id=${editedRecipe.id_recipe}`, { recipe })
+    return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?id=${editedRecipe.id_recipe}`, { recipe })
     .then(response => {
       return response.data; 
     })
@@ -83,8 +78,7 @@ export const getAllRecipes = () => {
 }
 
 export const deleteRecipe = (recipe) => {
-  console.log("receta a eliminar ", recipe);
-    return axios.delete(`http://localhost:8000/recipe?id=${recipe.id_recipe}`)
+    return axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?id=${recipe.id_recipe}`)
     .then(response => {
       return response.data;
     })
@@ -92,21 +86,16 @@ export const deleteRecipe = (recipe) => {
 }
 
 export const createRecipe = (newRecipe) => {
-  console.log("receta recibida en recipeService create recipe: ", newRecipe);
-
-  return axios.post(`http://localhost:8000/recipe`, { recipe: newRecipe })
+  return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe`, { recipe: newRecipe })
     .then(response => {
-      console.log("response data: ", response.data);
       return response.data;
     })
     .catch(error => console.error('Error:', error));
 }
 
 export const getAllRecipesWithProducts = () => {
-  console.log("entra a get recipes");
-  return fetch('http://localhost:8000/recipe/withoutProducts')
+  return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe/withoutProducts`)
     .then(response => {
-      console.log("response: ", response);
       return response.json();
     })
     .catch(error => {

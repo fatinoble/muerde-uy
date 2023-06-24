@@ -1,18 +1,17 @@
 import { Modal, Box, TextField, InputLabel, FormControl, Button, Typography, Select, MenuItem } from '@mui/material';
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Tooltip } from '@mui/material';
 import { getAllIngredients } from '../../../../services/ingredientService';
 import React, { useState, useEffect } from "react";
+import { UNIT_MEASURES_CONVERTER } from '@/utils/units_converter/helper';
 
 const CreateModal = ({ open, handleClose, handleAdd }) => {
     const [productData, setProductData] = useState({});
     const [ingredients, setIngredients] = useState([]);
     const [ingredientQuantities, setIngredientQuantities] = useState({});
-    const unitOptions = ['k', 'g', 'l', 'oz', 'ml', 'cc', 'unidad'];
 
     useEffect(() => {
         getAllIngredients()
             .then(response => {
-                console.log("then ingredients create modal", response.ingredients);
                 setIngredients(response.ingredients);
             })
     }, []);
@@ -130,18 +129,20 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                                         <TableCell>
                                             <FormControl>
                                                 <InputLabel>Unidad</InputLabel>
-                                                <Select
-                                                    value={unit}
-                                                    onChange={(event) => handleUnitChange(event, ingredient.id_ingredient)}
-                                                >
-                                                    {
-                                                        ingredient.unit === 'UN' ?
-                                                            <MenuItem value="UN">Unidad/es</MenuItem> :
-                                                            unitOptions.map((unitOption) => (
-                                                                <MenuItem key={unitOption} value={unitOption}>{unitOption}</MenuItem>
-                                                            ))
-                                                    }
-                                                </Select>
+                                                <Tooltip title="Todo se guarda en gramos menos las unidades" placement="right">
+                                                    <Select
+                                                        value={unit}
+                                                        onChange={(event) => handleUnitChange(event, ingredient.id_ingredient)}
+                                                    >
+                                                        {
+                                                            ingredient.unit === 'UN' ?
+                                                                <MenuItem value="UN">Unidad/es</MenuItem> :
+                                                                UNIT_MEASURES_CONVERTER.map((unitOption) => (
+                                                                    <MenuItem key={unitOption.key} value={unitOption.key}>{unitOption.text}</MenuItem>
+                                                                ))
+                                                        }
+                                                    </Select>
+                                                </Tooltip>
                                             </FormControl>
                                         </TableCell>
                                     </TableRow>

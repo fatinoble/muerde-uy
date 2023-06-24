@@ -1,7 +1,6 @@
 export const getAllCatalogs = () => {
-    return fetch('http://localhost:8000/catalog')
+    return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog`)
       .then(response => {
-        console.log("todos los catalgos: ", response);
         return response.json();
       })
       .catch(error => {
