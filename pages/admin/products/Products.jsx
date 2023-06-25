@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
 import DetailsModal from '../../../src/utils/modals/product_modal/DetailsModal';
-import EditModal from '../../../src/utils/modals/EditModal';
+import EditModal from '../../../src/utils/modals/product_modal/EditModal';
 import CreateModal from '../../../src/utils/modals/product_modal/CreateModal';
-import { getAllProducts, modifyProduct, deleteProduct, createProduct } from '../../../services/productService';
+import { getAllProducts, modifyProduct, createProduct } from '../../../services/productService';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -22,22 +22,16 @@ const Products = () => {
       .then(products => {
         setProducts(products);
         setLoading(false);
-      });    
+      });
   }, []);
 
   const editProduct = (editedProduct) => {
     modifyProduct(editedProduct)
-      .then(() => {
-        setProducts(products.map(product => product.id === editedProduct.id ? editedProduct : product));
+      .then((updatedProduct) => {
+        setProducts(products.map(product => product.id_product === updatedProduct.id_product
+          ? { ...product, ...updatedProduct }
+          : product));
         setEditModalOpen(false);
-      })
-  }
-
-  const removeProduct = (product) => {
-    deleteProduct(product)
-      .then(() => {
-        setProducts(prevProducts => prevProducts.filter(p => p.id_product !== product.id_product));
-        setDeleteModalOpen(false);
       })
   }
 
@@ -135,9 +129,9 @@ const Products = () => {
             <StyledButton status={product.status} variant="outlined" onClick={() => handleOpen(product)}>
               Ver detalles
             </StyledButton>
-            { selectedProduct ? ( 
+            {selectedProduct ? (
               <DetailsModal open={open} handleClose={handleClose} data={selectedProduct} />
-            ) : null }
+            ) : null}
             <StyledButton status={product.status} variant="outlined" onClick={() => { setProductToEdit(product); setEditModalOpen(true); }}>
               Editar producto
             </StyledButton>
@@ -145,20 +139,22 @@ const Products = () => {
           </div>
         </ProductPaper>
       ))}
-      <EditModal
-        open={editModalOpen}
-        handleClose={() => setEditModalOpen(false)}
-        data={productToEdit}
-        dataType={"product"}
-        handleInputChange={handleInputChange}
-        handleUpdate={editProduct}
-        title={"Editar producto"}
-      />
-      <CreateModal
-        open={isCreateModalOpen}
-        handleClose={handleCloseCreateModal}
-        handleAdd={newProduct}
-      />
+      {editModalOpen ? (
+        <EditModal
+          open={editModalOpen}
+          handleClose={() => setEditModalOpen(false)}
+          data={productToEdit}
+          handleInputChange={handleInputChange}
+          handleUpdate={editProduct}
+        />
+      ) : null}
+      {isCreateModalOpen ? (
+        <CreateModal
+          open={isCreateModalOpen}
+          handleClose={handleCloseCreateModal}
+          handleAdd={newProduct}
+        />
+      ) : null}
     </Layout>
   );
 };
