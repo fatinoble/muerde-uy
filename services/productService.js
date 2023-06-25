@@ -45,9 +45,6 @@ export const getAllProducts = () => {
     const { title, price, image, description, tags, status, catalog } = editedProduct;
     const { catalog_id } = catalog;
     const product = { title, price, image, description, tags, catalog_id, status };
-
-    console.log("producto a mandar para editar: ", product);
-
     return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product?id=${editedProduct.id_product}`, { product })
     .then(response => {
       return response.data; 
