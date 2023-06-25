@@ -2,6 +2,7 @@ import { Modal, Box, TextField, Button, Typography, Select, MenuItem } from '@mu
 import React, { useState, useEffect } from "react";
 
 const EditModal = ({ open, handleClose, data, dataType, handleUpdate, title }) => {
+    console.log("entra a edit modal receta ", data);
     const [productData, setProductData] = useState({
         status: 'ENABLED',
         ...data,

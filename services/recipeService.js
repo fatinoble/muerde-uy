@@ -63,9 +63,12 @@ export const getAllRecipes = () => {
   
   export const modifyRecipe = (editedRecipe) => {
     const { name, instructions, preparationTimeMinutes, ingredients } = editedRecipe;
-    const recipe = { name, instructions, preparationTimeMinutes, ingredients };
+    const filteredIngredients = ingredients.map(({ ingredient_id, quantity }) => ({
+      ingredient_id, 
+      quantity: Number(quantity)
+    }));
 
-    console.log("receta a mandar para editar: ", recipe);
+    const recipe = { name, instructions, preparationTimeMinutes: Number(preparationTimeMinutes), ingredients: filteredIngredients };
 
     return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?id=${editedRecipe.id_recipe}`, { recipe })
     .then(response => {
