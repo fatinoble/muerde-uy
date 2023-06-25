@@ -114,11 +114,13 @@ function OrderScreen() {
                                     margin="normal"
                                     variant="outlined"
                                 >
-                                    {ordersState?.map((orderState) => (
-                                        <MenuItem key={orderState} value={orderState}>
-                                            {getOrderStateName(orderState)}
-                                        </MenuItem>
-                                    ))}
+                                    {ordersState?.map((orderState) => {
+                                        if((orderState != 'DONE_DELIVERY' && order.delivery_type != 'DELIVERY') || (orderState != 'DONE_PICK_UP' && order.delivery_type != 'PICK_UP')){
+                                            return <MenuItem key={orderState} value={orderState} autoFocus={order.status == orderState} selected={order.status == orderState}>
+                                                        {getOrderStateName(orderState)}
+                                                    </MenuItem>
+                                        }
+                                    })}
                                 </Select>
                             </Typography>
 
