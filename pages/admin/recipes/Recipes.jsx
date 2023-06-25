@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button, Paper, Switch } from '@mui/material';
 import { styled, Box } from '@mui/system';
 import DetailsModal from '../../../src/utils/modals/recipe_modal/DetailsModal';
-import EditModal from '../../../src/utils/modals/EditModal';
+import EditModal from '../../../src/utils/modals/recipe_modal/EditModal';
 import DeleteModal from '../../../src/utils/modals/recipe_modal/DeleteModal';
 import CreateModal from '../../../src/utils/modals/recipe_modal/CreateModal';
 import { calculateQuantity } from '../../../src/utils/units_converter/helper';
@@ -24,7 +24,6 @@ const Recipes = () => {
   useEffect(() => {
     getAllRecipes()
     .then(recipes => {
-      console.log("then recipes", recipes)
       setRecipes(recipes);
     });
   }, []);
@@ -149,13 +148,15 @@ const Recipes = () => {
           </div>
         </ProductPaper>
       ))}
-      <EditModal
-        open={editModalOpen}
-        handleClose={() => setEditModalOpen(false)}
-        data={recipeToEdit}
-        handleInputChange={handleInputChange}
-        handleUpdate={editRecipe}
-      />
+      { editModalOpen ? (
+        <EditModal
+          open={editModalOpen}
+          handleClose={() => setEditModalOpen(false)}
+          data={recipeToEdit}
+          handleInputChange={handleInputChange}
+          handleUpdate={editRecipe}
+        />
+      ) : null}
       { deleteModalOpen ? (
         <DeleteModal
           open={deleteModalOpen}
@@ -164,11 +165,13 @@ const Recipes = () => {
           handleDelete={removeRecipe}
         />
       ) : null}
-      <CreateModal
-        open={isCreateModalOpen}
-        handleClose={handleCloseCreateModal}
-        handleAdd={newRecipe}
-      />
+      { isCreateModalOpen ? (
+        <CreateModal
+          open={isCreateModalOpen}
+          handleClose={handleCloseCreateModal}
+          handleAdd={newRecipe}
+        />
+      ) : null}
     </Layout>
   );
 };

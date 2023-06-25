@@ -16,12 +16,10 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
     useEffect(() => {
         getAllRecipesWithProducts()
             .then(response => {
-                console.log("then recipes with products create modal", response.recipes);
                 setRecipes(response.recipes);
             })
         getAllCatalogs()
             .then(response => {
-                console.log("then catalogs create modal", response.Catalogs);
                 setCatalogs(response.Catalogs);
             })
     }, []);

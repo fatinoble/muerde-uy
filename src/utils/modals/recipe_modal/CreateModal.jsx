@@ -128,7 +128,6 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                                         </TableCell>
                                         <TableCell>
                                             <FormControl>
-                                                <InputLabel>Unidad</InputLabel>
                                                 <Tooltip title="Todo se guarda en gramos menos las unidades" placement="right">
                                                     <Select
                                                         value={unit}
