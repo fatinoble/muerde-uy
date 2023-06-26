@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 // TODO manejar con logica de usuario
@@ -7,6 +8,8 @@ const user = { user_id: 1 };
 
 const SaleDialog = ({ product = {}, quantity }) => {
   const [openSaleModal, setOpenSaleModal] = useState(false);
+
+  const router = useRouter();
 
   const defaultSale = {
     delivery_type: 'PICK_UP',
@@ -28,10 +31,11 @@ const SaleDialog = ({ product = {}, quantity }) => {
 
   const handleDoSale = async () => {
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale`, {
+      const s = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale`, {
         sale: newSale,
       });
-      // TODO redirigir a página con resumen de compra y tiempo estimado de preparación
+      router.push(`/user/orders/order/${s.data.id_sale}?exito=true`);
+      // TODO tiempo estimado de preparación
     } catch (error) {
       console.log(error)
       console.error('Error doing sale:', error);

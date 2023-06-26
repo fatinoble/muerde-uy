@@ -2,16 +2,29 @@ import axios from 'axios';
 import Layout from '../../../../src/components/UserLayout';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import { Container, Grid, List, ListItem, ListItemText, MenuItem, Paper, Select, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { getOrderStateName } from '@/utils';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
+const useStyles = makeStyles((theme) => ({
+    successMessage: {
+        backgroundColor: '#4caf50',
+        color: 'white',
+        padding: theme.spacing(2),
+        borderRadius: theme.spacing(1),
+        marginBottom: theme.spacing(2),
+    },
+}));
+
 function OrderScreen() {
-    const { query } = useRouter();
-    const orderId = query.id;
-
     const router = useRouter();
+    const orderId = router.query.id;
 
+    const classes = useStyles();
+
+    const { exito } = router.query;
+    const doneSale = router.asPath.includes('exito=true') && exito === 'true';
 
     const [order, setOrder] = useState({});
 
@@ -59,6 +72,12 @@ function OrderScreen() {
                 }}>
                     Volver
                 </Button>
+                {doneSale === true && (
+                    <Paper className={classes.successMessage}>
+                        <Typography variant="body1">
+                            ¡Compra exitosa! Gracias por tu pedido.
+                        </Typography>
+                    </Paper>)}
                 <Paper style={{ padding: '25px' }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
