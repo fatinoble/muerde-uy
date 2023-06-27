@@ -1,8 +1,8 @@
 import React from 'react';
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import { createUser } from '../../../services/userService';
-import Snackbar from '@mui/material/Snackbar';
+import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
 
 const Register = () => {
@@ -13,38 +13,38 @@ const Register = () => {
     const [phone, setPhone] = useState("");
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("success");
+    const anchorRef = useRef(null);
 
-    const handleError = (newMessage) => {
+    const handleMessage = (newMessage, newMessageType) => {
         setMessage(newMessage);
+        setMessageType(newMessageType);
         setOpen(true);
     };
 
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
+    const handleClose = () => {
         setOpen(false);
     };
 
     const handleSubmit = async event => {
         event.preventDefault();
         if (!name || !mail || !address || !phone || !password) {
-            handleError("Por favor, completa todos los campos.");
+            handleMessage("Por favor, completa todos los campos.", "error");
             return;
         }
 
         if (!/\S+@\S+\.\S+/.test(mail)) {
-            handleError("Por favor, introduce un correo electrónico válido.");
+            handleMessage("Por favor, introduce un correo electrónico válido.", "error");
             return;
         }
 
         if (!/^\d+$/.test(phone)) {
-            handleError("Por favor, introduce un número de teléfono válido.");
+            handleMessage("Por favor, introduce un número de teléfono válido.", "error");
             return;
         }
 
         if (!/(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(password)) {
-            handleError("La contraseña debe tener al menos 8 caracteres, incluyendo al menos un número y un carácter especial.");
+            handleMessage("La contraseña debe tener al menos 8 caracteres, incluyendo al menos un número y un carácter especial.", "error");
             return;
         }
 
@@ -59,14 +59,14 @@ const Register = () => {
         try {
             const response = await createUser(data);
             if (response.statusText == "OK") {
-                handleError("Usuario creado con éxito, bienvenid@ " + response.data.name + "!");
+                handleMessage("Usuario creado con éxito, bienvenid@ " + response.data.name + "!", "success");
                 //router.push('/algo/algo') ToDo redirigir a catalogo
             } else {
-                handleError("Hubo un error al crear la cuenta. Por favor, intenta de nuevo.");
+                handleMessage("Hubo un error al crear la cuenta. Por favor, intenta de nuevo.", "error");
             }
         } catch (error) {
             console.error('Error:', error);
-            handleError('Hubo un error al crear la cuenta. Por favor, intenta de nuevo.');
+            handleMessage('Hubo un error al crear la cuenta. Por favor, intenta de nuevo.', "error");
         }
     }
 
@@ -162,11 +162,24 @@ const Register = () => {
                     >
                         Registrarse
                     </Button>
-                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                    <Popover
+                        open={open}
+                        anchorEl={anchorRef.current}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        style={{ transform: 'translateY(10px)' }}
+                    >
+                        <Alert severity={messageType} sx={{ width: '100%' }}>
                             {message}
                         </Alert>
-                    </Snackbar>
+                    </Popover>
                 </Box>
             </Box>
         </Container>
