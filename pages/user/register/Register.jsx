@@ -5,6 +5,7 @@ import { createUser } from '../../../services/userService';
 import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const Register = () => {
     const [name, setName] = useState("");
@@ -147,6 +148,15 @@ const Register = () => {
                         autoFocus
                         onChange={e => setPhone(e.target.value)}
                     />
+                    <Link href="/user/login" passHref>
+                        <Typography
+                            variant="body2"
+                            align="center"
+                            sx={{ cursor: 'pointer', textDecoration: 'underline', mt: 2, color: '#7B3E19'}}
+                        >
+                            ¿Ya tienes una cuenta? Inicia sesión aquí
+                        </Typography>
+                    </Link>
                     <Button
                         type="submit"
                         fullWidth
