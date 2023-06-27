@@ -1,18 +1,15 @@
 import React from 'react';
 import { useState, useRef } from "react";
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
-import { createUser } from '../../../services/userService';
+import { findUserByMail } from '../../../services/userService';
 import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 const Register = () => {
-    const [name, setName] = useState("");
     const [mail, setMail] = useState("");
     const [password, setPassword] = useState("");
-    const [address, setAddress] = useState("");
-    const [phone, setPhone] = useState("");
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("success");
@@ -31,7 +28,7 @@ const Register = () => {
 
     const handleSubmit = async event => {
         event.preventDefault();
-        if (!name || !mail || !address || !phone || !password) {
+        if (!mail || !password) {
             handleMessage("Por favor, completa todos los campos.", "error");
             return;
         }
@@ -41,35 +38,27 @@ const Register = () => {
             return;
         }
 
-        if (!/^\d+$/.test(phone)) {
-            handleMessage("Por favor, introduce un número de teléfono válido.", "error");
-            return;
-        }
-
         if (!/(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(password)) {
             handleMessage("La contraseña debe tener al menos 8 caracteres, incluyendo al menos un número y un carácter especial.", "error");
             return;
         }
 
-        const data = {
-            name: name,
+        const data = {           
             mail: mail,
             password: password,
-            address: address,
-            phone: phone
         };
 
         try {
-            const response = await createUser(data);
+            const response = await findUserByMail(data);
             if (response.statusText == "OK") {
-                handleMessage("Usuario creado con éxito, bienvenid@ " + response.data.name + "!", "success");
+                handleMessage("Login correcto, bienvenid@ " + response.data.name + "!", "success");
                 router.push('/admin/recipes') //ToDo redirigir a catalogo
             } else {
-                handleMessage("Hubo un error al crear la cuenta. Por favor, intenta de nuevo.", "error");
+                handleMessage("Hubo un error al iniciar sesión. Por favor, intenta de nuevo.", "error");
             }
         } catch (error) {
             console.error('Error:', error);
-            handleMessage('Hubo un error al crear la cuenta. Por favor, intenta de nuevo.', "error");
+            handleMessage('Hubo un error al iniciar sesión. Por favor, intenta de nuevo.', "error");
         }
     }
 
@@ -85,21 +74,9 @@ const Register = () => {
             >
                 <img src="/images/muerde_logo_small.png" alt="Muerde logo" />
                 <Typography component="h1" variant="h5" sx={{ color: '#7B3E19' }}>
-                    Registrarse
+                    Ingresar
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="name"
-                        label="Nombre"
-                        name="name"
-                        autoComplete="name"
-                        autoFocus
-                        onChange={e => setName(e.target.value)}
-                    />
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>                    
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -124,37 +101,13 @@ const Register = () => {
                         autoComplete="current-password"
                         onChange={e => setPassword(e.target.value)}
                     />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="address"
-                        label="Dirección"
-                        name="address"
-                        autoComplete="address"
-                        autoFocus
-                        onChange={e => setAddress(e.target.value)}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="phone"
-                        label="Teléfono"
-                        name="phone"
-                        autoComplete="phone"
-                        autoFocus
-                        onChange={e => setPhone(e.target.value)}
-                    />
-                    <Link href="/user/login" passHref>
+                    <Link href="/user/register" passHref>
                         <Typography
                             variant="body2"
                             align="center"
                             sx={{ cursor: 'pointer', textDecoration: 'underline', mt: 2, color: '#7B3E19'}}
                         >
-                            ¿Ya tienes una cuenta? Inicia sesión aquí
+                            ¿Aún no eres cliente? Registrate aquí
                         </Typography>
                     </Link>
                     <Button
@@ -173,7 +126,7 @@ const Register = () => {
                             },
                         }}
                     >
-                        Registrarse
+                        Ingresar
                     </Button>
                     <Popover
                         open={open}
