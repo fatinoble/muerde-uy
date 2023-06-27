@@ -56,7 +56,7 @@ const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`);
       const data = response.data;
-      const catalogProducts = data.Products.filter(product => product.catalog_id !== undefined && product.catalog_id !== null);
+      const catalogProducts = data.Products.filter(product => product.catalog_id !== undefined && product.catalog_id !== null && product.status === 'ENABLED');
       setProducts(catalogProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -101,7 +101,7 @@ const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
               imageSrc="/images/croassant.jpg"
               title={product.title}
               price={product.price}
-              status={product.status}
+              isOutOfStock={product.is_out_of_stock}
             />
             </a>
           </Grid>

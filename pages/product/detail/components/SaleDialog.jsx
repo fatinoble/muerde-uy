@@ -48,7 +48,7 @@ const SaleDialog = ({ product = {}, quantity }) => {
 
   return (
     <>
-      <Button variant="contained" color="primary" sx={{ marginTop: '1rem' }} onClick={()=>setOpenSaleModal(true)} disabled={product.status === 'OUT_OF_STOCK'}>
+      <Button variant="contained" color="primary" sx={{ marginTop: '1rem' }} onClick={()=>setOpenSaleModal(true)} disabled={product.is_out_of_stock}>
         Comprar
       </Button>
 

@@ -87,7 +87,7 @@ const Detail = () => {
     );
   }
 
-  const { image, title, description, price, status } = product;
+  const { image, title, description, price, is_out_of_stock } = product;
 
   const whatsappDetailMessage = `!Hola! Soy ${user.name}, y quisiera saber un poco más sobre el producto ${title}.`;
 
@@ -102,7 +102,7 @@ const Detail = () => {
           </Typography>
           <Typography variant="body1">{description}</Typography>
           <Typography variant="h6">Precio: ${price * quantity}</Typography>
-          {status === 'OUT_OF_STOCK' ?
+          {is_out_of_stock ?
             <span className='oos-pill'>SIN STOCK</span>
             : (
               <Box sx={{ display: 'flex', alignItems: 'center', marginTop: '1rem' }}>
