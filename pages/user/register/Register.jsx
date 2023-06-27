@@ -4,6 +4,7 @@ import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import { createUser } from '../../../services/userService';
 import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
+import { useRouter } from 'next/router';
 
 const Register = () => {
     const [name, setName] = useState("");
@@ -15,6 +16,7 @@ const Register = () => {
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("success");
     const anchorRef = useRef(null);
+    const router = useRouter();
 
     const handleMessage = (newMessage, newMessageType) => {
         setMessage(newMessage);
@@ -60,7 +62,7 @@ const Register = () => {
             const response = await createUser(data);
             if (response.statusText == "OK") {
                 handleMessage("Usuario creado con éxito, bienvenid@ " + response.data.name + "!", "success");
-                //router.push('/algo/algo') ToDo redirigir a catalogo
+                router.push('/admin/recipes') //ToDo redirigir a catalogo
             } else {
                 handleMessage("Hubo un error al crear la cuenta. Por favor, intenta de nuevo.", "error");
             }
@@ -80,7 +82,7 @@ const Register = () => {
                     alignItems: 'center',
                 }}
             >
-                <img src="/images/muerde_logo_small.png" alt="Logo" />
+                <img src="/images/muerde_logo_small.png" alt="Muerde logo" />
                 <Typography component="h1" variant="h5" sx={{ color: '#7B3E19' }}>
                     Registrarse
                 </Typography>
