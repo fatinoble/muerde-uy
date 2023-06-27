@@ -13,10 +13,12 @@ const getOrderStateName = (state) => {
     return "En preparación"
   }
   else if (state === 'DONE_PICK_UP') {
-    return "Listo retiro"
+    return "Listo para retiro"
   }
   else if (state === 'DONE_DELIVERY') {
-    return "Listo envío"
+    return "Listo para envío"
+  }else if (state === 'FINISHED') {
+    return "Finalizado"
   }
 }
 

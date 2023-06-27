@@ -1,10 +1,14 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, RadioGroup, FormControlLabel, Radio, Grid, TextField } from '@mui/material';
 
 // TODO manejar con logica de usuario
 const user = { user_id: 1 };
+
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(today.getDate() + 1);
 
 const SaleDialog = ({ product = {}, quantity }) => {
   const [openSaleModal, setOpenSaleModal] = useState(false);
@@ -14,6 +18,7 @@ const SaleDialog = ({ product = {}, quantity }) => {
   const defaultSale = {
     delivery_type: 'PICK_UP',
     user_id: user.user_id,
+    user_date: tomorrow,
     products: [
       {
         product_id: product.id_product,
@@ -31,6 +36,7 @@ const SaleDialog = ({ product = {}, quantity }) => {
 
   const handleDoSale = async () => {
     try {
+      console.log(newSale)
       const s = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale`, {
         sale: newSale,
       });
@@ -44,25 +50,61 @@ const SaleDialog = ({ product = {}, quantity }) => {
 
   const handleDeliveryTypeChange = (event) => {
     setNewSale({ ...newSale, delivery_type: event.target.value });
+  };  
+  
+  const handleDateChange = (event) => {
+    setNewSale({ ...newSale, user_date: event.target.value });
   };
 
   return (
     <>
-      <Button variant="contained" color="primary" sx={{ marginTop: '1rem' }} onClick={()=>setOpenSaleModal(true)} disabled={product.is_out_of_stock}>
+      <Button variant="contained" color="primary" sx={{ marginTop: '1rem' }} onClick={() => setOpenSaleModal(true)} disabled={product.is_out_of_stock}>
         Comprar
       </Button>
 
       <Dialog open={openSaleModal} onClose={handleCloseSaleModal}>
         <DialogTitle>Comprar {product.title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Seleccione el método de entrega:
-          </DialogContentText>
-          <RadioGroup value={newSale.delivery_type} onChange={handleDeliveryTypeChange}>
-            <FormControlLabel value="PICK_UP" control={<Radio />} label="Recoger en local" />
-            <FormControlLabel value="DELIVERY" control={<Radio />} label="Envío a domicilio" />
-          </RadioGroup>
-        </DialogContent>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+
+
+
+            <DialogContent>
+              <DialogContentText>
+                Seleccione el método de entrega:
+              </DialogContentText>
+              <RadioGroup value={newSale.delivery_type} onChange={handleDeliveryTypeChange}>
+                <FormControlLabel value="PICK_UP" control={<Radio />} label="Recoger en local" />
+                <FormControlLabel value="DELIVERY" control={<Radio />} label="Envío a domicilio" />
+              </RadioGroup>
+            </DialogContent>
+
+          </Grid>
+          <Grid item xs={12} sm={6}>
+
+
+
+            <DialogContent>
+              <DialogContentText>
+                Seleccione fecha entrega:
+              </DialogContentText>
+              <TextField
+                id="date"
+                type="date"
+                onChange={handleDateChange}
+                defaultValue={tomorrow.toISOString().split('T')[0]}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{
+                  min: tomorrow.toISOString().split('T')[0],
+                }}
+              />
+            </DialogContent>
+
+          </Grid>
+
+        </Grid>
         <DialogActions>
           <Button onClick={handleCloseSaleModal} color="primary">
             Cancelar
