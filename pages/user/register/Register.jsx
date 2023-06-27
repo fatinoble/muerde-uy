@@ -4,14 +4,40 @@ import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import { createUser } from '../../../services/userService';
 
 const Register = () => {
+    const [name, setName] = useState("");
+    const [mail, setMail] = useState("");
+    const [password, setPassword] = useState("");
+    const [address, setAddress] = useState("");
+    const [phone, setPhone] = useState("");
+
     const handleSubmit = async event => {
         event.preventDefault();
+        if (!name || !mail || !address || !phone || !password) {
+            alert("Por favor, completa todos los campos.");
+            return;
+        }
+
+        if (!/\S+@\S+\.\S+/.test(mail)) {
+            alert("Por favor, introduce un correo electrónico válido.");
+            return;
+        }
+
+        if (!/^\d+$/.test(phone)) {
+            alert("Por favor, introduce un número de teléfono válido.");
+            return;
+        }
+
+        if (!/(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(password)) {
+            alert("La contraseña debe tener al menos 8 caracteres, incluyendo al menos un número y un carácter especial.");
+            return;
+        }
+
         const data = {
-            name: event.target.name.value,
-            mail: event.target.mail.value,
-            password: event.target.password.value,
-            address: event.target.address.value,
-            phone: event.target.phone.value
+            name: name,
+            mail: mail,
+            password: password,
+            address: address,
+            phone: phone
         };
 
         try {
@@ -30,7 +56,7 @@ const Register = () => {
 
     return (
         <Container component="main" maxWidth="xs">
-            <Box 
+            <Box
                 sx={{
                     marginTop: 8,
                     display: 'flex',
@@ -38,11 +64,11 @@ const Register = () => {
                     alignItems: 'center',
                 }}
             >
-                <Typography component="h1" variant="h5">
+                <Typography component="h1" variant="h5" sx={{color: '#7B3E19'}}>
                     Registrarse
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                <TextField
+                    <TextField
                         variant="outlined"
                         margin="normal"
                         required
@@ -52,6 +78,7 @@ const Register = () => {
                         name="name"
                         autoComplete="name"
                         autoFocus
+                        onChange={e => setName(e.target.value)}
                     />
                     <TextField
                         variant="outlined"
@@ -63,7 +90,8 @@ const Register = () => {
                         name="mail"
                         autoComplete="mail"
                         autoFocus
-                    />                    
+                        onChange={e => setMail(e.target.value)}
+                    />
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -74,6 +102,7 @@ const Register = () => {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        onChange={e => setPassword(e.target.value)}
                     />
                     <TextField
                         variant="outlined"
@@ -85,6 +114,7 @@ const Register = () => {
                         name="address"
                         autoComplete="address"
                         autoFocus
+                        onChange={e => setAddress(e.target.value)}
                     />
                     <TextField
                         variant="outlined"
@@ -96,12 +126,23 @@ const Register = () => {
                         name="phone"
                         autoComplete="phone"
                         autoFocus
+                        onChange={e => setPhone(e.target.value)}
                     />
                     <Button
                         type="submit"
                         fullWidth
                         variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
+                        sx={{
+                            display: 'block',
+                            mt: 2,
+                            ml: 'auto',
+                            mr: 'auto',
+                            backgroundColor: '#EDCBA2',
+                            color: '#7B3E19',
+                            '&:hover': {
+                                backgroundColor: '#CCA870',
+                            },
+                        }}
                     >
                         Registrarse
                     </Button>
