@@ -40,6 +40,11 @@ const Products = () => {
       .then(() => {
         setNewProductData(newProductData);
         handleCloseCreateModal();
+        getAllProducts()
+        .then(products => {
+          setProducts(products);
+          setLoading(false);
+        });
       })
   }
 
@@ -68,7 +73,7 @@ const Products = () => {
   };
 
   const toggleProductStatus = async (targetProduct) => {
-    const newStatus = targetProduct.status === 'ENABLED' ? 'DISABLE' : 'ENABLED';
+    const newStatus = targetProduct.status === 'ENABLED' ? 'DISABLED' : 'ENABLED';
     const editedProduct = { ...targetProduct, status: newStatus };
     modifyProduct(editedProduct).then(() => {
       setProducts(prevProducts => prevProducts.map(product => product.id_product === editedProduct.id_product ? editedProduct : product));
@@ -136,6 +141,7 @@ const Products = () => {
               Editar producto
             </StyledButton>
             <Switch checked={product.status === 'ENABLED'} onChange={() => toggleProductStatus(product)} />
+            {product.is_out_of_stock ? <span>Sin Stock</span> : <span>En Stock</span>}
           </div>
         </ProductPaper>
       ))}

@@ -13,17 +13,17 @@ const theme = createTheme({
   },
 });
 
-const ProductCard = ({ imageSrc, title, price, status }) => {
+const ProductCard = ({ imageSrc, title, price, isOutOfStock }) => {
   return (
     <ThemeProvider theme={theme}>
-      <Card sx={{ height: '100%', opacity: status === 'OUT_OF_STOCK' ? '60%' : '100%' }}>
+      <Card sx={{ height: '100%', opacity: isOutOfStock ? '60%' : '100%' }}>
         <CardMedia component="img" src={imageSrc} alt={title} />
         <CardContent>
           <div className="top-info-card">
             <Typography variant="h6" component="div" color="primary">
               {title}
             </Typography>
-            {status === 'OUT_OF_STOCK' && <span className='oos-pill'>SIN STOCK</span>}
+            {isOutOfStock && <span className='oos-pill'>SIN STOCK</span>}
           </div>
           <Typography variant="body1" color="secondary">
             {price}

@@ -78,7 +78,6 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                 <Select value={productData.status || 'ENABLED'} onChange={handleChange} name="status">
                     <MenuItem value={"ENABLED"}>Activo</MenuItem>
                     <MenuItem value={"DISABLED"}>Inactivo</MenuItem>
-                    <MenuItem value={"OUT_OF_STOCK"}>Sin stock</MenuItem>
                 </Select>
                 <Button type="submit"
                     sx={{

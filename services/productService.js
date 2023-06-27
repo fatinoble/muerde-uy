@@ -19,6 +19,7 @@ export const getAllProducts = () => {
               description: product.description,
               tags: product.tags,
               status: product.status,
+              is_out_of_stock: product.is_out_of_stock,
               catalog: {
                 catalog_id: product.catalog_id,
                 type: catalog.type,
