@@ -2,6 +2,8 @@ import React from 'react';
 import { useState } from "react";
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import { createUser } from '../../../services/userService';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 const Register = () => {
     const [name, setName] = useState("");
@@ -9,26 +11,40 @@ const Register = () => {
     const [password, setPassword] = useState("");
     const [address, setAddress] = useState("");
     const [phone, setPhone] = useState("");
+    const [open, setOpen] = useState(false);
+    const [message, setMessage] = useState("");
+
+    const handleError = (newMessage) => {
+        setMessage(newMessage);
+        setOpen(true);
+    };
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
 
     const handleSubmit = async event => {
         event.preventDefault();
         if (!name || !mail || !address || !phone || !password) {
-            alert("Por favor, completa todos los campos.");
+            handleError("Por favor, completa todos los campos.");
             return;
         }
 
         if (!/\S+@\S+\.\S+/.test(mail)) {
-            alert("Por favor, introduce un correo electrónico válido.");
+            handleError("Por favor, introduce un correo electrónico válido.");
             return;
         }
 
         if (!/^\d+$/.test(phone)) {
-            alert("Por favor, introduce un número de teléfono válido.");
+            handleError("Por favor, introduce un número de teléfono válido.");
             return;
         }
 
         if (!/(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(password)) {
-            alert("La contraseña debe tener al menos 8 caracteres, incluyendo al menos un número y un carácter especial.");
+            handleError("La contraseña debe tener al menos 8 caracteres, incluyendo al menos un número y un carácter especial.");
             return;
         }
 
@@ -43,14 +59,14 @@ const Register = () => {
         try {
             const response = await createUser(data);
             if (response.statusText == "OK") {
-                alert("Usuario creado con éxito, bienvenid@ " + response.data.name + "!");
+                handleError("Usuario creado con éxito, bienvenid@ " + response.data.name + "!");
                 //router.push('/algo/algo') ToDo redirigir a catalogo
             } else {
-                alert("Hubo un error al crear la cuenta. Por favor, intenta de nuevo.");
+                handleError("Hubo un error al crear la cuenta. Por favor, intenta de nuevo.");
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Hubo un error al crear la cuenta. Por favor, intenta de nuevo.');
+            handleError('Hubo un error al crear la cuenta. Por favor, intenta de nuevo.');
         }
     }
 
@@ -64,7 +80,7 @@ const Register = () => {
                     alignItems: 'center',
                 }}
             >
-                <Typography component="h1" variant="h5" sx={{color: '#7B3E19'}}>
+                <Typography component="h1" variant="h5" sx={{ color: '#7B3E19' }}>
                     Registrarse
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -146,6 +162,11 @@ const Register = () => {
                     >
                         Registrarse
                     </Button>
+                    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                            {message}
+                        </Alert>
+                    </Snackbar>
                 </Box>
             </Box>
         </Container>
