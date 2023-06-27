@@ -1,15 +1,15 @@
 import React from 'react';
 import { useState, useRef } from "react";
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
-import { createUser } from '../../../services/userService';
+import { findUserByMail } from '../../../services/userService';
 import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 const Register = () => {
-    const [name, setName] = useState("");
     const [mail, setMail] = useState("");
+    const [password, setPassword] = useState("");
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("success");
@@ -49,7 +49,7 @@ const Register = () => {
         };
 
         try {
-            const response = await findUser(data);
+            const response = await findUserByMail(data);
             if (response.statusText == "OK") {
                 handleMessage("Login correcto, bienvenid@ " + response.data.name + "!", "success");
                 router.push('/admin/recipes') //ToDo redirigir a catalogo
