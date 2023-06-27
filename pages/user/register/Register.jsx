@@ -80,6 +80,7 @@ const Register = () => {
                     alignItems: 'center',
                 }}
             >
+                <img src="/images/muerde_logo_small.png" alt="Logo" />
                 <Typography component="h1" variant="h5" sx={{ color: '#7B3E19' }}>
                     Registrarse
                 </Typography>
