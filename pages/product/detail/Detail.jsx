@@ -10,7 +10,18 @@ import SaleDialog from './components/SaleDialog';
 import axios from 'axios';
 
 //TODO: Manejar user con lógica de usuario
-const user = { name: 'Pedro' }
+const user = { user_id: 1, name: 'Pedro' };
+
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(today.getDate() + 1);
+
+const defaultSale = {
+  delivery_type: 'PICK_UP',
+  user_id: user.user_id,
+  user_date: tomorrow.toISOString().split('T')[0],
+  products: []
+};
 
 const theme = createTheme({
   palette: {
@@ -27,6 +38,7 @@ const Detail = () => {
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [newSale, setNewSale] = useState(defaultSale);
 
   useEffect(() => {
     if (productId) {
@@ -40,11 +52,17 @@ const Detail = () => {
       const productResponse = response.data;
       if (productResponse && Object.keys(productResponse).length > 0) {
         setProduct(productResponse);
+        setNewSale(prevSale => ({
+          ...prevSale,
+          products: [{
+            product_id: productResponse.id_product,
+            quantity: 1
+          }]
+        }));
       } else {
         setError('Algo salió mal');
       }
     } catch (error) {
-      console.log("entre al catch")
       console.error('Error fetching product:', error);
       setError('Algo salió mal');
     } finally {
@@ -52,14 +70,29 @@ const Detail = () => {
     }
   };
 
+  const updateProductQuantity = (newQuantity) => {
+    setNewSale(prevSale => {
+      const productIndex = prevSale.products.findIndex(product => product.id_product === product.id_product);
+      if (productIndex !== -1) {
+        const updatedProducts = [...prevSale.products];
+        updatedProducts[productIndex] = { ...updatedProducts[productIndex], quantity: newQuantity };
+        return {
+          ...prevSale,
+          products: updatedProducts,
+        };
+      }
+      return prevSale;
+    });
+  };
+
   const handleDecrease = () => {
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
+    updateProductQuantity(quantity - 1)
+    setQuantity(quantity - 1)
   };
 
   const handleIncrease = () => {
-    setQuantity(quantity + 1);
+    updateProductQuantity(quantity + 1)
+    setQuantity(quantity + 1)
   };
 
   const handleSnackbarClose = () => {
@@ -122,7 +155,7 @@ const Detail = () => {
               </Box>
             )
           }
-          <SaleDialog product={product} quantity={quantity} />
+          <SaleDialog product={product} quantity={quantity} setNewSale={setNewSale} newSale={newSale} setError={setError}/>
         </Box>
       </ThemeProvider>
     </Layout>
