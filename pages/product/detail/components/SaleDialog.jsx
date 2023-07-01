@@ -3,35 +3,21 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, RadioGroup, FormControlLabel, Radio, Grid, TextField } from '@mui/material';
 
-// TODO manejar con logica de usuario
-const user = { user_id: 1 };
-
 const today = new Date();
 const tomorrow = new Date(today);
 tomorrow.setDate(today.getDate() + 1);
 
-const SaleDialog = ({ product = {}, quantity }) => {
+const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
   const [openSaleModal, setOpenSaleModal] = useState(false);
 
   const router = useRouter();
 
-  const defaultSale = {
-    delivery_type: 'PICK_UP',
-    user_id: user.user_id,
-    user_date: tomorrow,
-    products: [
-      {
-        product_id: product.id_product,
-        quantity: quantity
-      }
-    ]
-  };
-
-  const [newSale, setNewSale] = useState(defaultSale);
-
   const handleCloseSaleModal = () => {
     setOpenSaleModal(false);
-    setNewSale(defaultSale);
+    setNewSale(prevSale => ({
+      ...prevSale,
+      delivery_type: 'PICK_UP'
+    }));
   };
 
   const handleDoSale = async () => {
@@ -41,19 +27,28 @@ const SaleDialog = ({ product = {}, quantity }) => {
         sale: newSale,
       });
       router.push(`/user/orders/order/${s.data.id_sale}?exito=true`);
-      // TODO tiempo estimado de preparación
     } catch (error) {
-      console.log(error)
       console.error('Error doing sale:', error);
+      if (error.response.status === 409) {
+        setError("No hay suficiente stock para la cantidad solicitada. Prueba con menor cantidad.")
+      } else {
+        setError("Algo salió mal")
+      }
     }
   };
 
   const handleDeliveryTypeChange = (event) => {
-    setNewSale({ ...newSale, delivery_type: event.target.value });
+    setNewSale(prevSale => ({
+      ...prevSale,
+      delivery_type: event.target.value
+    }));
   };  
   
   const handleDateChange = (event) => {
-    setNewSale({ ...newSale, user_date: event.target.value });
+    setNewSale(prevSale => ({
+      ...prevSale,
+      user_date: event.target.value
+    }));
   };
 
   return (
