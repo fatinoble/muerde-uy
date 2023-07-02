@@ -91,25 +91,6 @@ const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
     );
   }
 
-  // return (
-  //   <ThemeProvider theme={theme}>
-  //     <Grid container justifyContent="center" spacing={2} sx={{ maxWidth: 1200 }}>
-  // {filteredProducts.map((product) => (
-  //   <Grid  item key={product.id} xs={4}>
-  //     <a className="product-card-link" href={`/product/detail?id=${product.id_product}`}>
-  //       <ProductCard
-  //         imageSrc="/images/croassant.jpg"
-  //         title={product.title}
-  //         price={product.price}
-  //         isOutOfStock={product.is_out_of_stock}
-  //       />
-  //     </a>
-  //   </Grid>
-  // ))}
-  //     </Grid>
-  //   </ThemeProvider>
-  // );
-
   return (
     <div className="product-catalog">
       {filteredProducts.map((product) => (

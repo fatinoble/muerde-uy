@@ -53,7 +53,7 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
 
   return (
     <>
-      <Button variant="contained" color="primary" sx={{ marginTop: '1rem' }} onClick={() => setOpenSaleModal(true)} disabled={product.is_out_of_stock}>
+      <Button variant="contained" color="primary" className="product-detail-buy-button" onClick={() => setOpenSaleModal(true)} disabled={product.is_out_of_stock}>
         Comprar
       </Button>
 
