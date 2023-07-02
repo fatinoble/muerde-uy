@@ -1,5 +1,6 @@
 import React from 'react';
-import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, InputAdornment } from '@mui/material';
+import {Filter} from '../../../../src/svg'
 
 const TagFilter = ({ allTags, selectedTags, setSelectedTags }) => {
 
@@ -8,8 +9,10 @@ const TagFilter = ({ allTags, selectedTags, setSelectedTags }) => {
   };
 
   return (
-    <FormControl sx={{ marginTop: '10px', minWidth: '200px' }}>
-      <InputLabel id="tag-filter-label">Filtrar por etiquetas</InputLabel>
+    <>
+    <FormControl className="tag-filter-form-control">
+
+      <InputLabel id="tag-filter-label" > <Filter/></InputLabel>
       <Select
         labelId="tag-filter-label"
         id="tag-filter-select"
@@ -25,6 +28,7 @@ const TagFilter = ({ allTags, selectedTags, setSelectedTags }) => {
         ))}
       </Select>
     </FormControl>
+    </>
   );
 };
 

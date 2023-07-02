@@ -9,9 +9,12 @@ const WhatsAppButton = ({message}) => {
   };
 
   return (
+    <div className="wpp-container">
     <button className='wpp-button' onClick={handleClick}>
       <img src="/images/whatsapp-icon.png" alt="WhatsApp" className="wpp-icon"/>
+      <span>Escribinos por Whatsapp</span>
     </button>
+    </div>
   );
 };
 

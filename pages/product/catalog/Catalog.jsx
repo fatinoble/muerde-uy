@@ -9,7 +9,7 @@ import WhatsAppButton from '../../../src/components/WhatsAppButton';
 import { ToggleButton, ToggleButtonGroup, Grid, Button } from '@mui/material';
 
 //TODO: Manejar user con lógica de usuario
-const user = {name: 'Pedro'}
+const user = { name: 'Pedro' }
 
 const Catalog = () => {
   const [selectedCatalog, setSelectedCatalog] = useState('products');
@@ -38,56 +38,61 @@ const Catalog = () => {
 
   return (
     <Layout>
-            <Head>
+      <Head>
         <title>Catálogo</title>
       </Head>
-      <Grid container spacing={2} alignItems="center" className="catalog-main-container">
-        <Grid sx={{ textAlign: 'left' }}>
-          <ToggleButtonGroup
-            value={selectedCatalog}
-            exclusive
-            onChange={handleCatalogTypeChange}
-            aria-label="catalog type"
-          >
-            <ToggleButton value="products" aria-label="products">
-              Productos
-            </ToggleButton>
-            <ToggleButton value="services" aria-label="services">
-              Servicios
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </Grid>
-        <Grid sx={{ textAlign: 'left', width: '50%', marginLeft: '20px' }}>
-          <Search handleSearchChange={handleSearchChange} searchQuery={searchQuery} />
+      <div className="catalog-main-container">
+        <div className="actions-container">
+          <div className="actions-filter-container">
+            <Search handleSearchChange={handleSearchChange} searchQuery={searchQuery} />
+            {selectedCatalog === 'products' && (
+              <>
+                <TagFilter allTags={allTags} selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleClearFilters()}
+                  sx={{
+                    borderRadius: '1rem',
+                    textTransform: 'none',
+                    fontWeight: 'bold',
+                    fontSize: '10px',
+                    backgroundColor: '#E28D8D'
+                  }}
+                >
+                  Limpiar
+                </Button>
+              </>
+            )
+            }
+          </div>
 
-          {selectedCatalog === 'products' && (
-            <>
-              <TagFilter allTags={allTags} selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleClearFilters()}
-                sx={{
-                  borderRadius: '1rem',
-                  textTransform: 'none',
-                  fontWeight: 'bold',
-                  fontSize: '1rem',
-                  backgroundColor: '#A87658'
-                }}
-              >
-                Limpiar
-              </Button>
-            </>
-          )
-          }
-          <WhatsAppButton message={whatsappCatalogMessage} />
-        </Grid>
-      </Grid>
+          <div className="catalog-switch-container">
+            <ToggleButtonGroup
+              className="catalog-switch-toggle"
+              value={selectedCatalog}
+              exclusive
+              onChange={handleCatalogTypeChange}
+              aria-label="catalog type"
+            >
+              <ToggleButton value="products" aria-label="products">
+                Productos
+              </ToggleButton>
+              <ToggleButton value="services" aria-label="services">
+                Servicios
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </div>
+          <div>
+            <WhatsAppButton message={whatsappCatalogMessage} />
+          </div>
+        </div>
 
-      <div className="catalogs-container">
-        {selectedCatalog === 'products'
-          ? <ProductCatalog searchQuery={searchQuery} setAllTags={setAllTags} selectedTags={selectedTags} />
-          : <ServiceCatalog searchQuery={searchQuery} />}
+        <div className="catalogs-container">
+          {selectedCatalog === 'products'
+            ? <ProductCatalog searchQuery={searchQuery} setAllTags={setAllTags} selectedTags={selectedTags} />
+            : <ServiceCatalog searchQuery={searchQuery} />}
+        </div>
       </div>
     </Layout>
   );

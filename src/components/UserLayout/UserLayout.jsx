@@ -6,7 +6,7 @@ const UserLayout = ({ children }) => {
   return (
     <div className="user-layout-container">
       <UserSettingsMenu/>
-      <Grid container>
+      <Grid container style={{height: '100%'}}>
         <Grid item xs={12} sm={3} md={2}>
           <UserMenu/>
         </Grid>

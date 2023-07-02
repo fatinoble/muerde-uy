@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ProductCard from './ProductCard';
 import { Grid, Snackbar, Typography, Box, } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -17,7 +17,7 @@ const theme = createTheme({
   },
 });
 
-const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
+const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,7 +42,7 @@ const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
       return products;
     }
   }, [products, searchQuery, selectedTags]);
-  
+
 
   useEffect(() => {
     if (!products.length) {
@@ -91,23 +91,38 @@ const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
     );
   }
 
+  // return (
+  //   <ThemeProvider theme={theme}>
+  //     <Grid container justifyContent="center" spacing={2} sx={{ maxWidth: 1200 }}>
+  // {filteredProducts.map((product) => (
+  //   <Grid  item key={product.id} xs={4}>
+  //     <a className="product-card-link" href={`/product/detail?id=${product.id_product}`}>
+  //       <ProductCard
+  //         imageSrc="/images/croassant.jpg"
+  //         title={product.title}
+  //         price={product.price}
+  //         isOutOfStock={product.is_out_of_stock}
+  //       />
+  //     </a>
+  //   </Grid>
+  // ))}
+  //     </Grid>
+  //   </ThemeProvider>
+  // );
+
   return (
-    <ThemeProvider theme={theme}>
-      <Grid container spacing={1} sx={{ display: 'flex', justifyContent: 'flex-start' }} className="product-card-list">
-        {filteredProducts.map((product) => (
-          <Grid item key={product.id} sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-            <a className="product-card-link" href={`/product/detail?id=${product.id_product}`}>
-            <ProductCard
-              imageSrc="/images/croassant.jpg"
-              title={product.title}
-              price={product.price}
-              isOutOfStock={product.is_out_of_stock}
-            />
-            </a>
-          </Grid>
-        ))}
-      </Grid>
-    </ThemeProvider>
+    <div className="product-catalog">
+      {filteredProducts.map((product) => (
+        <a className="product-card-link" href={`/product/detail?id=${product.id_product}`} key={product.id}>
+          <ProductCard
+            imageSrc="/images/croassant.jpg"
+            title={product.title}
+            price={product.price}
+            isOutOfStock={product.is_out_of_stock}
+          />
+        </a>
+    ))}
+    </div>
   );
 };
 

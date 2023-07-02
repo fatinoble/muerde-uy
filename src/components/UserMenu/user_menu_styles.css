@@ -14,7 +14,6 @@
 .user-menu-selector {
   color: var(--color-5, #1E265E);
   font-size: 18px;
-  font-family: Poppins;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -23,7 +22,6 @@
 .user-menu-selector-selected {
   color: #A95C5C;
   font-size: 18px;
-  font-family: Poppins;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
