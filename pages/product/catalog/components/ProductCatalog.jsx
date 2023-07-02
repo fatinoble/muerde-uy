@@ -93,9 +93,9 @@ const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Grid container spacing={3} sx={{ display: 'flex', alignItems: 'stretch' }}>
+      <Grid container spacing={1} sx={{ display: 'flex', justifyContent: 'flex-start' }} className="product-card-list">
         {filteredProducts.map((product) => (
-          <Grid item key={product.id} xs={12} sm={6} md={4}>
+          <Grid item key={product.id} sx={{ display: 'flex', justifyContent: 'flex-start' }}>
             <a className="product-card-link" href={`/product/detail?id=${product.id_product}`}>
             <ProductCard
               imageSrc="/images/croassant.jpg"

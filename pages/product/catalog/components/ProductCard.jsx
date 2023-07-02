@@ -16,8 +16,8 @@ const theme = createTheme({
 const ProductCard = ({ imageSrc, title, price, isOutOfStock }) => {
   return (
     <ThemeProvider theme={theme}>
-      <Card sx={{ height: '100%', opacity: isOutOfStock ? '60%' : '100%' }}>
-        <CardMedia component="img" src={imageSrc} alt={title} />
+      <Card sx={{ height: '100%', opacity: isOutOfStock ? '60%' : '100%' }} className="product-card-container">
+        <CardMedia component="img" src={imageSrc} alt={title} className="product-card-image"/>
         <CardContent>
           <div className="top-info-card">
             <Typography variant="h6" component="div" color="primary">

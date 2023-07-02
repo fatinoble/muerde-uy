@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Head from 'next/head';
 import Layout from '../../../src/components/UserLayout';
 import ProductCatalog from './components/ProductCatalog';
 import ServiceCatalog from './components/ServiceCatalog';
@@ -37,7 +38,10 @@ const Catalog = () => {
 
   return (
     <Layout>
-      <Grid container spacing={2} alignItems="center">
+            <Head>
+        <title>Catálogo</title>
+      </Head>
+      <Grid container spacing={2} alignItems="center" className="catalog-main-container">
         <Grid sx={{ textAlign: 'left' }}>
           <ToggleButtonGroup
             value={selectedCatalog}
@@ -80,7 +84,7 @@ const Catalog = () => {
         </Grid>
       </Grid>
 
-      <div>
+      <div className="catalogs-container">
         {selectedCatalog === 'products'
           ? <ProductCatalog searchQuery={searchQuery} setAllTags={setAllTags} selectedTags={selectedTags} />
           : <ServiceCatalog searchQuery={searchQuery} />}

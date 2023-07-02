@@ -1,7 +1,22 @@
-.user-layout-container {
-  margin: 40px;
+html, body {
+  height: 100%;
+  margin: 0;
 }
 
-html {
-  background-color: #faf9f6;
+#__next {
+  height: 100%;
+}
+
+.main-content-pages-container {
+  height: 100%;
+  border-radius: 55px 0px 0px 55px;
+  background: #EDEDED;
+}
+
+.main-content-pages{
+  margin-top: 50px
+}
+
+.user-layout-container {
+  height: 100%;
 }
