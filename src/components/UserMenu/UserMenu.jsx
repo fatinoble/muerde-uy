@@ -5,66 +5,69 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useRouter } from 'next/router';
 import { Book, LocalMall, Logout } from '@mui/icons-material';
+import { Box, Typography, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Home, ShoppingCart, ExitToApp } from '@mui/icons-material';
+import { Cupcacke, ShippingCart, SignOut } from '../../svg';
 
 import './user_menu_styles.css';
 
 const UserMenu = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
   const router = useRouter();
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = (route) => {
-    setAnchorEl(null);
-    router.push(route);
-  };
 
   const handleLogout = () => {
     // Handle logout logic
   };
 
-  const renderMenu = () => {
-    return (
-      <Menu
-        id="user-menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
-        }}
-      >
-        <MenuItem onClick={() => handleClose('/product/catalog')}>
-          <Book style={{ marginRight: '8px', color: '#F7DDE8' }} />
-          Catálogo
-        </MenuItem>
-        <MenuItem onClick={() => handleClose('/user/orders')}>
-          <LocalMall style={{ marginRight: '8px', color: '#B7C6A8' }} />
-          Mis pedidos
-        </MenuItem>
-        <MenuItem onClick={() => handleLogout()}>
-          <Logout style={{ marginRight: '8px', color: '#FF3B30' }} />
-          Cerrar Sesión
-        </MenuItem>
-      </Menu>
-    );
+  const handleNavigateTo = (route) => {
+    // router.push(route);
+    // window.refresh();
+    window.location.href = `${window.location.origin}${route}`
+  }
+
+  const isCurrentRoute = (route) => {
+    return router.pathname.includes(route);
   };
 
   return (
-    <div className="user-menu-container">
-      <span className="user-name-container">Pablo Perez</span>
-      <IconButton onClick={handleClick} className="user-icon">
-        <AccountCircle />
-      </IconButton>
-      {renderMenu()}
-    </div>
+    <Box p={2}>
+      <div className='logo-container'>
+        <img src="/images/muerde_pink.png" alt="Logo" style={{ marginBottom: '1rem' }} />
+      </div>
+      <List>
+        <ListItem
+          button
+          className={isCurrentRoute('product') ? "user-menu-selector-container-selected" : "user-menu-selector-container"}
+          onClick={() => handleNavigateTo('/product/catalog')}
+        >
+          <div className='list-item-content-container'>
+            <ListItemIcon>
+              <Cupcacke />
+            </ListItemIcon>
+            <ListItemText primary="Catálogo" className={isCurrentRoute('product') ? "user-menu-selector-selected" : "user-menu-selector"} />
+          </div>
+        </ListItem >
+        <ListItem
+          button
+          className={isCurrentRoute('orders')  ? "user-menu-selector-container-selected" : "user-menu-selector-container"}
+          onClick={() => handleNavigateTo('/user/orders')}
+        >
+          <div className='list-item-content-container'>
+            <ListItemIcon>
+              <ShippingCart />
+            </ListItemIcon>
+            <ListItemText primary="Mis pedidos" className={isCurrentRoute('orders') ? "user-menu-selector-selected" : "user-menu-selector"} />
+          </div>
+        </ListItem>
+        <ListItem button className="user-menu-selector-container" onClick={() => handleLogout()}>
+          <div className='list-item-content-container'>
+            <ListItemIcon>
+              <SignOut />
+            </ListItemIcon>
+            <ListItemText primary="Cerrar sesión" className="user-menu-selector" />
+          </div>
+        </ListItem>
+      </List>
+    </Box>
   );
 };
 

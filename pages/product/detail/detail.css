@@ -1,6 +1,113 @@
+.product-detail-main-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+.product-detail-container {
+  width: 900px;
+  min-height: 680px;
+  flex-shrink: 0;
+  border-radius: 43px;
+  background: #FFF;
+  box-shadow: 2px 2px 60px 0px rgba(106, 9, 9, 0.08);
+  margin: 10px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-detail-content {
+  margin-top: 10px;
+  margin-left: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-detail-image {
+  border-radius: 11px;
+  border: 2px solid #FFE8E8;
+  width: 800px;
+  height: 500px;
+  margin-top: 40px;
+  margin-left: 40px;
+  flex-shrink: 0;
+}
+
 .oos-pill {
-  color: #E7D9F3;
-  background-color: #d35115;
-  padding: 5px;
-  border-radius: 15%;
+  color: #FF5A5A;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.product-detail-title-box {
+  color: #818181;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 10px;
+}
+
+.product-detail-description-box {
+  color: #818181;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 10px;
+  max-width: 500px;
+}
+
+.product-detail-price-box {
+  border-radius: 3px;
+  background: #E28D8D;
+  width: 100px;
+  height: 40px;
+  flex-shrink: 0;
+  color: #FFF;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-detail-content-right {
+  margin-right: 60px;
+}
+
+.product-detail-buy-button {
+  width: 160px;
+  height: 50px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: #A95C5C;
+}
+
+.product-detail-quantity-changer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.product-detail-quantity-changer button {
+  background: #A95C5C;
+  font-size: 18px;
+}
+
+.product-detail-quantity-label {
+  color: #818181;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }

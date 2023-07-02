@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ProductCard from './ProductCard';
 import { Grid, Snackbar, Typography, Box, } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -17,7 +17,7 @@ const theme = createTheme({
   },
 });
 
-const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
+const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -42,7 +42,7 @@ const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
       return products;
     }
   }, [products, searchQuery, selectedTags]);
-  
+
 
   useEffect(() => {
     if (!products.length) {
@@ -92,22 +92,18 @@ const ProductCatalog = ({searchQuery = '', setAllTags, selectedTags}) => {
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <Grid container spacing={3} sx={{ display: 'flex', alignItems: 'stretch' }}>
-        {filteredProducts.map((product) => (
-          <Grid item key={product.id} xs={12} sm={6} md={4}>
-            <a className="product-card-link" href={`/product/detail?id=${product.id_product}`}>
-            <ProductCard
-              imageSrc="/images/croassant.jpg"
-              title={product.title}
-              price={product.price}
-              isOutOfStock={product.is_out_of_stock}
-            />
-            </a>
-          </Grid>
-        ))}
-      </Grid>
-    </ThemeProvider>
+    <div className="product-catalog">
+      {filteredProducts.map((product) => (
+        <a className="product-card-link" href={`/product/detail?id=${product.id_product}`} key={product.id}>
+          <ProductCard
+            imageSrc="/images/croassant.jpg"
+            title={product.title}
+            price={product.price}
+            isOutOfStock={product.is_out_of_stock}
+          />
+        </a>
+    ))}
+    </div>
   );
 };
 

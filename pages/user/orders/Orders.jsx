@@ -43,6 +43,7 @@ const Orders = () => {
     setPage(0);
   };
 
+  //TODO fix pagination style
   const rows = orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
 
@@ -51,48 +52,47 @@ const Orders = () => {
       <Head>
         <title>Pedidos</title>
       </Head>
-      <h1>Mis Pedidos</h1>
-            <TableContainer component={Paper} style={{ maxWidth: '500', margin: '0 auto' }}>
-              <Table aria-label="My Table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Nro Pedido</TableCell>
-                    <TableCell>Fecha de compra</TableCell>
-                    <TableCell>Fecha de entrega</TableCell>
-                    <TableCell>Estado</TableCell>
-                    <TableCell></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map((order, index) => (
-                    <TableRow style={{ backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#F0EBEB' }}>
-                      <TableCell>{order.id_sale}</TableCell>
-                      <TableCell>{order.start_date.substring(0, 10)}</TableCell>
-                      <TableCell>{order.finish_date ? order.finish_date.substring(0, 10) : '-'}</TableCell>
-                      <TableCell>{getOrderStateName(order.status)}</TableCell>
-                      <TableCell>
-                        <Button variant="outlined" onClick={(e) => {
-                          e.preventDefault();
-                          navigateToPage(order.id_sale)
-                        }}>
-                          Ver
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={orders.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              labelRowsPerPage="Pedidos por página"
-            />
+      <TableContainer component={Paper} style={{ maxWidth: '500', margin: '0 auto' }}>
+        <Table aria-label="My Table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Nro Pedido</TableCell>
+              <TableCell>Fecha de compra</TableCell>
+              <TableCell>Fecha de entrega</TableCell>
+              <TableCell>Estado</TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {orders.map((order, index) => (
+              <TableRow style={{ backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#F0EBEB' }}>
+                <TableCell>{order.id_sale}</TableCell>
+                <TableCell>{order.start_date.substring(0, 10)}</TableCell>
+                <TableCell>{order.finish_date ? order.finish_date.substring(0, 10) : '-'}</TableCell>
+                <TableCell>{getOrderStateName(order.status)}</TableCell>
+                <TableCell>
+                  <Button variant="outlined" onClick={(e) => {
+                    e.preventDefault();
+                    navigateToPage(order.id_sale)
+                  }}>
+                    Ver
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {/* <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={orders.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          labelRowsPerPage="Pedidos por página"
+        /> */}
+      </TableContainer>
     </Layout>
   );
 };
