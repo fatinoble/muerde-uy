@@ -10,10 +10,11 @@
 }
 
 .oos-pill {
-  color: #E7D9F3;
-  background-color: #d35115;
-  padding: 5px;
-  border-radius: 15%;
+  color: #FF5A5A;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .product-card-container {
@@ -54,7 +55,7 @@
   justify-content: center;
 }
 
-.catalog-switch-container{
+.catalog-switch-container {
   margin-bottom: 30px;
 }
 
@@ -62,7 +63,7 @@
   margin-bottom: 20px;
   display: flex;
   align-items: center;
-  justify-content: center; 
+  justify-content: center;
 }
 
 .search-bar-textfield {
@@ -92,43 +93,69 @@
 
 .catalog-switch-toggle {
   width: 499px;
-height: 47px;
+  height: 47px;
   border-radius: 28.5px;
-background: #E5E5E5;
+  background: #E5E5E5;
 }
 
-.catalog-switch-toggle button{
+.catalog-switch-toggle button {
   border: none;
   width: 100%;
 }
 
-.catalog-switch-toggle span{
+.catalog-switch-toggle span {
   color: #4C4C4C;
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
- }
+}
 
 .tag-filter-form-control {
   min-width: 90px;
 }
 
-.tag-filter-form-control svg{
+.tag-filter-form-control svg {
   margin-right: 20px;
   display: inline-block;
   vertical-align: middle;
 }
 
-.tag-filter-form-control label{
+.tag-filter-form-control label {
   display: inline-block;
   vertical-align: middle;
 }
 
-.tag-filter-form-control fieldset{
+.tag-filter-form-control fieldset {
   border: none;
 }
 
 #tag-filter-select {
   color: #A87658;
+}
+
+.product-card-price-box {
+  border-radius: 3px;
+  background: #E28D8D;
+  width: 73px;
+  height: 24px;
+  flex-shrink: 0;
+  color: #FFF;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: 0.6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-card-title-box {
+  color: #818181;
+font-size: 20px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+margin-bottom: 10px;
 }

@@ -5,37 +5,37 @@ const services = [
   {
     id: 1,
     title: 'Servicio de Pastelería para Cumpleaños',
-    price: '$99.99',
+    price: '99.99',
     image: '/images/party-cake.jpg',
   },
   {
     id: 2,
     title: 'Servicio de Pastelería para Fiestas de Matrimonio',
-    price: '$199.99',
+    price: '199.99',
     image: '/images/party-cake.jpg',
   },
   {
     id: 3,
     title: 'Servicio de Pastelería para Eventos Corporativos',
-    price: '$149.99',
+    price: '149.99',
     image: '/images/party-cake.jpg',
   },
   {
     id: 4,
     title: 'Servicio de Pastelería para Aniversarios',
-    price: '$79.99',
+    price: '79.99',
     image: '/images/party-cake.jpg',
   },
   {
     id: 5,
     title: 'Servicio de Pastelería para Baby Showers',
-    price: '$89.99',
+    price: '89.99',
     image: '/images/party-cake.jpg',
   },
   {
     id: 6,
     title: 'Servicio de Pastelería para Eventos Especiales',
-    price: '$129.99',
+    price: '129.99',
     image: '/images/party-cake.jpg',
   },
 ];
