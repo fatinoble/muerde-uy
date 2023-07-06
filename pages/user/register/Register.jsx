@@ -1,4 +1,5 @@
 import React from 'react';
+import Layout from '../../../src/components/UserLayout';
 import { useState, useRef } from "react";
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import { createUser } from '../../../services/userService';
@@ -62,6 +63,7 @@ const Register = () => {
         try {
             const response = await createUser(data);
             if (response.statusText == "OK") {
+                localStorage.setItem('token registration', response.data.token);
                 handleMessage("Usuario creado con éxito, bienvenid@ " + response.data.name + "!", "success");
                 router.push('/admin/recipes') //ToDo redirigir a catalogo
             } else {
@@ -74,128 +76,130 @@ const Register = () => {
     }
 
     return (
-        <Container component="main" maxWidth="xs">
-            <Box
-                sx={{
-                    marginTop: 8,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                <img src="/images/muerde_logo_small.png" alt="Muerde logo" />
-                <Typography component="h1" variant="h5" sx={{ color: '#7B3E19' }}>
-                    Registrarse
-                </Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="name"
-                        label="Nombre"
-                        name="name"
-                        autoComplete="name"
-                        autoFocus
-                        onChange={e => setName(e.target.value)}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="mail"
-                        label="Correo Electrónico"
-                        name="mail"
-                        autoComplete="mail"
-                        autoFocus
-                        onChange={e => setMail(e.target.value)}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Contraseña"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        onChange={e => setPassword(e.target.value)}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="address"
-                        label="Dirección"
-                        name="address"
-                        autoComplete="address"
-                        autoFocus
-                        onChange={e => setAddress(e.target.value)}
-                    />
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="phone"
-                        label="Teléfono"
-                        name="phone"
-                        autoComplete="phone"
-                        autoFocus
-                        onChange={e => setPhone(e.target.value)}
-                    />
-                    <Link href="/user/login" passHref>
-                        <Typography
-                            variant="body2"
-                            align="center"
-                            sx={{ cursor: 'pointer', textDecoration: 'underline', mt: 2, color: '#7B3E19'}}
-                        >
-                            ¿Ya tienes una cuenta? Inicia sesión aquí
-                        </Typography>
-                    </Link>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        sx={{
-                            display: 'block',
-                            mt: 2,
-                            ml: 'auto',
-                            mr: 'auto',
-                            backgroundColor: '#EDCBA2',
-                            color: '#7B3E19',
-                            '&:hover': {
-                                backgroundColor: '#CCA870',
-                            },
-                        }}
-                    >
+        <Layout>
+            <Container component="main" maxWidth="xs">
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <img src="/images/muerde_logo_small.png" alt="Muerde logo" />
+                    <Typography component="h1" variant="h5" sx={{ color: '#7B3E19' }}>
                         Registrarse
-                    </Button>
-                    <Popover
-                        open={open}
-                        anchorEl={anchorRef.current}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                        }}
-                        style={{ transform: 'translateY(10px)' }}
-                    >
-                        <Alert severity={messageType} sx={{ width: '100%' }}>
-                            {message}
-                        </Alert>
-                    </Popover>
+                    </Typography>
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="name"
+                            label="Nombre"
+                            name="name"
+                            autoComplete="name"
+                            autoFocus
+                            onChange={e => setName(e.target.value)}
+                        />
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="mail"
+                            label="Correo Electrónico"
+                            name="mail"
+                            autoComplete="mail"
+                            autoFocus
+                            onChange={e => setMail(e.target.value)}
+                        />
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Contraseña"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                            onChange={e => setPassword(e.target.value)}
+                        />
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="address"
+                            label="Dirección"
+                            name="address"
+                            autoComplete="address"
+                            autoFocus
+                            onChange={e => setAddress(e.target.value)}
+                        />
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="phone"
+                            label="Teléfono"
+                            name="phone"
+                            autoComplete="phone"
+                            autoFocus
+                            onChange={e => setPhone(e.target.value)}
+                        />
+                        <Link href="/user/login" passHref>
+                            <Typography
+                                variant="body2"
+                                align="center"
+                                sx={{ cursor: 'pointer', textDecoration: 'underline', mt: 2, color: '#7B3E19' }}
+                            >
+                                ¿Ya tienes una cuenta? Inicia sesión aquí
+                            </Typography>
+                        </Link>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{
+                                display: 'block',
+                                mt: 2,
+                                ml: 'auto',
+                                mr: 'auto',
+                                backgroundColor: '#EDCBA2',
+                                color: '#7B3E19',
+                                '&:hover': {
+                                    backgroundColor: '#CCA870',
+                                },
+                            }}
+                        >
+                            Registrarse
+                        </Button>
+                        <Popover
+                            open={open}
+                            anchorEl={anchorRef.current}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                            style={{ transform: 'translateY(10px)' }}
+                        >
+                            <Alert severity={messageType} sx={{ width: '100%' }}>
+                                {message}
+                            </Alert>
+                        </Popover>
+                    </Box>
                 </Box>
-            </Box>
-        </Container>
+            </Container>
+        </Layout>
     );
 }
 
