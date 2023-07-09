@@ -3,34 +3,19 @@ import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 
-const SalesByProductChart = () => {
+const SalesByProductChart = ({ initStartDate, initEndDate }) => {
   const [salesData, setSalesData] = useState([]);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState(initStartDate);
+  const [endDate, setEndDate] = useState(initEndDate);
 
   useEffect(() => {
-    const lastMonthStartDate = getLastMonthStartDate();
-    const lastMonthEndDate = getLastMonthEndDate();
-
-    setStartDate(lastMonthStartDate);
-    setEndDate(lastMonthEndDate);
-
-    fetchSalesData(lastMonthStartDate, lastMonthEndDate);
+    fetchSalesData(initStartDate, initEndDate);
   }, []);
 
   const fetchSalesData = async (start, end) => {
     try {
-      const mockedResponse = [
-        { product: 'Product A', sales: 20 },
-        { product: 'Product B', sales: 10 },
-        { product: 'Product C', sales: 15 },
-        { product: 'Product D', sales: 8 },
-        { product: 'Product E', sales: 12 },
-      ];
-      // Make API call to retrieve sales data based on the start and end dates
-      // const response = await axios.get(`/api/sales?startDate=${start}&endDate=${end}`);
-      const data = mockedResponse;
-      setSalesData(data);
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/total_product?start=${start}&end=${end}`);
+      setSalesData(data.sales_by_product);
     } catch (error) {
       console.error('Error fetching sales data:', error);
     }
@@ -40,27 +25,8 @@ const SalesByProductChart = () => {
     fetchSalesData(startDate, endDate);
   };
 
-  const getLastMonthStartDate = () => {
-    const today = new Date();
-    const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-    return formatDate(lastMonth);
-  };
-
-  const getLastMonthEndDate = () => {
-    const today = new Date();
-    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-    return formatDate(lastDayOfMonth);
-  };
-
-  const formatDate = (date) => {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
   const getDateLabel = () => {
-    if (startDate === getLastMonthStartDate() && endDate === getLastMonthEndDate()) {
+    if (startDate === initStartDate && endDate === initEndDate) {
       return 'Productos más vendidos del último mes';
     } else if (startDate && endDate) {
       return `Productos más vendidos del ${startDate} al ${endDate}`;
@@ -104,11 +70,11 @@ const SalesByProductChart = () => {
       </Grid>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={salesData}>
-          <XAxis dataKey="product" />
+          <XAxis dataKey="title" />
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="sales" fill="#8884d8" />
+          <Bar dataKey="sales_count" fill="#8884d8" />
         </BarChart>
       </ResponsiveContainer>
     </Container>

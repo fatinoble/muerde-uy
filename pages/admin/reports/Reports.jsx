@@ -9,6 +9,23 @@ import OrdersChart from './components/OrdersChart';
 
 const Reports = () => {
 
+  const getDateFromMonthAgo = () => {
+    const today = new Date();
+    const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
+    return formatDate(lastMonth);
+  };
+
+  const getDateFromToday = () => {
+    const today = new Date();
+    return formatDate(today);
+  };
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   return (
     <Layout>
       <Container>
@@ -17,9 +34,9 @@ const Reports = () => {
         </Typography>
         <OrdersChart />
         <StockChart />
-        <SaleByDateChart />
-        <SalesByProductChart />
-        <SalesByCustomerChart />
+        <SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
+        <SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
+        <SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
       </Container>
     </Layout>
   );

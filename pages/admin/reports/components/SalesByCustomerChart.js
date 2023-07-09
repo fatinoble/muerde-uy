@@ -3,19 +3,13 @@ import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 
-const SalesByCustomerChart = () => {
+const SalesByCustomerChart = ({ initStartDate, initEndDate }) => {
   const [salesData, setSalesData] = useState([]);
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState(initStartDate);
+  const [endDate, setEndDate] = useState(initEndDate);
 
   useEffect(() => {
-    const lastMonthStartDate = getLastMonthStartDate();
-    const lastMonthEndDate = getLastMonthEndDate();
-
-    setStartDate(lastMonthStartDate);
-    setEndDate(lastMonthEndDate);
-
-    fetchSalesData(lastMonthStartDate, lastMonthEndDate);
+    fetchSalesData(initStartDate, initEndDate);
   }, []);
 
   const fetchSalesData = async (start, end) => {
@@ -31,27 +25,8 @@ const SalesByCustomerChart = () => {
     fetchSalesData(startDate, endDate);
   };
 
-  const getLastMonthStartDate = () => {
-    const today = new Date();
-    const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-    return formatDate(lastMonth);
-  };
-
-  const getLastMonthEndDate = () => {
-    const today = new Date();
-    const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 0);
-    return formatDate(lastDayOfMonth);
-  };
-
-  const formatDate = (date) => {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
   const getDateLabel = () => {
-    if (startDate === getLastMonthStartDate() && endDate === getLastMonthEndDate()) {
+    if (startDate === initStartDate && endDate === initEndDate) {
       return `Clientes con más ventas del último mes`;
     }
     else if (startDate && endDate) {
