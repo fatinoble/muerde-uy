@@ -20,17 +20,8 @@ const SalesByCustomerChart = () => {
 
   const fetchSalesData = async (start, end) => {
     try {
-      const mockedResponse = [
-        { customer: 'Customer A', sales: 100 },
-        { customer: 'Customer B', sales: 80 },
-        { customer: 'Customer C', sales: 120 },
-        { customer: 'Customer D', sales: 60 },
-        { customer: 'Customer E', sales: 90 },
-      ];
-      // Make API call to retrieve sales data based on the start and end dates
-      //const response = await axios.get(`/api/sales?startDate=${start}&endDate=${end}`);
-      const data = mockedResponse;
-      setSalesData(data);
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/total_customer?start=${start}&end=${end}`);
+      setSalesData(data.sales_by_customer);
     } catch (error) {
       console.error('Error fetching sales data:', error);
     }
@@ -105,7 +96,7 @@ const SalesByCustomerChart = () => {
       </Grid>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={salesData}>
-          <XAxis dataKey="customer" />
+          <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
           <Legend />
