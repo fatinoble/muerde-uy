@@ -1,5 +1,4 @@
 import React from 'react';
-import Layout from '../../../src/components/AdminLayout';
 import { useState, useRef } from "react";
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import { findUserByMail } from '../../../services/userService';
