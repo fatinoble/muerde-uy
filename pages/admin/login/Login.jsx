@@ -1,5 +1,4 @@
 import React from 'react';
-import Layout from '../../../src/components/AdminLayout';
 import { useState, useRef } from "react";
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import { findUserByMail } from '../../../services/userService';
@@ -43,7 +42,7 @@ const Login = () => {
             return;
         }
 
-        const data = {           
+        const data = {
             mail: mail,
             password: password,
         };
@@ -67,85 +66,83 @@ const Login = () => {
     }
 
     return (
-        <Layout>
-            <Container component="main" maxWidth="xs">
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <img src="/images/muerde_logo_small.png" alt="Muerde logo" />
-                    <Typography component="h1" variant="h5" sx={{ color: '#7B3E19' }}>
+        <Container component="main" maxWidth="xs">
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <img src="/images/muerde_logo_small.png" alt="Muerde logo" />
+                <Typography component="h1" variant="h5" sx={{ color: '#7B3E19' }}>
+                    Ingresar
+                </Typography>
+                <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="mail"
+                        label="Correo Electrónico"
+                        name="mail"
+                        autoComplete="mail"
+                        autoFocus
+                        onChange={e => setMail(e.target.value)}
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Contraseña"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                        onChange={e => setPassword(e.target.value)}
+                    />
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        sx={{
+                            display: 'block',
+                            mt: 2,
+                            ml: 'auto',
+                            mr: 'auto',
+                            backgroundColor: '#EDCBA2',
+                            color: '#7B3E19',
+                            '&:hover': {
+                                backgroundColor: '#CCA870',
+                            },
+                        }}
+                    >
                         Ingresar
-                    </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>                    
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="mail"
-                            label="Correo Electrónico"
-                            name="mail"
-                            autoComplete="mail"
-                            autoFocus
-                            onChange={e => setMail(e.target.value)}
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Contraseña"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            onChange={e => setPassword(e.target.value)}
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{
-                                display: 'block',
-                                mt: 2,
-                                ml: 'auto',
-                                mr: 'auto',
-                                backgroundColor: '#EDCBA2',
-                                color: '#7B3E19',
-                                '&:hover': {
-                                    backgroundColor: '#CCA870',
-                                },
-                            }}
-                        >
-                            Ingresar
-                        </Button>
-                        <Popover
-                            open={open}
-                            anchorEl={anchorRef.current}
-                            onClose={handleClose}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'center',
-                            }}
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'center',
-                            }}
-                            style={{ transform: 'translateY(10px)' }}
-                        >
-                            <Alert severity={messageType} sx={{ width: '100%' }}>
-                                {message}
-                            </Alert>
-                        </Popover>
-                    </Box>
+                    </Button>
+                    <Popover
+                        open={open}
+                        anchorEl={anchorRef.current}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        style={{ transform: 'translateY(10px)' }}
+                    >
+                        <Alert severity={messageType} sx={{ width: '100%' }}>
+                            {message}
+                        </Alert>
+                    </Popover>
                 </Box>
-            </Container>
-        </Layout>
+            </Box>
+        </Container>
     );
 }
 
