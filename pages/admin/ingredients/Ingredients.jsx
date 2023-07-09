@@ -39,11 +39,11 @@ const Ingredients = () => {
     }
   };
 
-  const getTotalQuantityDisplayData = (totalQuantity, unit) => {
+  const getTotalQuantityDisplayData = (totalQuantity, unit, stockPercentageStatus) => {
     if (totalQuantity === 0) {
       return { text: 'Sin stock', color: 'red' };
-    } else if (totalQuantity > 0 && totalQuantity < 0.5) {
-      return { text: `Stock disponible: ${totalQuantity} ${unit}`, color: 'yellow' };
+    } else if (stockPercentageStatus > 0 && stockPercentageStatus <= 29) {
+      return { text: `Stock disponible: ${totalQuantity} ${unit}`, color: '#e0d500' };
     } else {
       return { text: `Stock disponible: ${totalQuantity} ${unit}`, color: '' };
     }
@@ -56,7 +56,7 @@ const Ingredients = () => {
         <AddDialog fetchIngredients={fetchIngredients}/>
         <List>
           {ingredients.map((ingredient) => {
-            const { text: totalQuantityText, color: totalQuantityColor } = getTotalQuantityDisplayData(ingredient.total_quantity, ingredient.unit);
+            const { text: totalQuantityText, color: totalQuantityColor } = getTotalQuantityDisplayData(ingredient.total_quantity, ingredient.unit, ingredient.stock_percentage_status);
             return (
               <ListItem key={ingredient.id_ingredient}>
                 <ListItemText
