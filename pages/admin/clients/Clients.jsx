@@ -1,15 +1,15 @@
 import Layout from '../../../src/components/AdminLayout';
 import { getUsers } from '../../../services/userService';
 import { useEffect } from 'react';
-import { styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableFooter, TablePagination, Select, MenuItem } from '@mui/material';
+import { styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableFooter, TablePagination, Select, MenuItem, Box } from '@mui/material';
 import React, { useState } from "react";
 
 const Clients = () => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [role, setRole] = React.useState('todos');
-  const filteredUsers = role === 'todos' ? users : users.filter(user => user.role === role);
+  const [role, setRole] = React.useState('all');
+  const filteredUsers = role === 'all' ? users : users.filter(user => user.role === role);
 
   useEffect(() => {
     getUsers()
@@ -41,13 +41,28 @@ const Clients = () => {
     fontWeight: 'bold',
   });
 
+  const StyledSelect = styled(Select)({
+    backgroundColor: 'white',
+    '& .MuiSelect-select': {
+      color: 'brown',
+    },
+  });
+
+  const SelectContainer = styled(Box)({
+    display: 'flex',
+    justifyContent: 'center',
+    margin: '20px 0',
+  });
+
   return (
     <Layout>
-      <Select value={role} onChange={handleRoleChange}>
-        <MenuItem value='todos'>Todos</MenuItem>
-        <MenuItem value='USER'>Clientes</MenuItem>
-        <MenuItem value='ADMIN'>Admins</MenuItem>
-      </Select>
+      <SelectContainer>
+        <StyledSelect value={role} onChange={handleRoleChange}>
+          <MenuItem value='all'>Todos</MenuItem>
+          <MenuItem value='USER'>Clientes</MenuItem>
+          <MenuItem value='ADMIN'>Admins</MenuItem>
+        </StyledSelect >
+      </SelectContainer>
       <StyledTableContainer>
         <Table>
           <TableHead>
@@ -62,7 +77,7 @@ const Clients = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-          {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
+            {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
               <TableRow key={user.id_user}>
                 <TableCell>{user.id_user}</TableCell>
                 <TableCell>{user.name}</TableCell>
@@ -75,18 +90,18 @@ const Clients = () => {
             ))}
           </TableBody>
           <TableFooter>
-          <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: 'Todos', value: -1 }]}
-              count={users.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              labelRowsPerPage="Filas por página"
-            />
-          </TableRow>
-        </TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, { label: 'Todos', value: -1 }]}
+                count={users.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                labelRowsPerPage="Filas por página"
+              />
+            </TableRow>
+          </TableFooter>
         </Table>
       </StyledTableContainer>
     </Layout>
