@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import axios from 'axios';
 
 const SalesByDateChart = ({ initStartDate, initEndDate }) => {
   const [salesData, setSalesData] = useState([]);
@@ -12,19 +13,8 @@ const SalesByDateChart = ({ initStartDate, initEndDate }) => {
   }, []);
 
   const fetchSalesData = async (start, end) => {
-    // Mocked response data for sales chart by date
-    const mockedResponse = [
-      { date: '2023-06-01', quantity: 10, earnings: 100 },
-      { date: '2023-06-02', quantity: 8, earnings: 80 },
-      { date: '2023-06-03', quantity: 15, earnings: 150 },
-      { date: '2023-06-04', quantity: 12, earnings: 120 },
-      { date: '2023-06-05', quantity: 20, earnings: 200 },
-    ];
-
-    // Simulate API call delay with setTimeout
-    setTimeout(() => {
-      setSalesData(mockedResponse);
-    }, 500); // Adjust the delay time as needed
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/sales_earnings_per_day?start=${start}&end=${end}`);
+    setSalesData(data.sales_earnings_per_day);
   };
 
   const handleFilterClick = () => {

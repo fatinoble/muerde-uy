@@ -34,6 +34,19 @@ const SalesByProductChart = ({ initStartDate, initEndDate }) => {
     return 'Productos más vendidos';
   };
 
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p>{`Ventas totales: ${payload[0].value}`}</p>
+          <p>{`Precio: $${payload[0].payload.price}`}</p>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <Container>
       <Typography variant="h6" component="h2" gutterBottom>
@@ -72,7 +85,7 @@ const SalesByProductChart = ({ initStartDate, initEndDate }) => {
         <BarChart data={salesData}>
           <XAxis dataKey="title" />
           <YAxis />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
           <Legend />
           <Bar dataKey="sales_count" fill="#8884d8" />
         </BarChart>
