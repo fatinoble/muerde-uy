@@ -1,13 +1,15 @@
 import Layout from '../../../src/components/AdminLayout';
 import { getUsers } from '../../../services/userService';
 import { useEffect } from 'react';
-import { styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableFooter, TablePagination } from '@mui/material';
+import { styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableFooter, TablePagination, Select, MenuItem } from '@mui/material';
 import React, { useState } from "react";
 
 const Clients = () => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [role, setRole] = React.useState('todos');
+  const filteredUsers = role === 'todos' ? users : users.filter(user => user.role === role);
 
   useEffect(() => {
     getUsers()
@@ -25,6 +27,10 @@ const Clients = () => {
     setPage(0);
   };
 
+  const handleRoleChange = (event) => {
+    setRole(event.target.value);
+  };
+
   const StyledTableContainer = styled(TableContainer)({
     backgroundColor: 'white',
     marginTop: '20px',
@@ -35,8 +41,15 @@ const Clients = () => {
     fontWeight: 'bold',
   });
 
+  
+
   return (
     <Layout>
+      <Select value={role} onChange={handleRoleChange}>
+        <MenuItem value='todos'>Todos</MenuItem>
+        <MenuItem value='USER'>Clientes</MenuItem>
+        <MenuItem value='ADMIN'>Admins</MenuItem>
+      </Select>
       <StyledTableContainer>
         <Table>
           <TableHead>
@@ -51,7 +64,7 @@ const Clients = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-          {users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
+          {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user) => (
               <TableRow key={user.id_user}>
                 <TableCell>{user.id_user}</TableCell>
                 <TableCell>{user.name}</TableCell>
