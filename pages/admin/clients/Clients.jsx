@@ -41,8 +41,6 @@ const Clients = () => {
     fontWeight: 'bold',
   });
 
-  
-
   return (
     <Layout>
       <Select value={role} onChange={handleRoleChange}>
