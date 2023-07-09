@@ -51,10 +51,15 @@ const Login = () => {
 
         try {
             const response = await findUserByMail(data);
-            if (response.statusText == "OK") {
-                localStorage.setItem('token login', response.data.token);
+            if (response.statusText == "OK" && response.data.role == "USER") {
+                localStorage.setItem('token login user', response.data.token);
+                localStorage.setItem('user role', response.data.role);
+                localStorage.setItem('user name', response.data.name);
+                localStorage.setItem('user mail', response.data.mail);
+                localStorage.setItem('user address', response.data.address);
+                localStorage.setItem('user phone', response.data.phone);
                 handleMessage("Login correcto, bienvenid@ " + response.data.name + "!", "success");
-                router.push('/admin/recipes') //ToDo redirigir a catalogo
+                router.push('/product/catalog')
             } else {
                 handleMessage("Hubo un error al iniciar sesión. Por favor, intenta de nuevo.", "error");
             }

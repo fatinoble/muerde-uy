@@ -1,19 +1,15 @@
 import React from 'react';
-import Layout from '../../../src/components/UserLayout';
+import Layout from '../../../src/components/AdminLayout';
 import { useState, useRef } from "react";
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
-import { createUser } from '../../../services/userService';
+import { findUserByMail } from '../../../services/userService';
 import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 
-const Register = () => {
-    const [name, setName] = useState("");
+const Login = () => {
     const [mail, setMail] = useState("");
     const [password, setPassword] = useState("");
-    const [address, setAddress] = useState("");
-    const [phone, setPhone] = useState("");
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("success");
@@ -32,7 +28,7 @@ const Register = () => {
 
     const handleSubmit = async event => {
         event.preventDefault();
-        if (!name || !mail || !address || !phone || !password) {
+        if (!mail || !password) {
             handleMessage("Por favor, completa todos los campos.", "error");
             return;
         }
@@ -42,41 +38,31 @@ const Register = () => {
             return;
         }
 
-        if (!/^\d+$/.test(phone)) {
-            handleMessage("Por favor, introduce un número de teléfono válido.", "error");
-            return;
-        }
-
         if (!/(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(password)) {
             handleMessage("La contraseña debe tener al menos 8 caracteres, incluyendo al menos un número y un carácter especial.", "error");
             return;
         }
 
-        const data = {
-            name: name,
+        const data = {           
             mail: mail,
             password: password,
-            address: address,
-            phone: phone
         };
 
         try {
-            const response = await createUser(data);
-            if (response.statusText == "OK") {
-                localStorage.setItem('token registration user', response.data.token);
+            const response = await findUserByMail(data);
+            if (response.statusText == "OK" && response.data.role == "ADMIN") {
+                localStorage.setItem('token login admin', response.data.token);
                 localStorage.setItem('user role', response.data.role);
                 localStorage.setItem('user name', response.data.name);
                 localStorage.setItem('user mail', response.data.mail);
-                localStorage.setItem('user address', response.data.address);
-                localStorage.setItem('user phone', response.data.phone);
-                handleMessage("Usuario creado con éxito, bienvenid@ " + response.data.name + "!", "success");
-                router.push('/product/catalog')
+                handleMessage("Login correcto, bienvenid@ " + response.data.name + "!", "success");
+                router.push('/admin/reports')
             } else {
-                handleMessage("Hubo un error al crear la cuenta. Por favor, intenta de nuevo.", "error");
+                handleMessage("Hubo un error al iniciar sesión. Por favor, intenta de nuevo.", "error");
             }
         } catch (error) {
             console.error('Error:', error);
-            handleMessage('Hubo un error al crear la cuenta. Por favor, intenta de nuevo.', "error");
+            handleMessage('Hubo un error al iniciar sesión. Por favor, intenta de nuevo.', "error");
         }
     }
 
@@ -93,21 +79,9 @@ const Register = () => {
                 >
                     <img src="/images/muerde_logo_small.png" alt="Muerde logo" />
                     <Typography component="h1" variant="h5" sx={{ color: '#7B3E19' }}>
-                        Registrarse
+                        Ingresar
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="name"
-                            label="Nombre"
-                            name="name"
-                            autoComplete="name"
-                            autoFocus
-                            onChange={e => setName(e.target.value)}
-                        />
+                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>                    
                         <TextField
                             variant="outlined"
                             margin="normal"
@@ -132,39 +106,6 @@ const Register = () => {
                             autoComplete="current-password"
                             onChange={e => setPassword(e.target.value)}
                         />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="address"
-                            label="Dirección"
-                            name="address"
-                            autoComplete="address"
-                            autoFocus
-                            onChange={e => setAddress(e.target.value)}
-                        />
-                        <TextField
-                            variant="outlined"
-                            margin="normal"
-                            required
-                            fullWidth
-                            id="phone"
-                            label="Teléfono"
-                            name="phone"
-                            autoComplete="phone"
-                            autoFocus
-                            onChange={e => setPhone(e.target.value)}
-                        />
-                        <Link href="/user/login" passHref>
-                            <Typography
-                                variant="body2"
-                                align="center"
-                                sx={{ cursor: 'pointer', textDecoration: 'underline', mt: 2, color: '#7B3E19' }}
-                            >
-                                ¿Ya tienes una cuenta? Inicia sesión aquí
-                            </Typography>
-                        </Link>
                         <Button
                             type="submit"
                             fullWidth
@@ -181,7 +122,7 @@ const Register = () => {
                                 },
                             }}
                         >
-                            Registrarse
+                            Ingresar
                         </Button>
                         <Popover
                             open={open}
@@ -208,4 +149,4 @@ const Register = () => {
     );
 }
 
-export default Register;
+export default Login;
