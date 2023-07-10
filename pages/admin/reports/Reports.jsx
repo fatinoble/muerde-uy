@@ -1,11 +1,16 @@
 import React from 'react';
+import dynamic from "next/dynamic";
 import Layout from '../../../src/components/AdminLayout';
 import { Container, Typography } from '@mui/material';
 import SaleByDateChart from './components/SaleByDateChart';
 import SalesByProductChart from './components/SalesByProductChart';
 import SalesByCustomerChart from './components/SalesByCustomerChart';
-import StockChart from './components/StockChart';
+import StockChart from './components/IngredientStockChart';
 import OrdersChart from './components/OrdersChart';
+const ProductStockChartWithoutSSR = dynamic(
+  import("./components/ProductStockChart"),
+  { ssr: false }
+);
 
 const Reports = () => {
 
@@ -32,6 +37,7 @@ const Reports = () => {
         <Typography variant="h3" component="h1" align="center" gutterBottom>
           Dashboard
         </Typography>
+        <ProductStockChartWithoutSSR />
         <OrdersChart />
         <StockChart />
         <SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>

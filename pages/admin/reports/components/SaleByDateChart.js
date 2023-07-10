@@ -23,11 +23,11 @@ const SalesByDateChart = ({ initStartDate, initEndDate }) => {
 
   const getDateLabel = () => {
     if (startDate === initStartDate && endDate === initEndDate) {
-      return `Ventas por día del último mes`;
+      return `Ventas finalizadas por día del último mes`;
     } else if (startDate && endDate) {
-      return `Ventas por día del ${startDate} al ${endDate}`;
+      return `Ventas finalizadas por día del ${startDate} al ${endDate}`;
     }
-    return 'Ventas por día';
+    return 'Ventas finalizadas por día';
   };
 
   return (

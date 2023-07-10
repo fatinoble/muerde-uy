@@ -3,11 +3,11 @@ import { useEffect, useState } from 'react';
 import dynamic from "next/dynamic";
 import axios from 'axios';
 const StockNeedlePieCharttWithoutSSR = dynamic(
-  import("./StockPieNeedleChart"),
+  import("./IngredientStockPieNeedleChart"),
   { ssr: false }
 );
 const StockBarChartWithoutSSR = dynamic(
-  import("./StockBarChart"),
+  import("./IngredientStockBarChart"),
   { ssr: false }
 );
 
