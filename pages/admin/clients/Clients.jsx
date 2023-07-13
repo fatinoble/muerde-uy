@@ -1,8 +1,10 @@
 import Layout from '../../../src/components/AdminLayout';
 import { getUsers } from '../../../services/userService';
 import { useEffect } from 'react';
-import { styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableFooter, TablePagination, Select, MenuItem, Box } from '@mui/material';
+import { Button, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableFooter, TablePagination, Select, MenuItem, Box } from '@mui/material';
 import React, { useState } from "react";
+import EditModal from '../../../src/utils/modals/user_modal/EditModal';
+import {  modifyUser } from '../../../services/userService';
 
 const Clients = () => {
   const [users, setUsers] = useState([]);
@@ -10,6 +12,8 @@ const Clients = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [role, setRole] = React.useState('all');
   const filteredUsers = role === 'all' ? users : users.filter(user => user.role === role);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     getUsers()
@@ -42,9 +46,9 @@ const Clients = () => {
   });
 
   const StyledSelect = styled(Select)({
-    backgroundColor: 'white',
+    backgroundColor: 'rgb(168, 118, 88)',
     '& .MuiSelect-select': {
-      color: 'brown',
+      color: 'white',
     },
   });
 
@@ -53,6 +57,25 @@ const Clients = () => {
     justifyContent: 'center',
     margin: '20px 0',
   });
+
+  const handleEdit = (user) => {
+    setCurrentUser(user);
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setModalOpen(false);
+    setCurrentUser(null);
+  };
+
+  const editUser = (editedUser) => {
+    console.log("editedUser ", editedUser);
+    modifyUser(editedUser)
+      .then(() => {
+        setUsers(users.map(user => user.id === editedUser.id ? editedUser : user));
+        setModalOpen(false);
+      })
+  }
 
   return (
     <Layout>
@@ -86,6 +109,11 @@ const Clients = () => {
                 <TableCell>{user.address}</TableCell>
                 <TableCell>{user.creation_date}</TableCell>
                 <TableCell>{user.role}</TableCell>
+                <TableCell>
+                  <Button variant="contained" color="primary" onClick={() => handleEdit(user)} style={{ backgroundColor: 'rgb(168, 118, 88)', color: 'white' }}>
+                    Editar
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -104,6 +132,9 @@ const Clients = () => {
           </TableFooter>
         </Table>
       </StyledTableContainer>
+      {modalOpen ? (
+        <EditModal open={modalOpen} handleClose={handleClose} user={currentUser} handleUpdate={editUser}/>
+      ) : null}
     </Layout>
   );
 };

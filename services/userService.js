@@ -23,3 +23,12 @@ export const findUserByMail = (data) => {
       })
       .catch(error => console.error('Error:', error.response.data));
 }
+
+export const modifyUser = (user) => {
+  const id = user.id_user;
+  return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user?id=${id}`, { user: user })
+      .then(response => {
+          return response;
+      })
+      .catch(error => console.error('Error:', error.response.data));
+}
