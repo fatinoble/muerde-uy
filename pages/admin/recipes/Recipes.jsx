@@ -29,7 +29,6 @@ const Recipes = () => {
   }, []);
 
   const editRecipe = (editedRecipe) => {
-    console.log("editedRecipe ", editedRecipe);
     modifyRecipe(editedRecipe)
       .then(() => {
         setRecipes(recipes.map(recipe => recipe.id === editedRecipe.id ? editedRecipe : recipe));

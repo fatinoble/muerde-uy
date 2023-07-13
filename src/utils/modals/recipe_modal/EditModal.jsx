@@ -32,8 +32,6 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
         }));
     };
 
-    console.log('receta que llega al modal de editar receta ', productData);
-
     return (
         <Modal open={open} onClose={handleClose}>
             <Box component="form" onSubmit={handleSubmit}
@@ -75,19 +73,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                         </Typography>
                     </div>
                 ))}
-                <Button type="submit"
-                    sx={{
-                        display: 'block',
-                        mt: 2,
-                        ml: 'auto',
-                        mr: 'auto',
-                        backgroundColor: '#EDCBA2',
-                        color: '#7B3E19',
-                        '&:hover': {
-                            backgroundColor: '#CCA870',
-                        },
-                    }}
-                >
+                <Button type="submit" style={{ backgroundColor: 'rgb(168, 118, 88)', color: 'white' }}>
                     Actualizar
                 </Button>
             </Box>
