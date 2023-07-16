@@ -6,6 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Container, Grid, List, ListItem, ListItemText, MenuItem, Paper, Select, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { getOrderStateName } from '@/utils';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import ReviewForm from '@/utils/rating/ReviewForm';
+import { getAllReviews, newReview } from '../../../../services/reviewService';
 
 const useStyles = makeStyles((theme) => ({
     successMessage: {
@@ -28,12 +30,12 @@ function OrderScreen() {
 
     const [order, setOrder] = useState({});
 
+    const [orderHasReview, setOrderHasReview] = useState(false);
+    const [showReviewForm, setShowReviewForm] = useState(true);
 
     useEffect(() => {
         fetchOrder();
     }, [])
-
-
 
     const fetchOrder = async () => {
         try {
@@ -48,6 +50,7 @@ function OrderScreen() {
             console.error('Error fetching sale:', error);
         }
     }
+
     const setProgressBar = (status) => {
         if (status == 'TODO') {
             return 0;
@@ -61,6 +64,30 @@ function OrderScreen() {
 
     }
 
+    const handleReviewSubmit = async (rating, review) => {
+        const reviews = await getAllReviews();
+        const reviewExists  = reviews.some(r => r.sale_id === Number(orderId));
+        setOrderHasReview(reviewExists);
+        const user_id = localStorage.getItem('user_id');
+    
+        if (!reviewExists) {        
+            const newReviewData = {
+                score: rating,
+                description: review,
+                userId: Number(user_id),
+                saleId: Number(orderId)
+            }
+            const response = await newReview(newReviewData);
+            if (response.status === 200) {
+                alert("Gracias por tu review!");
+                setShowReviewForm(false);
+            } else {
+                alert("Hubo un error al enviar tu review. Intentalo de nuevo.");
+            }
+        } else {
+            alert("Ya has enviado una review para este pedido.");
+        }
+    };
 
     return (
         <Layout>
@@ -97,12 +124,11 @@ function OrderScreen() {
                                     ))}
                                 </List>
                             </Typography>
-
                         </Grid>
                     </Grid>
                     <LinearProgress variant="buffer" value={setProgressBar(order?.status)} valueBuffer={15} />
+                    { (order.status == "DONE_PICK_UP" || order.status == "DONE_DELIVERY") && (!orderHasReview && showReviewForm) ? <ReviewForm onSubmit={handleReviewSubmit} /> : null }
                 </Paper>
-
             </Container>
         </Layout>
     );
