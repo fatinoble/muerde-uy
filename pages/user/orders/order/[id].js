@@ -29,7 +29,6 @@ function OrderScreen() {
     const doneSale = router.asPath.includes('exito=true') && exito === 'true';
     const [order, setOrder] = useState({});
 
-    const [reviews, setReviews] = useState([]);
     const [orderHasReview, setOrderHasReview] = useState(false);
     const [showReviewForm, setShowReviewForm] = useState(true);
     const [open, setOpen] = useState(false);
@@ -42,8 +41,6 @@ function OrderScreen() {
 
         const loadReviews = async () => {
             const fetchedReviews = await getAllReviews();
-            setReviews(fetchedReviews);
-    
             const reviewExists = fetchedReviews.some(r => r.sale_id === Number(orderId));
             setOrderHasReview(reviewExists);
         };
