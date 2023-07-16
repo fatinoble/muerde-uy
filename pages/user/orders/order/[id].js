@@ -24,12 +24,9 @@ const useStyles = makeStyles((theme) => ({
 function OrderScreen() {
     const router = useRouter();
     const orderId = router.query.id;
-
     const classes = useStyles();
-
     const { exito } = router.query;
     const doneSale = router.asPath.includes('exito=true') && exito === 'true';
-
     const [order, setOrder] = useState({});
 
     const [orderHasReview, setOrderHasReview] = useState(false);
@@ -41,6 +38,14 @@ function OrderScreen() {
 
     useEffect(() => {
         fetchOrder();
+
+        const loadReviews = async () => {
+            const fetchedReviews = await getAllReviews();
+            const reviewExists = fetchedReviews.some(r => r.sale_id === Number(orderId));
+            setOrderHasReview(reviewExists);
+        };
+    
+        loadReviews();
     }, [])
 
     const fetchOrder = async () => {
@@ -70,13 +75,10 @@ function OrderScreen() {
 
     }
 
-    const handleReviewSubmit = async (rating, review) => {
-        const reviews = await getAllReviews();
-        const reviewExists = reviews.some(r => r.sale_id === Number(orderId));
-        setOrderHasReview(reviewExists);
+    const handleReviewSubmit = async (rating, review) => {        
         const user_id = localStorage.getItem('user_id');
 
-        if (!reviewExists) {
+        if (!orderHasReview) {
             const newReviewData = {
                 score: rating,
                 description: review,
@@ -87,6 +89,7 @@ function OrderScreen() {
             if (response.status === 200) {
                 handleMessage("Gracias por tu reseña!", "success");
                 setShowReviewForm(false);
+                setOrderHasReview(true);
             } else {
                 handleMessage("Hubo un error al enviar tu reseña. Intentalo de nuevo.", "error");
             }
