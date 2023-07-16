@@ -1,11 +1,15 @@
 import axios from 'axios';
 import Layout from '../../../../src/components/UserLayout';
 import { useRouter } from 'next/router';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Container, Grid, List, ListItem, ListItemText, MenuItem, Paper, Select, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { getOrderStateName } from '@/utils';
 import LinearProgress from '@material-ui/core/LinearProgress';
+import ReviewForm from '@/utils/rating/ReviewForm';
+import { getAllReviews, newReview } from '../../../../services/reviewService';
+import Popover from '@mui/material/Popover';
+import Alert from '@mui/material/Alert';
 
 const useStyles = makeStyles((theme) => ({
     successMessage: {
@@ -28,12 +32,16 @@ function OrderScreen() {
 
     const [order, setOrder] = useState({});
 
+    const [orderHasReview, setOrderHasReview] = useState(false);
+    const [showReviewForm, setShowReviewForm] = useState(true);
+    const [open, setOpen] = useState(false);
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState("success");
+    const anchorRef = useRef(null);
 
     useEffect(() => {
         fetchOrder();
     }, [])
-
-
 
     const fetchOrder = async () => {
         try {
@@ -48,6 +56,7 @@ function OrderScreen() {
             console.error('Error fetching sale:', error);
         }
     }
+
     const setProgressBar = (status) => {
         if (status == 'TODO') {
             return 0;
@@ -61,6 +70,40 @@ function OrderScreen() {
 
     }
 
+    const handleReviewSubmit = async (rating, review) => {
+        const reviews = await getAllReviews();
+        const reviewExists = reviews.some(r => r.sale_id === Number(orderId));
+        setOrderHasReview(reviewExists);
+        const user_id = localStorage.getItem('user_id');
+
+        if (!reviewExists) {
+            const newReviewData = {
+                score: rating,
+                description: review,
+                userId: Number(user_id),
+                saleId: Number(orderId)
+            }
+            const response = await newReview(newReviewData);
+            if (response.status === 200) {
+                handleMessage("Gracias por tu reseña!", "success");
+                setShowReviewForm(false);
+            } else {
+                handleMessage("Hubo un error al enviar tu reseña. Intentalo de nuevo.", "error");
+            }
+        } else {
+            handleMessage("Ya has enviado una reseña para este pedido.", "error");
+        }
+    };
+
+    const handleMessage = (newMessage, newMessageType) => {
+        setMessage(newMessage);
+        setMessageType(newMessageType);
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
 
     return (
         <Layout>
@@ -97,12 +140,31 @@ function OrderScreen() {
                                     ))}
                                 </List>
                             </Typography>
-
                         </Grid>
                     </Grid>
                     <LinearProgress variant="buffer" value={setProgressBar(order?.status)} valueBuffer={15} />
-                </Paper>
+                    {(order.status == "DONE_PICK_UP" || order.status == "DONE_DELIVERY") && (!orderHasReview && showReviewForm) ? <ReviewForm onSubmit={handleReviewSubmit} /> : null}
+                    { orderHasReview ? <Typography style={{ marginBottom: '20px', color: "#A87658", marginTop: '40px', fontSize: '23px' }} variant="h5">¡Gracias por tu reseña!</Typography> : null}
+                    <Popover
+                        open={open}
+                        anchorEl={anchorRef.current}
+                        onClose={handleClose}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        style={{ transform: 'translateY(10px)' }}
+                    >
+                        <Alert severity={messageType} sx={{ width: '100%' }}>
+                            {message}
+                        </Alert>
+                    </Popover>
 
+                </Paper>
             </Container>
         </Layout>
     );

@@ -51,12 +51,14 @@ const Login = () => {
         try {
             const response = await findUserByMail(data);
             if (response.statusText == "OK" && response.data.role == "USER") {
-                localStorage.setItem('token login user', response.data.token);
-                localStorage.setItem('user role', response.data.role);
-                localStorage.setItem('user name', response.data.name);
-                localStorage.setItem('user mail', response.data.mail);
-                localStorage.setItem('user address', response.data.address);
-                localStorage.setItem('user phone', response.data.phone);
+                console.log("response login    ", response.data);
+                localStorage.setItem('token_login_user', response.data.token);
+                localStorage.setItem('user_id', response.data.id_user);
+                localStorage.setItem('user_role', response.data.role);
+                localStorage.setItem('user_name', response.data.name);
+                localStorage.setItem('user_mail', response.data.mail);
+                localStorage.setItem('user_address', response.data.address);
+                localStorage.setItem('user_phone', response.data.phone);
                 handleMessage("Login correcto, bienvenid@ " + response.data.name + "!", "success");
                 router.push('/product/catalog')
             } else {
