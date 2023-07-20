@@ -11,7 +11,7 @@ const oR = 100;
 
 const needle = (value, stockIndicators, cx, cy, iR, oR, color) => {
   let total = 0;
-  stockIndicators.forEach((v) => {
+  stockIndicators?.forEach((v) => {
     total += v.value;
   });
   const ang = 180.0 * (1 - value / total);
@@ -33,7 +33,7 @@ const needle = (value, stockIndicators, cx, cy, iR, oR, color) => {
     <path d={`M${xba} ${yba}L${xbb} ${ybb} L${xp} ${yp} L${xba} ${yba}`} stroke="#none" fill={color} />,
   ];
 };
-const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo, stockIndicators }) => {
+const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo = () => { }, stockIndicators }) => {
   const [selectedIngredient, setSelectedIngredient] = useState(ingredients[0] || {});
 
   const handleIngredientChange = (event) => {
@@ -51,7 +51,7 @@ const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo, stockInd
             onChange={handleIngredientChange}
             displayEmpty
           >
-            {ingredients.map((ingredient) => (
+            {ingredients?.map((ingredient) => (
               <MenuItem key={ingredient.key} value={ingredient}>
                 {ingredient.name}
               </MenuItem>
@@ -74,7 +74,7 @@ const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo, stockInd
           fill="#8884d8"
           stroke="none"
         >
-          {stockIndicators.map((entry, index) => (
+          {stockIndicators?.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>

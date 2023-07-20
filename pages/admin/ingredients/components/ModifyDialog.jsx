@@ -18,7 +18,7 @@ const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
 
   const handleModifyIngredient = async () => {
     try {
-      await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient?id=${ingredient.id_ingredient}`, {
+      await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient?id=${ingredient?.id_ingredient}`, {
         ingredient: modifyIngredient,
       });
       fetchIngredients();
