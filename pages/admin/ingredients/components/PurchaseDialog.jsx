@@ -43,7 +43,7 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
             Complete los campos para registrar la compra:
           </DialogContentText>
           <TextField
-            label={`Cantidad en ${ingredient.unit}`}
+            label={`Cantidad en ${ingredient?.unit}`}
             type="number"
             inputProps={{ min: 0, step: 0.01 }}
             value={newPurchase.quantity}

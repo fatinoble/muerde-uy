@@ -51,7 +51,7 @@ const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo = () => {
             onChange={handleIngredientChange}
             displayEmpty
           >
-            {ingredients.map((ingredient) => (
+            {ingredients?.map((ingredient) => (
               <MenuItem key={ingredient.key} value={ingredient}>
                 {ingredient.name}
               </MenuItem>
@@ -74,7 +74,7 @@ const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo = () => {
           fill="#8884d8"
           stroke="none"
         >
-          {stockIndicators.map((entry, index) => (
+          {stockIndicators?.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={entry.color} />
           ))}
         </Pie>
