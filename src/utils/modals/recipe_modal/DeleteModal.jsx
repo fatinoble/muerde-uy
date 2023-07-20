@@ -35,7 +35,7 @@ const DeleteModal = ({ open, handleClose, data, handleDelete }) => {
                             marginBottom: 2,
                         }}
                     >
-                        "Eliminar receta"
+                        Eliminar receta
                     </Typography>
                     <Typography variant="h6" component="div">
                         {renderContent()}

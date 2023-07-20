@@ -53,12 +53,12 @@ const Ingredients = () => {
     <Layout>
       <div>
         <h1>Ingredientes</h1>
-        <AddDialog fetchIngredients={fetchIngredients}/>
+        <AddDialog fetchIngredients={fetchIngredients} />
         <List>
           {ingredients.map((ingredient) => {
             const { text: totalQuantityText, color: totalQuantityColor } = getTotalQuantityDisplayData(ingredient.total_quantity, ingredient.unit, ingredient.stock_percentage_status);
             return (
-              <ListItem key={ingredient.id_ingredient}>
+              <ListItem key={ingredient?.id_ingredient}>
                 <ListItemText
                   primary={ingredient.name}
                   secondary={
@@ -83,8 +83,8 @@ const Ingredients = () => {
                   }
                 />
                 <PurchaseDialog fetchIngredients={fetchIngredients} ingredient={ingredient} />
-                <ModifyDialog fetchIngredients={fetchIngredients} ingredient={ingredient}/>
-                <DeleteDialog fetchIngredients={fetchIngredients} ingredientId={ingredient.id_ingredient} disabled={ingredient.recipie_using_count > 0} />
+                <ModifyDialog fetchIngredients={fetchIngredients} ingredient={ingredient} />
+                <DeleteDialog fetchIngredients={fetchIngredients} ingredientId={ingredient?.id_ingredient} disabled={ingredient.recipie_using_count > 0} />
               </ListItem>
             )
           }

@@ -27,7 +27,7 @@ const DetailsModal = ({ open, handleClose, data }) => {
                         marginBottom: 2,
                     }}
                 >
-                    "Detalle de la receta"
+                    Detalle de la receta
                 </Typography>
                 <Typography variant="body1">
                     <strong>Id: </strong>

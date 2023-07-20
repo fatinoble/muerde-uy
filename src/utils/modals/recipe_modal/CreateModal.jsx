@@ -115,15 +115,15 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                         </TableHead>
                         <TableBody>
                             {ingredients.map((ingredient) => {
-                                const ingredientQuantity = ingredientQuantities[ingredient.id_ingredient] || {};
+                                const ingredientQuantity = ingredientQuantities[ingredient?.id_ingredient] || {};
                                 const { quantity = '', unit = '' } = ingredientQuantity;
                                 return (
-                                    <TableRow key={ingredient.id_ingredient}>
+                                    <TableRow key={ingredient?.id_ingredient}>
                                         <TableCell>{ingredient.name}</TableCell>
                                         <TableCell>
                                             <TextField
                                                 value={quantity}
-                                                onChange={(event) => handleQuantityChange(event, ingredient.id_ingredient)}
+                                                onChange={(event) => handleQuantityChange(event, ingredient?.id_ingredient)}
                                             />
                                         </TableCell>
                                         <TableCell>
@@ -131,7 +131,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                                                 <Tooltip title="Todo se guarda en gramos menos las unidades" placement="right">
                                                     <Select
                                                         value={unit}
-                                                        onChange={(event) => handleUnitChange(event, ingredient.id_ingredient)}
+                                                        onChange={(event) => handleUnitChange(event, ingredient?.id_ingredient)}
                                                     >
                                                         {
                                                             ingredient.unit === 'UN' ?

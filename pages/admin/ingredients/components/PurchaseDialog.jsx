@@ -8,7 +8,7 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
   const [newPurchase, setNewPurchase] = useState({
     quantity: 0,
     cost: 0,
-    ingredient_id: ingredient.id_ingredient
+    ingredient_id: ingredient?.id_ingredient
   });
 
   const handleClosePurchaseodal = () => {
@@ -16,7 +16,7 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
     setNewPurchase({
       quantity: 0,
       cost: 0,
-      ingredient_id: ingredient.id_ingredient
+      ingredient_id: ingredient?.id_ingredient
     });
   };
 
@@ -37,7 +37,7 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
       <Button variant="outlined" color="primary" onClick={() => setOpenPurchaseModal(true)}>Registrar compra</Button>
 
       <Dialog open={openPurchaseModal} onClose={handleClosePurchaseodal}>
-        <DialogTitle>{`Registrar compra de ${ingredient.name}`}</DialogTitle>
+        <DialogTitle>{`Registrar compra de ${ingredient?.name}`}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Complete los campos para registrar la compra:

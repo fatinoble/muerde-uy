@@ -42,8 +42,8 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
       ...prevSale,
       delivery_type: event.target.value
     }));
-  };  
-  
+  };
+
   const handleDateChange = (event) => {
     setNewSale(prevSale => ({
       ...prevSale,
@@ -68,7 +68,7 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
               <DialogContentText>
                 Seleccione el método de entrega:
               </DialogContentText>
-              <RadioGroup value={newSale.delivery_type} onChange={handleDeliveryTypeChange}>
+              <RadioGroup value={newSale?.delivery_type} onChange={handleDeliveryTypeChange}>
                 <FormControlLabel value="PICK_UP" control={<Radio />} label="Recoger en local" />
                 <FormControlLabel value="DELIVERY" control={<Radio />} label="Envío a domicilio" />
               </RadioGroup>

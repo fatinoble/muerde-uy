@@ -23,7 +23,7 @@ const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
   const [error, setError] = useState(null);
 
   const filteredProducts = useMemo(() => {
-    if (searchQuery && selectedTags.length > 0) {
+    if (searchQuery && selectedTags?.length > 0) {
       return products.filter((product) => {
         return (
           product.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
@@ -34,7 +34,7 @@ const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
       return products.filter((product) => {
         return product.title.toLowerCase().includes(searchQuery.toLowerCase());
       });
-    } else if (selectedTags.length > 0) {
+    } else if (selectedTags?.length > 0) {
       return products.filter((product) => {
         return selectedTags.every((tag) => product.tags?.includes(tag));
       });
@@ -45,7 +45,7 @@ const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
 
 
   useEffect(() => {
-    if (!products.length) {
+    if (!products?.length) {
       fetchProducts();
     }
     const allTags = [...new Set(products.flatMap((product) => product.tags))];
@@ -93,7 +93,7 @@ const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
 
   return (
     <div className="product-catalog">
-      {filteredProducts.map((product) => (
+      {filteredProducts?.map((product) => (
         <a className="product-card-link" href={`/product/detail?id=${product.id_product}`} key={product.id}>
           <ProductCard
             imageSrc="/images/croassant.jpg"
@@ -102,7 +102,7 @@ const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
             isOutOfStock={product.is_out_of_stock}
           />
         </a>
-    ))}
+      ))}
     </div>
   );
 };

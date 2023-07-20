@@ -33,7 +33,7 @@ const needle = (value, stockIndicators, cx, cy, iR, oR, color) => {
     <path d={`M${xba} ${yba}L${xbb} ${ybb} L${xp} ${yp} L${xba} ${yba}`} stroke="#none" fill={color} />,
   ];
 };
-const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo, stockIndicators }) => {
+const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo = () => { }, stockIndicators }) => {
   const [selectedIngredient, setSelectedIngredient] = useState(ingredients[0] || {});
 
   const handleIngredientChange = (event) => {
