@@ -11,7 +11,7 @@ const oR = 100;
 
 const needle = (value, stockIndicators, cx, cy, iR, oR, color) => {
   let total = 0;
-  stockIndicators.forEach((v) => {
+  stockIndicators?.forEach((v) => {
     total += v.value;
   });
   const ang = 180.0 * (1 - value / total);
