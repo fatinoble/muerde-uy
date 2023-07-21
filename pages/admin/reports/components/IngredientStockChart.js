@@ -1,5 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
+import { Tooltip } from '@mui/material';
 import dynamic from "next/dynamic";
 import axios from 'axios';
 const StockNeedlePieCharttWithoutSSR = dynamic(
@@ -38,6 +39,7 @@ const StockChart = () => {
   };
 
   const getStockIndicatorInfo = (ingredient = {}) => {
+    if (!ingredient || Object.keys(ingredient).length === 0) return {};
     if (ingredient.stock_percentage_status <= STOCK_INDICATORS[0].value) {
       return STOCK_INDICATORS[0];
     } else if (ingredient.stock_percentage_status > STOCK_INDICATORS[0].value && ingredient.stock_percentage_status <= STOCK_INDICATORS[1].value) {
@@ -49,9 +51,25 @@ const StockChart = () => {
     }
   }
 
+  const tooltipText = 'Se considera que un ingrediente tiene 100% de stock cuando cuenta con la cantidad necesaria para utilizarse en la totalidad de sus recetas involucradas al menos 5 veces cada una.';
+
   return (
     <>
-      <span>Se considera que un ingrediente tiene 100% de stock cuando cuenta con la cantidad necesaria para utilizarse en la totalidad de sus recetas involucradas al menos 5 veces cada una.</span>
+      <Tooltip
+        title={tooltipText}
+        placement="top"
+        arrow
+        styles={{
+          backgroundColor: '#E28D8D',
+          color: 'white',
+          borderRadius: 4,
+          fontSize: 12,
+          maxWidth: 200,
+          textAlign: 'center',
+        }}
+      >
+        <div>Info.</div>
+      </Tooltip>
       <StockBarChartWithoutSSR ingredients={ingredients} getStockIndicatorInfo={getStockIndicatorInfo} stockIndicators={STOCK_INDICATORS} />
       <StockNeedlePieCharttWithoutSSR ingredients={ingredients} getStockIndicatorInfo={getStockIndicatorInfo} stockIndicators={STOCK_INDICATORS} />
     </>

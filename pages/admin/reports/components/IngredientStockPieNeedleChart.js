@@ -57,6 +57,7 @@ const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo = () => {
               </MenuItem>
             ))}
           </Select>
+
           <span style={{ color: getStockIndicatorInfo(selectedIngredient)?.color }}>{getStockIndicatorInfo(selectedIngredient)?.name}</span >
         </Grid>
       </Grid>

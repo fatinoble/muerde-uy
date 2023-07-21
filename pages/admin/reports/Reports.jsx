@@ -32,19 +32,33 @@ const Reports = () => {
   };
 
   return (
+    // <Layout>
+    //   <Container>
+    //     <Typography variant="h3" component="h1" align="center" gutterBottom>
+    //       Dashboard
+    //     </Typography>
+    //     <ProductStockChartWithoutSSR />
+    //     <OrdersChart />
+    //     <StockChart />
+    //     <SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
+    //     <SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
+    //     <SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
+    //   </Container>
+    // </Layout>
     <Layout>
       <Container>
-        <Typography variant="h3" component="h1" align="center" gutterBottom>
-          Dashboard
-        </Typography>
-        <ProductStockChartWithoutSSR />
-        <OrdersChart />
-        <StockChart />
-        <SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
-        <SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
-        <SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
+        <section class="grid">
+          <article><StockChart /></article>
+          <article><OrdersChart /></article>
+          <article><ProductStockChartWithoutSSR /></article>
+          <article><SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} /></article>
+          <article><SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} /></article>
+          <article><SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} /></article>
+        </section>
       </Container>
     </Layout>
+
+
   );
 };
 
