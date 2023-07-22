@@ -44,7 +44,7 @@ function OrderScreen() {
             const reviewExists = fetchedReviews.some(r => r.sale_id === Number(orderId));
             setOrderHasReview(reviewExists);
         };
-    
+
         loadReviews();
     }, [])
 
@@ -75,7 +75,7 @@ function OrderScreen() {
 
     }
 
-    const handleReviewSubmit = async (rating, review) => {        
+    const handleReviewSubmit = async (rating, review) => {
         const user_id = localStorage.getItem('user_id');
 
         if (!orderHasReview) {
@@ -146,8 +146,8 @@ function OrderScreen() {
                         </Grid>
                     </Grid>
                     <LinearProgress variant="buffer" value={setProgressBar(order?.status)} valueBuffer={15} />
-                    {(order.status == "DONE_PICK_UP" || order.status == "DONE_DELIVERY") && (!orderHasReview && showReviewForm) ? <ReviewForm onSubmit={handleReviewSubmit} /> : null}
-                    { orderHasReview ? <Typography style={{ marginBottom: '20px', color: "#A87658", marginTop: '40px', fontSize: '23px' }} variant="h5">¡Gracias por tu reseña!</Typography> : null}
+                    {(order.status == "FINISHED") && (!orderHasReview && showReviewForm) ? <ReviewForm onSubmit={handleReviewSubmit} /> : null}
+                    {orderHasReview ? <Typography style={{ marginBottom: '20px', color: "#A87658", marginTop: '40px', fontSize: '23px' }} variant="h5">¡Gracias por tu reseña!</Typography> : null}
                     <Popover
                         open={open}
                         anchorEl={anchorRef.current}

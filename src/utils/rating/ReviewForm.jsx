@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 import { Typography } from '@mui/material';
 
 export default function ReviewForm({ onSubmit }) {
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(5);
   const [review, setReview] = useState('');
 
   const handleFormSubmit = (event) => {

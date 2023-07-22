@@ -7,21 +7,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Alert } from '@mui/material';
 import { CircularProgress } from '@mui/material';
 import SaleDialog from './components/SaleDialog';
+import { isObjectEmpty } from '../../../src/utils';
 import axios from 'axios';
-
-//TODO: Manejar user con lógica de usuario
-const user = { user_id: 1, name: 'Pedro' };
 
 const today = new Date();
 const tomorrow = new Date(today);
 tomorrow.setDate(today.getDate() + 1);
-
-const defaultSale = {
-  delivery_type: 'PICK_UP',
-  user_id: user.user_id,
-  user_date: tomorrow.toISOString().split('T')[0],
-  products: []
-};
 
 const theme = createTheme({
   palette: {
@@ -31,7 +22,15 @@ const theme = createTheme({
   },
 });
 
+const defaultSale = {
+  delivery_type: 'PICK_UP',
+  user_id: 1,
+  user_date: tomorrow.toISOString().split('T')[0],
+  products: []
+};
+
 const Detail = () => {
+
   const router = useRouter();
   const { id: productId } = router.query;
   const [product, setProduct] = useState(null);
@@ -39,12 +38,24 @@ const Detail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newSale, setNewSale] = useState(defaultSale);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     if (productId) {
       fetchProduct();
     }
   }, [productId]);
+
+  useEffect(() => {
+    if (!user || isObjectEmpty(user)) {
+      const userFromLocalStorage = { user_id: localStorage.getItem('user_id'), name: localStorage.getItem('user_name') };
+      setUser(userFromLocalStorage);
+      setNewSale((prevNewSale) => ({
+        ...prevNewSale,
+        user_id: userFromLocalStorage.user_id,
+      }))
+    }
+  }, []);
 
   const fetchProduct = async () => {
     try {
@@ -128,47 +139,47 @@ const Detail = () => {
     <Layout>
       <WhatsAppButton message={whatsappDetailMessage} />
       <div className="product-detail-main-container">
-      <ThemeProvider theme={theme}>
-        <Box className="product-detail-container">
-          <img src="/images/croassant.jpg" alt={title} className="product-detail-image" />
-          <div className="product-detail-content">
-            <div className="product-detail-content-left">
-              <Typography variant="h6" className="product-detail-title-box">
-                {title}
-              </Typography>
-              <Typography variant="h6" className="product-detail-price-box">${price * quantity}</Typography>
-            </div>
-            <div className="product-detail-content-middle">
-            <Typography className="product-detail-description-box">{description}</Typography>
-            </div>
-            <div className="product-detail-content-right">
-              {is_out_of_stock ?
-                <span className='oos-pill'>SIN STOCK</span>
-                : (
-                  <Box className="product-detail-quantity-changer">
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      sx={{ marginRight: '0.5rem' }}
-                      onClick={handleDecrease}
-                      disabled={quantity === 1}
-                    >
-                      -
-                    </Button>
-                    <Typography variant="body1" className="product-detail-quantity-label">{quantity}</Typography>
-                    <Button variant="contained" color="primary" sx={{ marginLeft: '0.5rem' }} onClick={handleIncrease}>
-                      +
-                    </Button>
-                  </Box>
-                )
-              }
-              <SaleDialog product={product} quantity={quantity} setNewSale={setNewSale} newSale={newSale} setError={setError} />
+        <ThemeProvider theme={theme}>
+          <Box className="product-detail-container">
+            <img src="/images/croassant.jpg" alt={title} className="product-detail-image" />
+            <div className="product-detail-content">
+              <div className="product-detail-content-left">
+                <Typography variant="h6" className="product-detail-title-box">
+                  {title}
+                </Typography>
+                <Typography variant="h6" className="product-detail-price-box">${price * quantity}</Typography>
+              </div>
+              <div className="product-detail-content-middle">
+                <Typography className="product-detail-description-box">{description}</Typography>
+              </div>
+              <div className="product-detail-content-right">
+                {is_out_of_stock ?
+                  <span className='oos-pill'>SIN STOCK</span>
+                  : (
+                    <Box className="product-detail-quantity-changer">
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        sx={{ marginRight: '0.5rem' }}
+                        onClick={handleDecrease}
+                        disabled={quantity === 1}
+                      >
+                        -
+                      </Button>
+                      <Typography variant="body1" className="product-detail-quantity-label">{quantity}</Typography>
+                      <Button variant="contained" color="primary" sx={{ marginLeft: '0.5rem' }} onClick={handleIncrease}>
+                        +
+                      </Button>
+                    </Box>
+                  )
+                }
+                <SaleDialog product={product} quantity={quantity} setNewSale={setNewSale} newSale={newSale} setError={setError} />
+
+              </div>
 
             </div>
-
-          </div>
-        </Box>
-      </ThemeProvider>
+          </Box>
+        </ThemeProvider>
       </div>
     </Layout>
   );
