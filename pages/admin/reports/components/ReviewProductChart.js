@@ -2,9 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 import { InputLabel, Grid, MenuItem, Select } from '@mui/material';
+import Rating from '@mui/material/Rating';
 import axios from 'axios';
 
-const ReviewProductChart = () => {
+const ReviewProductChart = ({ getReviewColorFromScore = () => { } }) => {
   const [productsData, setProductsData] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState({});
 
@@ -45,54 +46,74 @@ const ReviewProductChart = () => {
 
   return (
     <>
-      <Grid container spacing={2} alignItems="center">
-        <Grid item>
-          <InputLabel htmlFor="product-select">Seleccionar Producto:</InputLabel>
-          <Select
-            value={selectedProduct || {}}
-            onChange={handleProductChange}
-            displayEmpty
-          >
-            {productsData?.map((productData) => {
-              return (
-                <MenuItem key={productData?.product?.id_product} value={productData}>
-                  {productData?.product?.title}
-                </MenuItem>
-              )
-            })}
-          </Select>
-        </Grid>
-      </Grid>
+      <div className="featured">
 
-      <span>Reviews del producto {selectedProduct?.title}: </span>
-      {selectedProduct?.review_summary?.map((reviewSummary) => {
-        return (
-          <>
-            <span>Puntaje: {reviewSummary.score}</span>
-            <span>Descripción: {reviewSummary.description}</span>
-          </>
-        )
-      })}
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart width={400} height={400}>
-          <Pie
-            data={selectedProduct?.score_quantity}
-            cx="50%"
-            cy="50%"
-            labelLine={false}
-            label={renderCustomizedLabel}
-            outerRadius={80}
-            fill="#8884d8"
-            dataKey="quantity"
-          >
-            {selectedProduct?.score_quantity?.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
+        <div className="featuredItem">
+          <span className="featuredTitle">Reviews de productos</span>
+          <br />
+          <br />
+          <Grid container spacing={2} alignItems="center">
+            <Grid item>
+              <InputLabel style={{ display: 'inline-block', marginRight: '10px' }} htmlFor="product-select">Seleccionar Producto:</InputLabel>
+              <Select
+                value={selectedProduct || {}}
+                onChange={handleProductChange}
+                displayEmpty
+              >
+                {productsData?.map((productData) => {
+                  return (
+                    <MenuItem key={productData?.product?.id_product} value={productData}>
+                      {productData?.product?.title}
+                    </MenuItem>
+                  )
+                })}
+              </Select>
+            </Grid>
+          </Grid>
+
+          {selectedProduct?.review_summary?.map((reviewSummary) => {
+            const backgroundColor = getReviewColorFromScore(reviewSummary?.score);
+            return (
+              <div className="reviewBox" style={{ backgroundColor }}>
+                <Rating
+                  name="read-only"
+                  readOnly
+                  value={reviewSummary?.score}
+                />
+                <br />
+                <span className="reviewDescription">{reviewSummary.description}</span>
+              </div>
+            )
+          })}
+        </div>
+
+        <div className="featuredItem">
+          <span className="featuredTitle">Porcentaje de puntaje de reviews de {selectedProduct?.title}</span>
+          <div className="featuredMoneyContainer">
+          </div>
+
+
+          <ResponsiveContainer width="100%" height={200}>
+            <PieChart width={400} height={400}>
+              <Pie
+                data={selectedProduct?.score_quantity}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={renderCustomizedLabel}
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="quantity"
+              >
+                {selectedProduct?.score_quantity?.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={getReviewColorFromScore(entry?.score)} />
+                ))}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
     </>
-
   );
 };
 

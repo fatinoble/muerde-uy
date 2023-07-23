@@ -1,8 +1,7 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
 import { Tooltip } from '@mui/material';
 import dynamic from "next/dynamic";
-import axios from 'axios';
+import InfoIcon from '../../../../src/svg/Info';
 const StockNeedlePieCharttWithoutSSR = dynamic(
   import("./IngredientStockPieNeedleChart"),
   { ssr: false }
@@ -19,24 +18,8 @@ const STOCK_INDICATORS = [
   { name: 'Stock abundante', value: 10, color: '#0ad80a' },
 ];
 
-const StockChart = () => {
-  const [ingredients, setIngredients] = useState([]);
+const StockChart = ({ ingredients }) => {
 
-  useEffect(() => {
-    if (!ingredients.length) {
-      fetchIngredients();
-    }
-  }, []);
-
-  const fetchIngredients = async () => {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient`);
-      const data = response.data;
-      setIngredients(data.ingredients);
-    } catch (error) {
-      console.error('Error fetching ingredients:', error);
-    }
-  };
 
   const getStockIndicatorInfo = (ingredient = {}) => {
     if (!ingredient || Object.keys(ingredient).length === 0) return {};
@@ -55,23 +38,39 @@ const StockChart = () => {
 
   return (
     <>
-      <Tooltip
-        title={tooltipText}
-        placement="top"
-        arrow
-        styles={{
-          backgroundColor: '#E28D8D',
-          color: 'white',
-          borderRadius: 4,
-          fontSize: 12,
-          maxWidth: 200,
-          textAlign: 'center',
-        }}
-      >
-        <div>Info.</div>
-      </Tooltip>
-      <StockBarChartWithoutSSR ingredients={ingredients} getStockIndicatorInfo={getStockIndicatorInfo} stockIndicators={STOCK_INDICATORS} />
-      <StockNeedlePieCharttWithoutSSR ingredients={ingredients} getStockIndicatorInfo={getStockIndicatorInfo} stockIndicators={STOCK_INDICATORS} />
+      <div className="featured">
+
+        <div className="featuredItem">
+          <div>
+            <span className="featuredTitle">Porcentaje de stock de ingredientes</span>
+            <Tooltip
+              title={tooltipText}
+              placement="top"
+              arrow
+              styles={{
+                backgroundColor: '#E28D8D',
+                color: 'white',
+                borderRadius: 4,
+                fontSize: 25,
+                maxWidth: 200,
+                textAlign: 'center',
+              }}
+            >
+              <div style={{ display: 'inline-block' }}>
+                <InfoIcon className="info-icon" />
+              </div>
+            </Tooltip>
+          </div>
+          <br />
+          <br />
+          <StockBarChartWithoutSSR ingredients={ingredients} getStockIndicatorInfo={getStockIndicatorInfo} stockIndicators={STOCK_INDICATORS} />
+        </div>
+
+        <div className="featuredItem">
+          <span className="featuredTitle">Rango de stock por ingrediente</span>
+          <StockNeedlePieCharttWithoutSSR ingredients={ingredients} getStockIndicatorInfo={getStockIndicatorInfo} stockIndicators={STOCK_INDICATORS} />
+        </div>
+      </div>
     </>
   );
 };

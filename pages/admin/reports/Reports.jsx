@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import dynamic from "next/dynamic";
 import Layout from '../../../src/components/AdminLayout';
 import { ArrowDownward, ArrowUpward } from "@material-ui/icons";
@@ -18,6 +19,38 @@ const ProductStockChartWithoutSSR = dynamic(
 );
 
 const Reports = () => {
+  const [ingredients, setIngredients] = useState([]);
+  const [productsData, setProductsData] = useState([]);
+
+
+  useEffect(() => {
+    if (!ingredients.length) {
+      fetchIngredients();
+    }
+    if (!productsData.length) {
+      fetchProductsData();
+    }
+  }, []);
+
+  const fetchProductsData = async () => {
+    try {
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`);
+      setProductsData(data.Products);
+
+    } catch (error) {
+      console.error('Error fetching products data:', error);
+    }
+  };
+
+  const fetchIngredients = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient`);
+      const data = response.data;
+      setIngredients(data.ingredients);
+    } catch (error) {
+      console.error('Error fetching ingredients:', error);
+    }
+  };
 
   const formatDate = (date) => {
     const year = date.getFullYear();
@@ -43,47 +76,39 @@ const Reports = () => {
     return formatDate(tomorrow);
   };
 
+  const getReviewColorFromScore = (score) => {
+    switch (score) {
+      case 1:
+        return '#d434269b';
+      case 2:
+        return '#d491269b';
+      case 3:
+        return '#d2d4269b';
+      case 4:
+        return '#268a1d9b';
+      case 5:
+        return '#4cff3b9b';
+      default:
+        return '';
+    }
+  }
+
   return (
-    // <Layout>
-    //   <Container>
-    //     <Typography variant="h3" component="h1" align="center" gutterBottom>
-    //       Dashboard
-    //     </Typography>
-    //     <ProductStockChartWithoutSSR />
-    //     <OrdersChart />
-    //     <StockChart />
-    //     <SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
-    //     <SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
-    //     <SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
-    //   </Container>
-    // </Layout>
 
-    // <Container>
-    //     <section class="grid">
-    //       <article><StockChart /></article>
-    //       <article><OrdersChart /></article> // USED
-    //       <article><ProductStockChartWithoutSSR /></article> // USED
-    //       <article><SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article> // USED
-    //       <article><SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
-    //       <article><SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
-    //       <article><ReviewScoreQuantityChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
-    //       <article><ReviewProductChart /></article>
-    //     </section>
-    //   </Container>
     <Layout>
-
+      <br />
       <div className="featured">
 
         <div className="featuredItem">
           <span className="featuredTitle">Avisos importantes</span>
-          <Warnings />
+          <Warnings ingredients={ingredients} productsData={productsData} />
         </div>
 
         <div className="featuredItem">
           <span className="featuredTitle">Stock de productos</span>
           <div className="featuredMoneyContainer">
           </div>
-          <ProductStockChartWithoutSSR />
+          <ProductStockChartWithoutSSR productsData={productsData} />
         </div>
 
         <div className="featuredItem">
@@ -92,11 +117,26 @@ const Reports = () => {
         </div>
       </div>
 
-
       <div className="big-chart">
         <SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} />
       </div>
 
+      <StockChart ingredients={ingredients} />
+
+
+      <div className="big-chart">
+        <SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} />
+      </div>
+
+      <div className="big-chart">
+        <SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} />
+      </div>
+
+      <ReviewProductChart getReviewColorFromScore={getReviewColorFromScore} />
+
+      <div className="big-chart">
+        <ReviewScoreQuantityChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} getReviewColorFromScore={getReviewColorFromScore} />
+      </div>
 
 
     </Layout>

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Grid, Typography, TextField, Button } from '@mui/material';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 
-const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow }) => {
+const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow, getReviewColorFromScore = () => { } }) => {
   const [reviewsData, setReviewsData] = useState([]);
   const [startDate, setStartDate] = useState(initStartDate);
   const [endDate, setEndDate] = useState(initEndDate);
@@ -40,6 +40,7 @@ const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow }) => {
       <Typography variant="h6" component="h2" gutterBottom>
         {getDateLabel()}
       </Typography>
+      <br />
       <Grid container spacing={2} alignItems="center">
         <Grid item>
           <TextField
@@ -69,13 +70,19 @@ const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow }) => {
           </Button>
         </Grid>
       </Grid>
+      <br />
+      <br />
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={reviewsData}>
           <XAxis dataKey="score" />
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="quantity" fill="#8884d8" />
+          <Bar dataKey="quantity" fill={(data) => getReviewColorFromScore(data?.payload?.score)}>
+            {reviewsData.map((review, index) => (
+              <Cell key={`cell-${index}`} fill={getReviewColorFromScore(review?.score)} />
+            ))}
+          </Bar >
         </BarChart>
       </ResponsiveContainer>
     </Container>

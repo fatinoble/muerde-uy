@@ -1,27 +1,8 @@
 /* eslint-disable react/jsx-key */
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
-import axios from 'axios';
 
-const ProductStockChart = () => {
-  const [productsData, setProductsData] = useState([]);
-  const [productsDataForChart, setProductsDataForChart] = useState([]);
-
-  useEffect(() => {
-    fetchProductsData();
-  }, []);
-
-  const fetchProductsData = async () => {
-    try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`);
-      setProductsData(data.Products);
-      setProductsDataForChart(calculateProductsOutOfStockCountData(data.Products))
-
-    } catch (error) {
-      console.error('Error fetching products data:', error);
-    }
-  };
-
+const ProductStockChart = ({ productsData = [] }) => {
   const calculateProductsOutOfStockCountData = (products = []) => {
     let outOfStockCount = 0;
     let inStockCount = 0;
@@ -42,10 +23,19 @@ const ProductStockChart = () => {
     ];
   }
 
+  const productsDataForChart = calculateProductsOutOfStockCountData(productsData);
+
+  const getOOSPercentage = (value) => {
+    if (typeof value === 'number') {
+      return parseFloat(value)?.toFixed(0);
+    }
+    return value?.toFixed(0);
+  }
+
   return (
     <>
       <div className="featuredMoneyContainer">
-        <span className="featuredMoney"> {parseFloat(productsDataForChart[0]?.value)?.toFixed(0)}%</span>
+        <span className="featuredMoney"> {getOOSPercentage(productsDataForChart[0]?.value)}%</span>
         <span className="featuredMoneyRate">
           Productos sin stock
         </span>

@@ -86,3 +86,38 @@
   justify-content: center;
   align-items: center;
 }
+
+
+
+.redWarning {
+  background-color: #f842429d;
+  color: rgb(28, 25, 25);
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.yellowWarning {
+  background-color: #e0d500;
+  color: rgb(28, 25, 25);
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+
+.info-icon {
+  margin-left: 10px;
+}
+
+.reviewBox {
+  color: rgb(28, 25, 25);
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.reviewScore {
+  margin-bottom: 25px;
+  font-size: 15px;
+}
