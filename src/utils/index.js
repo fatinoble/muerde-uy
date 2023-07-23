@@ -3,7 +3,7 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
 
-const UNIT_MEASURES = [{key: 'G', text: 'Gramo'}, {key: 'UN', text: 'Unidad'}];
+const UNIT_MEASURES = [{ key: 'G', text: 'Gramo' }, { key: 'UN', text: 'Unidad' }];
 
 const getOrderStateName = (state) => {
   if (state === 'TODO') {
@@ -17,9 +17,18 @@ const getOrderStateName = (state) => {
   }
   else if (state === 'DONE_DELIVERY') {
     return "Listo para envío"
-  }else if (state === 'FINISHED') {
+  } else if (state === 'FINISHED') {
     return "Finalizado"
   }
 }
 
-export { formatDate, UNIT_MEASURES, getOrderStateName };
+const isObjectEmpty = (objectName) => {
+  for (let prop in objectName) {
+    if (objectName.hasOwnProperty(prop)) {
+      return false;
+    }
+  }
+  return true;
+};
+
+export { formatDate, UNIT_MEASURES, getOrderStateName, isObjectEmpty };

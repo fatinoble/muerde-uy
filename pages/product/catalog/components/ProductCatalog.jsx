@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, memo } from 'react';
 import ProductCard from './ProductCard';
 import { Grid, Snackbar, Typography, Box, } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -50,7 +50,7 @@ const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
     }
     const allTags = [...new Set(products.flatMap((product) => product.tags))];
     setAllTags(allTags);
-  })
+  }, [])
 
   const fetchProducts = async () => {
     try {
@@ -107,4 +107,4 @@ const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
   );
 };
 
-export default ProductCatalog;
+export default memo(ProductCatalog);

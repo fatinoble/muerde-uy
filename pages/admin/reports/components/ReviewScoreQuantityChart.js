@@ -3,36 +3,36 @@ import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 
-const SalesByCustomerChart = ({ initStartDate, initEndDate, tomorrow }) => {
-  const [salesData, setSalesData] = useState([]);
+const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow }) => {
+  const [reviewsData, setReviewsData] = useState([]);
   const [startDate, setStartDate] = useState(initStartDate);
   const [endDate, setEndDate] = useState(initEndDate);
 
   useEffect(() => {
-    fetchSalesData(initStartDate, initEndDate);
+    fetchReviewsScoreData(initStartDate, initEndDate);
   }, []);
 
-  const fetchSalesData = async (start, end) => {
+  const fetchReviewsScoreData = async (start, end) => {
     try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/total_customer?start=${start}&end=${tomorrow}`);
-      setSalesData(data.sales_by_customer);
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/review/score?start=${start}&end=${tomorrow}`);
+      setReviewsData(data.review_score_quantity);
     } catch (error) {
-      console.error('Error fetching sales data:', error);
+      console.error('Error fetching reviews score data:', error);
     }
   };
 
   const handleFilterClick = () => {
-    fetchSalesData(startDate, endDate);
+    fetchReviewsScoreData(startDate, endDate);
   };
 
   const getDateLabel = () => {
     if (startDate === initStartDate && endDate === initEndDate) {
-      return `Clientes con más ventas del último mes`;
+      return `Puntaje de reviews de clientes del último mes`;
     }
     else if (startDate && endDate) {
-      return `Clientes con más ventas del ${startDate} al ${endDate}`;
+      return `Puntaje de reviews de clientes del ${startDate} al ${endDate}`;
     }
-    return 'Clientes con más ventas';
+    return 'Puntaje de reviews de clientes';
   };
 
   return (
@@ -70,16 +70,16 @@ const SalesByCustomerChart = ({ initStartDate, initEndDate, tomorrow }) => {
         </Grid>
       </Grid>
       <ResponsiveContainer width="100%" height={300}>
-        <BarChart data={salesData}>
-          <XAxis dataKey="name" />
+        <BarChart data={reviewsData}>
+          <XAxis dataKey="score" />
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="sales" fill="#8884d8" />
+          <Bar dataKey="quantity" fill="#8884d8" />
         </BarChart>
       </ResponsiveContainer>
     </Container>
   );
 };
 
-export default SalesByCustomerChart;
+export default ReviewScoreQuantityChart;

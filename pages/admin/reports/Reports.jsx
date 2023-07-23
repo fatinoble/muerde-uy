@@ -7,12 +7,20 @@ import SalesByProductChart from './components/SalesByProductChart';
 import SalesByCustomerChart from './components/SalesByCustomerChart';
 import StockChart from './components/IngredientStockChart';
 import OrdersChart from './components/OrdersChart';
+import ReviewScoreQuantityChart from './components/ReviewScoreQuantityChart';
 const ProductStockChartWithoutSSR = dynamic(
   import("./components/ProductStockChart"),
   { ssr: false }
 );
 
 const Reports = () => {
+
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
 
   const getDateFromMonthAgo = () => {
     const today = new Date();
@@ -24,27 +32,42 @@ const Reports = () => {
     const today = new Date();
     return formatDate(today);
   };
-  const formatDate = (date) => {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
+
+  const getDateFromTomorrow = () => {
+    const today = new Date();
+    const tomorrow = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
+    return formatDate(tomorrow);
   };
 
   return (
+    // <Layout>
+    //   <Container>
+    //     <Typography variant="h3" component="h1" align="center" gutterBottom>
+    //       Dashboard
+    //     </Typography>
+    //     <ProductStockChartWithoutSSR />
+    //     <OrdersChart />
+    //     <StockChart />
+    //     <SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
+    //     <SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
+    //     <SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
+    //   </Container>
+    // </Layout>
     <Layout>
       <Container>
-        <Typography variant="h3" component="h1" align="center" gutterBottom>
-          Dashboard
-        </Typography>
-        <ProductStockChartWithoutSSR />
-        <OrdersChart />
-        <StockChart />
-        <SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
-        <SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
-        <SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
+        <section class="grid">
+          <article><StockChart /></article>
+          <article><OrdersChart /></article>
+          <article><ProductStockChartWithoutSSR /></article>
+          <article><SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
+          <article><SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
+          <article><SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
+          <article><ReviewScoreQuantityChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
+        </section>
       </Container>
     </Layout>
+
+
   );
 };
 

@@ -7,10 +7,6 @@ import { useRouter } from 'next/router';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@material-ui/core';
 import { getOrderStateName } from '@/utils';
 const Orders = () => {
-
-  // TODO manejar con logica de usuario
-  const user = { user_id: 1 };
-
   const router = useRouter();
 
   const [orders, setOrders] = useState([]);
@@ -18,12 +14,13 @@ const Orders = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
-    fetchOrders();
+    const userId = localStorage.getItem('user_id');
+    fetchOrders(userId);
   }, [])
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (userId) => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/user?id=${user.user_id}`);
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/user?id=${userId}`);
       const data = response.data;
       setOrders(data.orders);
     } catch (error) {
