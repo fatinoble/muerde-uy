@@ -3,7 +3,7 @@ import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 
-const SalesByCustomerChart = ({ initStartDate, initEndDate }) => {
+const SalesByCustomerChart = ({ initStartDate, initEndDate, tomorrow }) => {
   const [salesData, setSalesData] = useState([]);
   const [startDate, setStartDate] = useState(initStartDate);
   const [endDate, setEndDate] = useState(initEndDate);
@@ -14,7 +14,7 @@ const SalesByCustomerChart = ({ initStartDate, initEndDate }) => {
 
   const fetchSalesData = async (start, end) => {
     try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/total_customer?start=${start}&end=${end}`);
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/total_customer?start=${start}&end=${tomorrow}`);
       setSalesData(data.sales_by_customer);
     } catch (error) {
       console.error('Error fetching sales data:', error);
