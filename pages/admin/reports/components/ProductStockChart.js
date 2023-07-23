@@ -44,7 +44,9 @@ const ProductStockChart = ({ productsData = [] }) => {
 
       {productsData.map((product) => {
         return (
-          product.is_out_of_stock && <span className="featuredSub">{product.title}</span>
+          product.is_out_of_stock && <div>
+            <span className="featuredSub">{product.title}</span>
+          </div>
         )
       })}
       <div className="center">
