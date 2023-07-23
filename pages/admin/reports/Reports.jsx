@@ -7,7 +7,9 @@ import SalesByProductChart from './components/SalesByProductChart';
 import SalesByCustomerChart from './components/SalesByCustomerChart';
 import StockChart from './components/IngredientStockChart';
 import OrdersChart from './components/OrdersChart';
+import ProductStockChart from './components/ProductStockChart';
 import ReviewScoreQuantityChart from './components/ReviewScoreQuantityChart';
+import ReviewProductChart from './components/ReviewProductChart';
 const ProductStockChartWithoutSSR = dynamic(
   import("./components/ProductStockChart"),
   { ssr: false }
@@ -63,6 +65,7 @@ const Reports = () => {
           <article><SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
           <article><SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
           <article><ReviewScoreQuantityChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
+          <article><ReviewProductChart /></article>
         </section>
       </Container>
     </Layout>
