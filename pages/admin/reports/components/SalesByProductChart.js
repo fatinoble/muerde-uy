@@ -52,6 +52,7 @@ const SalesByProductChart = ({ initStartDate, initEndDate, tomorrow }) => {
       <Typography variant="h6" component="h2" gutterBottom>
         {getDateLabel()}
       </Typography>
+      <br />
       <Grid container spacing={2} alignItems="center">
         <Grid item>
           <TextField
@@ -81,13 +82,15 @@ const SalesByProductChart = ({ initStartDate, initEndDate, tomorrow }) => {
           </Button>
         </Grid>
       </Grid>
+      <br />
+      <br />
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={salesData}>
           <XAxis dataKey="title" />
           <YAxis />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
-          <Bar dataKey="sales_count" fill="#8884d8" />
+          <Bar dataKey="sales_count" fill="#9b00ca6d" />
         </BarChart>
       </ResponsiveContainer>
     </Container>

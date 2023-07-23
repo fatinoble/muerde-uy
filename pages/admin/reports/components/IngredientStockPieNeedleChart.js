@@ -43,44 +43,50 @@ const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo = () => {
 
   return (
     <>
+      <br />
+      <br />
       <Grid container spacing={2} alignItems="center">
         <Grid item>
-          <InputLabel htmlFor="ingredient-select">Seleccionar Ingrediente:</InputLabel>
-          <Select
-            value={selectedIngredient || {}}
-            onChange={handleIngredientChange}
-            displayEmpty
-          >
-            {ingredients?.map((ingredient) => (
-              <MenuItem key={ingredient.key} value={ingredient}>
-                {ingredient.name}
-              </MenuItem>
-            ))}
-          </Select>
+          <InputLabel htmlFor="ingredient-select" className="featuredSub">Seleccionar Ingrediente:
+            <Select
+              value={selectedIngredient || {}}
+              onChange={handleIngredientChange}
+              displayEmpty
+            >
+              {ingredients?.map((ingredient) => (
+                <MenuItem key={ingredient.key} value={ingredient}>
+                  {ingredient.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </InputLabel>
+
 
           <span style={{ color: getStockIndicatorInfo(selectedIngredient)?.color }}>{getStockIndicatorInfo(selectedIngredient)?.name}</span >
         </Grid>
       </Grid>
+      <div className="center">
+        <PieChart width={400} height={250}>
+          <Pie
+            dataKey="value"
+            startAngle={180}
+            endAngle={0}
+            data={stockIndicators}
+            cx={cx}
+            cy={cy}
+            innerRadius={iR}
+            outerRadius={oR}
+            fill="#8884d8"
+            stroke="none"
+          >
+            {stockIndicators?.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.color} />
+            ))}
+          </Pie>
+          {needle(selectedIngredient.stock_percentage_status, stockIndicators, cx, cy, iR, oR, '#d0d000')}
+        </PieChart>
+      </div>
 
-      <PieChart width={400} height={500}>
-        <Pie
-          dataKey="value"
-          startAngle={180}
-          endAngle={0}
-          data={stockIndicators}
-          cx={cx}
-          cy={cy}
-          innerRadius={iR}
-          outerRadius={oR}
-          fill="#8884d8"
-          stroke="none"
-        >
-          {stockIndicators?.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={entry.color} />
-          ))}
-        </Pie>
-        {needle(selectedIngredient.stock_percentage_status, stockIndicators, cx, cy, iR, oR, '#d0d000')}
-      </PieChart>
     </>
   );
 };

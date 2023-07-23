@@ -1,27 +1,8 @@
 /* eslint-disable react/jsx-key */
 import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
-import axios from 'axios';
 
-const ProductStockChart = () => {
-  const [productsData, setProductsData] = useState([]);
-  const [productsDataForChart, setProductsDataForChart] = useState([]);
-
-  useEffect(() => {
-    fetchProductsData();
-  }, []);
-
-  const fetchProductsData = async () => {
-    try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`);
-      setProductsData(data.Products);
-      setProductsDataForChart(calculateProductsOutOfStockCountData(data.Products))
-
-    } catch (error) {
-      console.error('Error fetching products data:', error);
-    }
-  };
-
+const ProductStockChart = ({ productsData = [] }) => {
   const calculateProductsOutOfStockCountData = (products = []) => {
     let outOfStockCount = 0;
     let inStockCount = 0;
@@ -42,32 +23,52 @@ const ProductStockChart = () => {
     ];
   }
 
+  const productsDataForChart = calculateProductsOutOfStockCountData(productsData);
+
+  const getOOSPercentage = (value) => {
+    if (typeof value === 'number') {
+      return parseFloat(value)?.toFixed(0);
+    }
+    return value?.toFixed(0);
+  }
+
   return (
     <>
-      <span>Productos sin stock: {productsDataForChart[0]?.value}%</span>
+      <div className="featuredMoneyContainer">
+        <span className="featuredMoney"> {getOOSPercentage(productsDataForChart[0]?.value)}%</span>
+        <span className="featuredMoneyRate">
+          Productos sin stock
+        </span>
+      </div>
+
+
       {productsData.map((product) => {
         return (
-          product.is_out_of_stock && <span>{product.title}</span>
+          product.is_out_of_stock && <div>
+            <span className="featuredSub">{product.title}</span>
+          </div>
         )
       })}
-      <PieChart width={800} height={400}>
-        <Pie
-          data={productsDataForChart}
-          cx={420}
-          cy={200}
-          startAngle={180}
-          endAngle={0}
-          innerRadius={60}
-          outerRadius={80}
-          fill="#8884d8"
-          paddingAngle={5}
-          dataKey="value"
-        >
-          {productsDataForChart.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={entry.color} />
-          ))}
-        </Pie>
-      </PieChart>
+      <div className="center">
+        <PieChart width={200} height={200}>
+          <Pie
+            data={productsDataForChart}
+            // cx={420}
+            cy={130}
+            startAngle={180}
+            endAngle={0}
+            innerRadius={60}
+            outerRadius={80}
+            fill="#8884d8"
+            paddingAngle={5}
+            dataKey="value"
+          >
+            {productsDataForChart.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.color} />
+            ))}
+          </Pie>
+        </PieChart>
+      </div>
     </>
 
   );

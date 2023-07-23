@@ -55,7 +55,16 @@ const OrdersChart = () => {
   }
 
   return (
-    <Box width="100%" height={400}>
+    <Box width="100%" height={200}>
+      <br />
+      <Box ml={2}>
+        {orderStatusData.map((orderStatus, index) => (
+          <Box key={`legend-${index}`} display="flex" alignItems="center" mb={1}>
+            <Box width={16} height={16} bgcolor={getInfoFromOrderStatus(orderStatus.status)?.color} mr={1} />
+            <Typography variant="body2">{getInfoFromOrderStatus(orderStatus.status)?.name}</Typography>
+          </Box>
+        ))}
+      </Box>
       <ResponsiveContainer>
         <PieChart>
           <Pie
@@ -74,14 +83,6 @@ const OrdersChart = () => {
           </Pie>
         </PieChart>
       </ResponsiveContainer>
-      <Box ml={2}>
-        {orderStatusData.map((orderStatus, index) => (
-          <Box key={`legend-${index}`} display="flex" alignItems="center" mb={1}>
-            <Box width={16} height={16} bgcolor={getInfoFromOrderStatus(orderStatus.status)?.color} mr={1} />
-            <Typography variant="body2">{getInfoFromOrderStatus(orderStatus.status)?.name}</Typography>
-          </Box>
-        ))}
-      </Box>
     </Box>
   );
 };

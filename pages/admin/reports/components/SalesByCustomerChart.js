@@ -40,6 +40,7 @@ const SalesByCustomerChart = ({ initStartDate, initEndDate, tomorrow }) => {
       <Typography variant="h6" component="h2" gutterBottom>
         {getDateLabel()}
       </Typography>
+      <br />
       <Grid container spacing={2} alignItems="center">
         <Grid item>
           <TextField
@@ -69,13 +70,14 @@ const SalesByCustomerChart = ({ initStartDate, initEndDate, tomorrow }) => {
           </Button>
         </Grid>
       </Grid>
+      <br />
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={salesData}>
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
           <Legend />
-          <Bar dataKey="sales" fill="#8884d8" />
+          <Bar dataKey="sales" fill="#002fca6d" />
         </BarChart>
       </ResponsiveContainer>
     </Container>
