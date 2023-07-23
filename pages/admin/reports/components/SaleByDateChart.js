@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Grid, Typography, TextField, Button } from '@mui/material';
-import { LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 
 const SalesByDateChart = ({ initStartDate, initEndDate, tomorrow }) => {
@@ -30,14 +30,41 @@ const SalesByDateChart = ({ initStartDate, initEndDate, tomorrow }) => {
     return 'Ventas finalizadas por día';
   };
 
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p>{`${payload[0]?.payload?.date}`}</p>
+          <p>{`Ganancias: $${parseFloat(payload[0]?.value)?.toFixed(2)}`}</p>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  const CustomTooltipQuantity = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p>{`${payload[0]?.payload?.date}`}</p>
+          <p>{`Ventas: ${payload[0]?.value}`}</p>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <Container>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Typography variant="h6" component="h2" gutterBottom>
+          <Typography variant="h6" component="h2" gutterBottom className="chartTitle">
             {getDateLabel()}
           </Typography>
-          <Grid container spacing={2} alignItems="center">
+          <Grid container spacing={2} alignItems="center" className="chartDateSelectorFilter">
             <Grid item>
               <TextField
                 label="Inicio"
@@ -66,15 +93,47 @@ const SalesByDateChart = ({ initStartDate, initEndDate, tomorrow }) => {
               </Button>
             </Grid>
           </Grid>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={salesData}>
+
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart
+              width={500}
+              height={200}
+              data={salesData}
+              syncId="anyId"
+              margin={{
+                top: 10,
+                right: 30,
+                left: 0,
+                bottom: 0,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="date" />
               <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="quantity" stroke="#8884d8" />
-              <Line type="monotone" dataKey="earnings" stroke="#82ca9d" />
-            </LineChart>
+              <Tooltip content={<CustomTooltipQuantity />} />
+              <Area type="monotone" dataKey="quantity" stroke="#8884d8" fill="#8884d8" />
+            </AreaChart>
+          </ResponsiveContainer>
+          <br />
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart
+              width={500}
+              height={200}
+              data={salesData}
+              syncId="anyId"
+              margin={{
+                top: 10,
+                right: 30,
+                left: 0,
+                bottom: 0,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip content={<CustomTooltip />} />
+              <Area type="monotone" dataKey="earnings" stroke="#82ca9d" fill="#82ca9d" />
+            </AreaChart>
           </ResponsiveContainer>
         </Grid>
       </Grid>

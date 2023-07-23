@@ -1,6 +1,7 @@
 import React from 'react';
 import dynamic from "next/dynamic";
 import Layout from '../../../src/components/AdminLayout';
+import { ArrowDownward, ArrowUpward } from "@material-ui/icons";
 import { Container, Typography } from '@mui/material';
 import SaleByDateChart from './components/SaleByDateChart';
 import SalesByProductChart from './components/SalesByProductChart';
@@ -10,6 +11,7 @@ import OrdersChart from './components/OrdersChart';
 import ProductStockChart from './components/ProductStockChart';
 import ReviewScoreQuantityChart from './components/ReviewScoreQuantityChart';
 import ReviewProductChart from './components/ReviewProductChart';
+import Warnings from './components/Warnings';
 const ProductStockChartWithoutSSR = dynamic(
   import("./components/ProductStockChart"),
   { ssr: false }
@@ -55,19 +57,48 @@ const Reports = () => {
     //     <SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()}/>
     //   </Container>
     // </Layout>
+
+    // <Container>
+    //     <section class="grid">
+    //       <article><StockChart /></article>
+    //       <article><OrdersChart /></article> // USED
+    //       <article><ProductStockChartWithoutSSR /></article> // USED
+    //       <article><SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article> // USED
+    //       <article><SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
+    //       <article><SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
+    //       <article><ReviewScoreQuantityChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
+    //       <article><ReviewProductChart /></article>
+    //     </section>
+    //   </Container>
     <Layout>
-      <Container>
-        <section class="grid">
-          <article><StockChart /></article>
-          <article><OrdersChart /></article>
-          <article><ProductStockChartWithoutSSR /></article>
-          <article><SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
-          <article><SalesByProductChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
-          <article><SalesByCustomerChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
-          <article><ReviewScoreQuantityChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} /></article>
-          <article><ReviewProductChart /></article>
-        </section>
-      </Container>
+
+      <div className="featured">
+
+        <div className="featuredItem">
+          <span className="featuredTitle">Avisos importantes</span>
+          <Warnings />
+        </div>
+
+        <div className="featuredItem">
+          <span className="featuredTitle">Stock de productos</span>
+          <div className="featuredMoneyContainer">
+          </div>
+          <ProductStockChartWithoutSSR />
+        </div>
+
+        <div className="featuredItem">
+          <span className="featuredTitle">Estado de pedidos</span>
+          <OrdersChart />
+        </div>
+      </div>
+
+
+      <div className="big-chart">
+        <SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} />
+      </div>
+
+
+
     </Layout>
 
 

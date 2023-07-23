@@ -44,30 +44,39 @@ const ProductStockChart = () => {
 
   return (
     <>
-      <span>Productos sin stock: {productsDataForChart[0]?.value}%</span>
+      <div className="featuredMoneyContainer">
+        <span className="featuredMoney"> {parseFloat(productsDataForChart[0]?.value)?.toFixed(0)}%</span>
+        <span className="featuredMoneyRate">
+          Productos sin stock
+        </span>
+      </div>
+
+
       {productsData.map((product) => {
         return (
-          product.is_out_of_stock && <span>{product.title}</span>
+          product.is_out_of_stock && <span className="featuredSub">{product.title}</span>
         )
       })}
-      <PieChart width={800} height={400}>
-        <Pie
-          data={productsDataForChart}
-          cx={420}
-          cy={200}
-          startAngle={180}
-          endAngle={0}
-          innerRadius={60}
-          outerRadius={80}
-          fill="#8884d8"
-          paddingAngle={5}
-          dataKey="value"
-        >
-          {productsDataForChart.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={entry.color} />
-          ))}
-        </Pie>
-      </PieChart>
+      <div className="center">
+        <PieChart width={200} height={200}>
+          <Pie
+            data={productsDataForChart}
+            // cx={420}
+            cy={130}
+            startAngle={180}
+            endAngle={0}
+            innerRadius={60}
+            outerRadius={80}
+            fill="#8884d8"
+            paddingAngle={5}
+            dataKey="value"
+          >
+            {productsDataForChart.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.color} />
+            ))}
+          </Pie>
+        </PieChart>
+      </div>
     </>
 
   );
