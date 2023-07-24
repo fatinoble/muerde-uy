@@ -8,6 +8,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
     const [productData, setProductData] = useState({});
     const [ingredients, setIngredients] = useState([]);
     const [ingredientQuantities, setIngredientQuantities] = useState({});
+    const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
         getAllIngredients()
@@ -83,6 +84,10 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
         });
     };
 
+    const handleSearchChange = (event) => {
+        setSearchText(event.target.value);
+    };
+
     return (
         <Modal open={open} onClose={handleClose}>
             <Box component="form" onSubmit={handleSubmit}
@@ -104,7 +109,12 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                 <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} />
                 <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions} onChange={handleChange} />
                 <TextField variant="outlined" margin="normal" required fullWidth name="preparation_time_minutes" label="Tiempo de preparación en minutos" value={productData.preparation_time} onChange={handleChange} />
-                <TableContainer>
+                <TextField variant="outlined" margin="normal" fullWidth name="search" label="Buscar ingrediente" value={searchText} onChange={handleSearchChange} />
+                <TableContainer
+                sx={{
+                    maxHeight: '300px', 
+                    overflow: 'auto'
+                }}>
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -114,7 +124,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {ingredients.map((ingredient) => {
+                        {ingredients.filter(ingredient => ingredient.name.toLowerCase().includes(searchText.toLowerCase())).map((ingredient) => {
                                 const ingredientQuantity = ingredientQuantities[ingredient?.id_ingredient] || {};
                                 const { quantity = '', unit = '' } = ingredientQuantity;
                                 return (
