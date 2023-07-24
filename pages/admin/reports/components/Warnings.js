@@ -10,7 +10,7 @@ const Warnings = ({ productsData, ingredients }) => {
       </div>
 
 
-      {productsData.map((product) => {
+      {productsData?.map((product) => {
         return (
           product.is_out_of_stock && <div className="redWarning">
             {<span>El producto <span style={{ fontWeight: 'bold' }}>{product.title}</span> se encuentra sin stock de ingredientes y <span style={{ fontWeight: 'bold' }}>no está disponible para la venta</span>.</span>}
@@ -18,7 +18,7 @@ const Warnings = ({ productsData, ingredients }) => {
         )
       })}
 
-      {ingredients.map((ingredient) => {
+      {ingredients?.map((ingredient) => {
         return (
           ingredient.stock_percentage_status === 0 && <div className="redWarning">
             {<span >El ingrediente  <span style={{ fontWeight: 'bold' }}>{ingredient.name}</span>  se encuentra sin stock. No se podrá vender ningún producto cuya receta utilice este ingrediente.
@@ -28,7 +28,7 @@ const Warnings = ({ productsData, ingredients }) => {
         )
       })}
 
-      {ingredients.map((ingredient) => {
+      {ingredients?.map((ingredient) => {
         return (
           ingredient.stock_percentage_status > 0 && ingredient.stock_percentage_status <= 29 && <div className="yellowWarning">
             {<span >El ingrediente <span style={{ fontWeight: 'bold' }}>{ingredient.name}</span> se encuentra con bajo stock. <span style={{ fontWeight: 'bold' }}> Se aconseja ingresar mayor cantidad pronto</span>.</span>}
