@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Layout from '../../../src/components/UserLayout';
 import ProductCatalog from './components/ProductCatalog';
@@ -8,15 +8,19 @@ import TagFilter from './components/TagFilter';
 import WhatsAppButton from '../../../src/components/WhatsAppButton';
 import { ToggleButton, ToggleButtonGroup, Grid, Button } from '@mui/material';
 
-//TODO: Manejar user con lógica de usuario
-const user = { name: 'Pedro' }
-
 const Catalog = () => {
   const [selectedCatalog, setSelectedCatalog] = useState('products');
   const [searchQuery, setSearchQuery] = useState('');
   const [allTags, setAllTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [userName, setUserName] = useState('');
 
+  useEffect(() => {
+    const localStorageUserName = localStorage.getItem('user_name');
+    if (localStorageUserName) {
+      setUserName(localStorageUserName);
+    }
+  }, []); 
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -34,7 +38,7 @@ const Catalog = () => {
     setSelectedTags([]);
   };
 
-  const whatsappCatalogMessage = `!Hola! Soy ${user.name}, y quisiera saber un poco más sobre los productos en Muerde.`;
+  const whatsappCatalogMessage = `!Hola! Soy ${userName}, y quisiera saber un poco más sobre los productos en Muerde.`;
 
   return (
     <Layout>

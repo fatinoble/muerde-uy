@@ -3,11 +3,14 @@ import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Toolt
 import { getAllIngredients } from '../../../../services/ingredientService';
 import React, { useState, useEffect } from "react";
 import { UNIT_MEASURES_CONVERTER } from '@/utils/units_converter/helper';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
 
 const CreateModal = ({ open, handleClose, handleAdd }) => {
     const [productData, setProductData] = useState({});
     const [ingredients, setIngredients] = useState([]);
     const [ingredientQuantities, setIngredientQuantities] = useState({});
+    const [searchText, setSearchText] = useState('');
 
     useEffect(() => {
         getAllIngredients()
@@ -83,6 +86,10 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
         });
     };
 
+    const handleSearchChange = (event) => {
+        setSearchText(event.target.value);
+    };
+
     return (
         <Modal open={open} onClose={handleClose}>
             <Box component="form" onSubmit={handleSubmit}
@@ -104,7 +111,34 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                 <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} />
                 <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions} onChange={handleChange} />
                 <TextField variant="outlined" margin="normal" required fullWidth name="preparation_time_minutes" label="Tiempo de preparación en minutos" value={productData.preparation_time} onChange={handleChange} />
-                <TableContainer>
+                <Box
+                    component="form"
+                    sx={{
+                        backgroundColor: '#f1f1f1', 
+                        borderRadius: '20px',
+                        padding: '0.5rem',
+                        marginBottom: '1rem', 
+                    }}
+                >
+                    <InputBase
+                        fullWidth 
+                        placeholder="Buscar ingrediente"
+                        inputProps={{ 'aria-label': 'Buscar ingrediente' }}
+                        value={searchText}
+                        onChange={handleSearchChange}
+                        sx={{
+                            ml: 1
+                        }}
+                        startAdornment={(
+                            <SearchIcon color="action" sx={{ mr: 1 }} />
+                        )}
+                    />
+                </Box>
+                <TableContainer
+                    sx={{
+                        maxHeight: '300px',
+                        overflow: 'auto'
+                    }}>
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -114,7 +148,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {ingredients.map((ingredient) => {
+                            {ingredients.filter(ingredient => ingredient.name.toLowerCase().includes(searchText.toLowerCase())).map((ingredient) => {
                                 const ingredientQuantity = ingredientQuantities[ingredient?.id_ingredient] || {};
                                 const { quantity = '', unit = '' } = ingredientQuantity;
                                 return (
@@ -149,7 +183,8 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                             })}
                         </TableBody>
                     </Table>
-                </TableContainer>            <Button type="submit"
+                </TableContainer>
+                <Button type="submit"
                     sx={{
                         display: 'block',
                         mt: 2,
