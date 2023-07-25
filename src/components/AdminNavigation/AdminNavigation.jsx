@@ -7,41 +7,15 @@ import {
   ListItemIcon,
   ListItemText,
   Button,
-  makeStyles,
   Typography,
-} from "@material-ui/core";
-import {
-  Receipt,
-  Storefront,
-  RestaurantMenu,
-  Kitchen,
-  BarChart,
-  People
-} from "@material-ui/icons";
+} from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
-  drawer: {
-    backgroundColor: '#A87658',
-    color: '#FDF7E3',
-    width: 250,
-    height: '100%',
-    paddingTop: theme.spacing(2),
-  },
-  listItem: {
-    '&:hover': {
-      backgroundColor: '#F7DDE8',
-      color: '#A87658',
-    },
-    marginBottom: theme.spacing(1),
-  },
-  title: {
-    marginLeft: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-  },
-  button: {
-    marginBottom: theme.spacing(2),
-  },
-}));
+import Receipt from "@mui/icons-material/Receipt";
+import Storefront from "@mui/icons-material/Storefront";
+import RestaurantMenu from "@mui/icons-material/RestaurantMenu";
+import Kitchen from "@mui/icons-material/Kitchen";
+import BarChart from "@mui/icons-material/BarChart";
+import People from "@mui/icons-material/People";
 
 const routingList = [
   { name: "Dashboard", icon: <BarChart />, route: "/admin/reports" },
@@ -55,7 +29,6 @@ const routingList = [
 const AdminNavigation = () => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const classes = useStyles();
 
   const handleNavigation = (route) => {
     setOpen(false);
@@ -63,8 +36,17 @@ const AdminNavigation = () => {
   };
 
   const getList = () => (
-    <div className={classes.drawer} onClick={() => setOpen(false)}>
-      <Typography variant="h6" className={classes.title}>
+    <div styles={{
+      backgroundColor: '#A87658',
+      color: '#FDF7E3',
+      width: '250px',
+      height: '100%',
+      paddingTop: '5px',
+    }} onClick={() => setOpen(false)}>
+      <Typography variant="h6" styles={{
+    marginLeft: '5px',
+    marginBottom: '5px',
+  }}>
         Menú
       </Typography>
       {routingList.map((item, index) => (
@@ -72,7 +54,13 @@ const AdminNavigation = () => {
           button
           key={index}
           onClick={() => handleNavigation(item.route)}
-          className={classes.listItem}
+          styles={{
+            '&:hover': {
+              backgroundColor: '#F7DDE8',
+              color: '#A87658',
+            },
+            marginBottom: '5px',
+          }}
         >
           <ListItemIcon>{item.icon}</ListItemIcon>
           <ListItemText primary={item.name} />

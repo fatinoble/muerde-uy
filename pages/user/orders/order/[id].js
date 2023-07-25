@@ -2,29 +2,17 @@ import axios from 'axios';
 import Layout from '../../../../src/components/UserLayout';
 import { useRouter } from 'next/router';
 import { useState, useEffect, useRef } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { Container, Grid, List, ListItem, ListItemText, MenuItem, Paper, Select, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
 import { getOrderStateName } from '@/utils';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import ReviewForm from '@/utils/rating/ReviewForm';
 import { getAllReviews, newReview } from '../../../../services/reviewService';
 import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
 
-const useStyles = makeStyles((theme) => ({
-    successMessage: {
-        backgroundColor: '#4caf50',
-        color: 'white',
-        padding: theme.spacing(2),
-        borderRadius: theme.spacing(1),
-        marginBottom: theme.spacing(2),
-    },
-}));
-
 function OrderScreen() {
     const router = useRouter();
     const orderId = router.query.id;
-    const classes = useStyles();
     const { exito } = router.query;
     const doneSale = router.asPath.includes('exito=true') && exito === 'true';
     const [order, setOrder] = useState({});
@@ -119,7 +107,13 @@ function OrderScreen() {
                     Volver
                 </Button>
                 {doneSale === true && (
-                    <Paper className={classes.successMessage}>
+                    <Paper styles={{
+                        backgroundColor: '#4caf50',
+                        color: 'white',
+                        padding: '5px',
+                        borderRadius: '5px',
+                        marginBottom: '5px',
+                    }}>
                         <Typography variant="body1">
                             ¡Compra exitosa! Gracias por tu pedido.
                         </Typography>
@@ -169,7 +163,7 @@ function OrderScreen() {
 
                 </Paper>
             </Container>
-        </Layout>
+        </Layout >
     );
 }
 
