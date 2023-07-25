@@ -1,10 +1,29 @@
 import axios from 'axios';
 import Layout from '../../../src/components/AdminLayout';
-import { Button, List, ListItem, ListItemText, Select, MenuItem, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
+import {
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  Select,
+  MenuItem,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TablePagination,
+} from '@mui/material';
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@material-ui/core';
 import { getOrderStateName } from '@/utils';
 
 const Orders = () => {
@@ -90,107 +109,107 @@ const Orders = () => {
         <title>Pedidos</title>
       </Head>
       <h1>Pedidos</h1>
-            <TableContainer component={Paper} style={{ maxWidth: '500', margin: '0 auto' }}>
-              <Table aria-label="My Table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>ID</TableCell>
-                    <TableCell>Nombre cliente</TableCell>
-                    <TableCell>Productos</TableCell>
-                    <TableCell>Fecha de compra</TableCell>
-                    <TableCell>Precio total</TableCell>
-                    <TableCell>Estado</TableCell>
-                    <TableCell>Detalle</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {rows.map((order, index) => (
-                    <TableRow style={{ backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#F0EBEB' }}>
-                      <TableCell>{order.id_sale}</TableCell>
-                      <TableCell>{order.user ? order.user.name : 'Usuario eliminado'}</TableCell>
-                      <TableCell>
-                        <List>
-                          {order.products.map((product) => (
-                            <ListItem key={product.product.id_product}>
-                              <ListItemText primary={`${product.product.title} (${product.quantity})`} />
-                            </ListItem>
-                          ))}
-                        </List>
-                      </TableCell>
-                      <TableCell>{order.start_date.substring(0, 10)}</TableCell>
-                      <TableCell>${order.total_earn_cost}</TableCell>
-                      <TableCell>
-                        <Select
-                          value={order.status}
-                          onChange={(e) => {
-                            if (e.target.value != order.status) {
-                              handleSelectChange(e, order);
-                            }
-                          }
-                          }
-                          fullWidth
-                          margin="normal"
-                          variant="outlined"
-                        >
-                          {ordersState.map((orderState) => {
-                            if((orderState != 'DONE_DELIVERY' && order.delivery_type != 'DELIVERY') || (orderState != 'DONE_PICK_UP' && order.delivery_type != 'PICK_UP')){
-                              return <MenuItem key={orderState} value={orderState} autoFocus={order.status == orderState}>
-                                {getOrderStateName(orderState)}
-                              </MenuItem>
-                            }
-                        })}
-                        </Select>
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="outlined" onClick={(e) => {
-                          e.preventDefault();
-                          navigateToPage(order.id_sale)
-                        }}>
-                          Detalles
-                        </Button>
-                      </TableCell>
-                    </TableRow>
+      <TableContainer component={Paper} style={{ maxWidth: '500', margin: '0 auto' }}>
+        <Table aria-label="My Table">
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Nombre cliente</TableCell>
+              <TableCell>Productos</TableCell>
+              <TableCell>Fecha de compra</TableCell>
+              <TableCell>Precio total</TableCell>
+              <TableCell>Estado</TableCell>
+              <TableCell>Detalle</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((order, index) => (
+              <TableRow style={{ backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#F0EBEB' }}>
+                <TableCell>{order.id_sale}</TableCell>
+                <TableCell>{order.user ? order.user.name : 'Usuario eliminado'}</TableCell>
+                <TableCell>
+                  <List>
+                    {order.products.map((product) => (
+                      <ListItem key={product.product.id_product}>
+                        <ListItemText primary={`${product.product.title} (${product.quantity})`} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </TableCell>
+                <TableCell>{order.start_date.substring(0, 10)}</TableCell>
+                <TableCell>${order.total_earn_cost}</TableCell>
+                <TableCell>
+                  <Select
+                    value={order.status}
+                    onChange={(e) => {
+                      if (e.target.value != order.status) {
+                        handleSelectChange(e, order);
+                      }
+                    }
+                    }
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                  >
+                    {ordersState.map((orderState) => {
+                      if ((orderState != 'DONE_DELIVERY' && order.delivery_type != 'DELIVERY') || (orderState != 'DONE_PICK_UP' && order.delivery_type != 'PICK_UP')) {
+                        return <MenuItem key={orderState} value={orderState} autoFocus={order.status == orderState}>
+                          {getOrderStateName(orderState)}
+                        </MenuItem>
+                      }
+                    })}
+                  </Select>
+                </TableCell>
+                <TableCell>
+                  <Button variant="outlined" onClick={(e) => {
+                    e.preventDefault();
+                    navigateToPage(order.id_sale)
+                  }}>
+                    Detalles
+                  </Button>
+                </TableCell>
+              </TableRow>
 
 
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={orders.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              labelRowsPerPage="Pedidos por página"
-            />
-            {
-              openStateModal && (
-                <Dialog
-                  open={openStateModal}
-                  onClose={() => setOpenStateModal(false)}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                >
-                  <DialogTitle id="alert-dialog-title">Confirmar Estado</DialogTitle>
-                  <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                      ¿Estás segurx de que deseas cambiar el estado?
-                    </DialogContentText>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleCancel} color="primary">
-                      No
-                    </Button>
-                    <Button onClick={handleConfirm} color="primary" autoFocus>
-                      Sí
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              )
-            }
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={orders.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage="Pedidos por página"
+      />
+      {
+        openStateModal && (
+          <Dialog
+            open={openStateModal}
+            onClose={() => setOpenStateModal(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">Confirmar Estado</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                ¿Estás segurx de que deseas cambiar el estado?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCancel} color="primary">
+                No
+              </Button>
+              <Button onClick={handleConfirm} color="primary" autoFocus>
+                Sí
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )
+      }
     </Layout>
   );
 };
