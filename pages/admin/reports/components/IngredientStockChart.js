@@ -2,6 +2,7 @@ import React from 'react';
 import { Tooltip } from '@mui/material';
 import dynamic from "next/dynamic";
 import InfoIcon from '../../../../src/svg/Info';
+import CSVDownloader from '../../../../src/components/CSVDownloader';
 const StockNeedlePieCharttWithoutSSR = dynamic(
   import("./IngredientStockPieNeedleChart"),
   { ssr: false }
@@ -18,7 +19,7 @@ const STOCK_INDICATORS = [
   { name: 'Stock abundante', value: 10, color: '#0ad80a' },
 ];
 
-const StockChart = ({ ingredients }) => {
+const StockChart = ({ ingredients = [] }) => {
 
 
   const getStockIndicatorInfo = (ingredient = {}) => {
@@ -34,6 +35,17 @@ const StockChart = ({ ingredients }) => {
     }
   }
 
+  const ingredientsDataForCSVDownload = ingredients?.map(ingredient => {
+    return (
+      {
+        id: ingredient.id_ingredient,
+        nombre: ingredient.name,
+        unidad: ingredient.unit,
+        porcentage_de_stock: ingredient.stock_percentage_status
+      }
+    )
+  })
+
   const tooltipText = 'Se considera que un ingrediente tiene 100% de stock cuando cuenta con la cantidad necesaria para utilizarse en la totalidad de sus recetas involucradas al menos 5 veces cada una.';
 
   return (
@@ -42,24 +54,36 @@ const StockChart = ({ ingredients }) => {
 
         <div className="featuredItem">
           <div>
-            <span className="featuredTitle">Porcentaje de stock de ingredientes</span>
-            <Tooltip
-              title={tooltipText}
-              placement="top"
-              arrow
-              style={{
-                backgroundColor: '#E28D8D',
-                color: 'white',
-                borderRadius: 4,
-                fontSize: 25,
-                maxWidth: 200,
-                textAlign: 'center',
-              }}
-            >
-              <div style={{ display: 'inline-block' }}>
-                <InfoIcon className="info-icon" />
+            <div className="title-download-container">
+              <div>
+                <span className="featuredTitle">Porcentaje de stock de ingredientes</span>
+                <Tooltip
+                  title={tooltipText}
+                  placement="top"
+                  arrow
+                  style={{
+                    backgroundColor: '#E28D8D',
+                    color: 'white',
+                    borderRadius: 4,
+                    fontSize: 25,
+                    maxWidth: 200,
+                    textAlign: 'center',
+                  }}
+                >
+                  <div style={{ display: 'inline-block' }}>
+                    <InfoIcon className="info-icon" />
+                  </div>
+                </Tooltip>
               </div>
-            </Tooltip>
+              {ingredientsDataForCSVDownload && ingredientsDataForCSVDownload.length &&
+                <CSVDownloader
+                  jsonData={ingredientsDataForCSVDownload}
+                  fileName="stock-ingredientes"
+                />
+              }
+
+            </div>
+
           </div>
           <br />
           <br />

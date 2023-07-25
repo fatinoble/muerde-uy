@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
-import React, { useState, useEffect } from 'react';
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import React from 'react';
+import { PieChart, Pie, Cell } from 'recharts';
 
 const ProductStockChart = ({ productsData = [] }) => {
   const calculateProductsOutOfStockCountData = (products = []) => {

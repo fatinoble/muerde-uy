@@ -10,6 +10,7 @@ import OrdersChart from './components/OrdersChart';
 import ReviewScoreQuantityChart from './components/ReviewScoreQuantityChart';
 import ReviewProductChart from './components/ReviewProductChart';
 import Warnings from './components/Warnings';
+import CSVDownloader from '../../../src/components/CSVDownloader'
 const ProductStockChartWithoutSSR = dynamic(
   import("./components/ProductStockChart"),
   { ssr: false }
@@ -18,7 +19,7 @@ const ProductStockChartWithoutSSR = dynamic(
 const Reports = () => {
   const [ingredients, setIngredients] = useState([]);
   const [productsData, setProductsData] = useState([]);
-
+  const [orderStatusData, setOrderStatusData] = useState([]);
 
   useEffect(() => {
     if (!ingredients.length) {
@@ -27,7 +28,20 @@ const Reports = () => {
     if (!productsData.length) {
       fetchProductsData();
     }
+    if (!orderStatusData.length) {
+      fetchOrderStatusData();
+    }
   }, []);
+
+  const fetchOrderStatusData = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/total_progress_status`);
+      const data = response.data;
+      setOrderStatusData(data.total_progress_status);
+    } catch (error) {
+      console.error('Error fetching orderStatusData:', error);
+    }
+  };
 
   const fetchProductsData = async () => {
     try {
@@ -90,6 +104,16 @@ const Reports = () => {
     }
   }
 
+  const productsDataForCSVDownload = productsData?.map(product => {
+    return (
+      {
+        id: product.id_product,
+        titulo: product.title,
+        esta_en_stock: product.is_out_of_stock
+      }
+    )
+  })
+
   return (
 
     <Layout>
@@ -102,15 +126,32 @@ const Reports = () => {
         </div>
 
         <div className="featuredItem">
-          <span className="featuredTitle">Stock de productos</span>
+          <div className="title-download-container">
+            <span className="featuredTitle">Stock de productos</span>
+            {productsDataForCSVDownload && productsDataForCSVDownload.length &&
+              <CSVDownloader
+                jsonData={productsDataForCSVDownload}
+                fileName="stock-productos"
+              />
+            }
+          </div>
+
           <div className="featuredMoneyContainer">
           </div>
           <ProductStockChartWithoutSSR productsData={productsData} />
         </div>
 
         <div className="featuredItem">
-          <span className="featuredTitle">Estado de pedidos</span>
-          <OrdersChart />
+          <div className="title-download-container">
+            <span className="featuredTitle">Estado de pedidos</span>
+            {orderStatusData && orderStatusData.length &&
+              <CSVDownloader
+                jsonData={orderStatusData}
+                fileName="estado-pedidos"
+              />
+            }
+          </div>
+          <OrdersChart orderStatusData={orderStatusData} />
         </div>
       </div>
 
