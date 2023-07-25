@@ -70,21 +70,23 @@ const ReviewProductChart = ({ getReviewColorFromScore = () => { } }) => {
               </Select>
             </Grid>
           </Grid>
+          {selectedProduct?.review_summary?.length > 0 ? (
+            selectedProduct?.review_summary?.map((reviewSummary) => {
+              const backgroundColor = getReviewColorFromScore(reviewSummary?.score);
+              return (
+                <div className="reviewBox" style={{ backgroundColor }}>
+                  <Rating
+                    name="read-only"
+                    readOnly
+                    value={reviewSummary?.score}
+                  />
+                  <br />
+                  <span className="reviewDescription">{reviewSummary.description}</span>
+                </div>
+              )
+            })
+          ) : (<span> Este producto aún no tiene reviews de clientes.</span>)}
 
-          {selectedProduct?.review_summary?.map((reviewSummary) => {
-            const backgroundColor = getReviewColorFromScore(reviewSummary?.score);
-            return (
-              <div className="reviewBox" style={{ backgroundColor }}>
-                <Rating
-                  name="read-only"
-                  readOnly
-                  value={reviewSummary?.score}
-                />
-                <br />
-                <span className="reviewDescription">{reviewSummary.description}</span>
-              </div>
-            )
-          })}
         </div>
 
         <div className="featuredItem">

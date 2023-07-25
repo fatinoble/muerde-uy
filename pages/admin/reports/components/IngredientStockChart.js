@@ -47,7 +47,7 @@ const StockChart = ({ ingredients }) => {
               title={tooltipText}
               placement="top"
               arrow
-              styles={{
+              style={{
                 backgroundColor: '#E28D8D',
                 color: 'white',
                 borderRadius: 4,

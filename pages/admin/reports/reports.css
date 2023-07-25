@@ -35,6 +35,8 @@
 }
 
 .featuredItem {
+  max-height:300px;
+  overflow: auto;
   background-color: white;
   flex: 1;
   margin: 0px 20px;
