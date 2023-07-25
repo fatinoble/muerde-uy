@@ -7,24 +7,7 @@ import { Typography } from '@mui/material';
 
 const RADIAN = Math.PI / 180;
 
-const OrdersChart = () => {
-  const [orderStatusData, setOrderStatusData] = useState([]);
-
-  useEffect(() => {
-    if (!orderStatusData.length) {
-      fetchOrderStatusData();
-    }
-  }, []);
-
-  const fetchOrderStatusData = async () => {
-    try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/total_progress_status`);
-      const data = response.data;
-      setOrderStatusData(data.total_progress_status);
-    } catch (error) {
-      console.error('Error fetching orderStatusData:', error);
-    }
-  };
+const OrdersChart = ({ orderStatusData = [] }) => {
 
 
   const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {

@@ -17,7 +17,7 @@ export default function Home() {
 
   return (
     <div>
-      <div styles={{
+      <div style={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

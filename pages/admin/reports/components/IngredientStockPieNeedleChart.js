@@ -65,7 +65,7 @@ const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo = () => {
           <span style={{ color: getStockIndicatorInfo(selectedIngredient)?.color }}>{getStockIndicatorInfo(selectedIngredient)?.name}</span >
         </Grid>
       </Grid>
-      <div className="center">
+      <div className="center" style={{ marginTop: '-30px' }}>
         <PieChart width={400} height={250}>
           <Pie
             dataKey="value"

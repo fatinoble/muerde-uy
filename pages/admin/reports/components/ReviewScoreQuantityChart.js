@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
+import CSVDownloader from '../../../../src/components/CSVDownloader';
 
 const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow, getReviewColorFromScore = () => { } }) => {
   const [reviewsData, setReviewsData] = useState([]);
@@ -35,11 +36,30 @@ const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow, getRev
     return 'Puntaje de reviews de clientes';
   };
 
+  const reviewsDataForCSVDownload = reviewsData?.map(review => {
+    return (
+      {
+        puntaje_estrellas: review.score,
+        cantidad_total: review.quantity,
+      }
+    )
+  })
+
   return (
     <Container>
-      <Typography variant="h6" component="h2" gutterBottom>
-        {getDateLabel()}
-      </Typography>
+
+      <div className="title-download-container">
+        <Typography variant="h6" component="h2" gutterBottom>
+          {getDateLabel()}
+        </Typography>
+        {reviewsDataForCSVDownload && reviewsDataForCSVDownload.length &&
+          <CSVDownloader
+            jsonData={reviewsDataForCSVDownload}
+            fileName={`reviews-${startDate}-al-${endDate}`}
+          />
+        }
+      </div>
+
       <br />
       <Grid container spacing={2} alignItems="center">
         <Grid item>

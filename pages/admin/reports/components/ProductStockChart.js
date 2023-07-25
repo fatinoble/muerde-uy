@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
-import React, { useState, useEffect } from 'react';
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
+import React from 'react';
+import { PieChart, Pie, Cell } from 'recharts';
 
 const ProductStockChart = ({ productsData = [] }) => {
   const calculateProductsOutOfStockCountData = (products = []) => {
@@ -44,13 +44,15 @@ const ProductStockChart = ({ productsData = [] }) => {
 
       {productsData.map((product) => {
         return (
-          product.is_out_of_stock && <div>
-            <span className="featuredSub">{product.title}</span>
-          </div>
+          <>
+            {product.is_out_of_stock && <div>
+              <span className="featuredSub">{product.title}</span>
+            </div>}
+          </>
         )
       })}
       <div className="center">
-        <PieChart width={200} height={200}>
+        <PieChart width={200} height={150}>
           <Pie
             data={productsDataForChart}
             // cx={420}

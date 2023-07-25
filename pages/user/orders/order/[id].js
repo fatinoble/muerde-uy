@@ -107,7 +107,7 @@ function OrderScreen() {
                     Volver
                 </Button>
                 {doneSale === true && (
-                    <Paper styles={{
+                    <Paper style={{
                         backgroundColor: '#4caf50',
                         color: 'white',
                         padding: '5px',

@@ -36,14 +36,14 @@ const AdminNavigation = () => {
   };
 
   const getList = () => (
-    <div styles={{
+    <div style={{
       backgroundColor: '#A87658',
       color: '#FDF7E3',
       width: '250px',
       height: '100%',
       paddingTop: '5px',
     }} onClick={() => setOpen(false)}>
-      <Typography variant="h6" styles={{
+      <Typography variant="h6" style={{
     marginLeft: '5px',
     marginBottom: '5px',
   }}>
@@ -54,7 +54,7 @@ const AdminNavigation = () => {
           button
           key={index}
           onClick={() => handleNavigation(item.route)}
-          styles={{
+          style={{
             '&:hover': {
               backgroundColor: '#F7DDE8',
               color: '#A87658',

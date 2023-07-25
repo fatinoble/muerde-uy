@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
+import CSVDownloader from '../../../../src/components/CSVDownloader';
 
 const SalesByCustomerChart = ({ initStartDate, initEndDate, tomorrow }) => {
   const [salesData, setSalesData] = useState([]);
@@ -37,9 +38,19 @@ const SalesByCustomerChart = ({ initStartDate, initEndDate, tomorrow }) => {
 
   return (
     <Container>
-      <Typography variant="h6" component="h2" gutterBottom>
-        {getDateLabel()}
-      </Typography>
+
+      <div className="title-download-container">
+        <Typography variant="h6" component="h2" gutterBottom>
+          {getDateLabel()}
+        </Typography>
+        {salesData && salesData.length &&
+          <CSVDownloader
+            jsonData={salesData}
+            fileName={`ventas-clientes-${startDate}-al-${endDate}`}
+          />
+        }
+      </div>
+
       <br />
       <Grid container spacing={2} alignItems="center">
         <Grid item>

@@ -21,7 +21,7 @@ const StockBarChart = ({ ingredients = [], getStockIndicatorInfo }) => {
   return (
     <BarChart
       width={500}
-      height={300}
+      height={200}
       data={ingredients}
       margin={{
         top: 20,
