@@ -101,6 +101,23 @@ const Orders = () => {
 
   const rows = orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
+  const getDaysDifference = (date) => {
+    const today = new Date();
+    const userDate = new Date(date);
+    const timeDiff = Math.abs(userDate.getTime() - today.getTime());
+    return Math.ceil(timeDiff / (1000 * 3600 * 24));
+  };
+
+  const getCellColor = (date) => {
+    const daysDifference = getDaysDifference(date);
+    if (daysDifference <= 2) {
+      return '#FF0000';
+    } else if (daysDifference <= 7) {
+      return '#FFA500';
+    } else {
+      return '#008000';
+    }
+  };
 
 
   return (
@@ -117,6 +134,7 @@ const Orders = () => {
               <TableCell>Nombre cliente</TableCell>
               <TableCell>Productos</TableCell>
               <TableCell>Fecha de compra</TableCell>
+              <TableCell>Fecha de entrega solicitada</TableCell>
               <TableCell>Precio total</TableCell>
               <TableCell>Estado</TableCell>
               <TableCell>Detalle</TableCell>
@@ -137,6 +155,8 @@ const Orders = () => {
                   </List>
                 </TableCell>
                 <TableCell>{order.start_date.substring(0, 10)}</TableCell>
+                {order.status == 'FINISHED' ? <TableCell>{order.user_date.substring(0, 10)}</TableCell>
+                  : <TableCell style={{ color: getCellColor(order.user_date) }}>{order.user_date.substring(0, 10)}</TableCell>}
                 <TableCell>${order.total_earn_cost}</TableCell>
                 <TableCell>
                   <Select
