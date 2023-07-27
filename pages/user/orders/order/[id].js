@@ -9,6 +9,7 @@ import ReviewForm from '@/utils/rating/ReviewForm';
 import { getAllReviews, newReview } from '../../../../services/reviewService';
 import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
+import SuccessMessage from '../components/SuccessMessage';
 
 function OrderScreen() {
     const router = useRouter();
@@ -54,10 +55,12 @@ function OrderScreen() {
         if (status == 'TODO') {
             return 0;
         } else if (status == 'WIP') {
-            return 40;
+            return 35;
         } else if (status == 'DONE_DELIVERY') {
-            return 100;
+            return 75;
         } else if (status == 'DONE_PICK_UP') {
+            return 75;
+        } else if (status == 'FINISHED') {
             return 100;
         }
 
@@ -107,17 +110,8 @@ function OrderScreen() {
                     Volver
                 </Button>
                 {doneSale === true && (
-                    <Paper style={{
-                        backgroundColor: '#4caf50',
-                        color: 'white',
-                        padding: '5px',
-                        borderRadius: '5px',
-                        marginBottom: '5px',
-                    }}>
-                        <Typography variant="body1">
-                            ¡Compra exitosa! Gracias por tu pedido.
-                        </Typography>
-                    </Paper>)}
+                    <SuccessMessage message="¡Compra exitosa! Gracias por tu pedido." />
+                )}
                 <Paper style={{ padding: '25px' }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>

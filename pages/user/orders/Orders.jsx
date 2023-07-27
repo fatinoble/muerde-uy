@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { getOrderStateName } from '@/utils';
+import OrderCard from './components/OrderCard';
 const Orders = () => {
   const router = useRouter();
 
@@ -48,6 +49,9 @@ const Orders = () => {
       <Head>
         <title>Pedidos</title>
       </Head>
+      {orders.filter((order) => order?.status !== 'FINISHED').map((order) => (
+        <OrderCard order={order} />
+      ))}
       <TableContainer component={Paper} style={{ maxWidth: '500', margin: '0 auto' }}>
         <Table aria-label="My Table">
           <TableHead>
@@ -62,14 +66,14 @@ const Orders = () => {
           <TableBody>
             {orders.map((order, index) => (
               <TableRow style={{ backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#F0EBEB' }}>
-                <TableCell>{order.id_sale}</TableCell>
-                <TableCell>{order.start_date.substring(0, 10)}</TableCell>
-                <TableCell>{order.finish_date ? order.finish_date.substring(0, 10) : '-'}</TableCell>
-                <TableCell>{getOrderStateName(order.status)}</TableCell>
+                <TableCell>{order?.id_sale}</TableCell>
+                <TableCell>{order?.start_date?.substring(0, 10)}</TableCell>
+                <TableCell>{order?.finish_date ? order?.finish_date?.substring(0, 10) : '-'}</TableCell>
+                <TableCell>{getOrderStateName(order?.status)}</TableCell>
                 <TableCell>
                   <Button variant="outlined" onClick={(e) => {
                     e.preventDefault();
-                    navigateToPage(order.id_sale)
+                    navigateToPage(order?.id_sale)
                   }}>
                     Ver
                   </Button>
