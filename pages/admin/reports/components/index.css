@@ -1,0 +1,89 @@
+.rbc-calendar{
+background-color: white;
+}
+.rbc-toolbar-label{
+    font-size: 20px;
+    font-weight: bold;
+    color: #062338;
+}
+.rbc-header {
+    background: #062338;
+    color: white;
+    padding: 10px;
+    font-size: 12px;
+  }
+  .rbc-btn-group button{
+    background-color: #062338;
+    color:white
+  }
+  .rbc-btn-group button:hover{
+    background-color: #759cb9;
+    color:white
+  }
+  .rbc-toolbar button:active, .rbc-toolbar button.rbc-active:hover{
+    background-color: #759cb9;
+    color:white
+  }
+  .rbc-toolbar button:active, .rbc-toolbar button.rbc-active{
+    background-color: #79b8e4;
+    color: white;
+    border: none;
+  }
+
+  .rbc-btn-group button .rbc-active{
+    background-color: red;
+    color: red;
+    border: none;
+  }
+  .rbc-btn-group button .rbc-active{
+    background-color: #79b8e4;
+  }
+
+  
+  .rbc-background-event {
+    padding: 0px !important;
+    border-radius: 0px !important;
+    border: none !important;
+    background-color: transparent !important;
+  }
+  
+  .rbc-time-slot {
+    background-color: #eaf3fa;
+    color: #74a4c3;
+    border-color: aqua !important;
+  }
+  
+  .rbc-event-label {
+    display: none !important;
+  }
+  
+  .rbc-events-container {
+    width: 100% !important;
+  }
+  
+  .rbc-timeslot-group {
+    min-height: 120px !important;
+  }
+
+ .rbc-header, .rbc-toolbar-label{
+  text-transform: uppercase;
+}
+.rbc-day-bg, .rbc-off-range-bg{
+  background-color: white !important;
+}
+.rbc-today{
+  background-color: #a5ceeb !important;
+  color: white !important;
+}
+.rbc-off-range-bg{
+  background-color: #e7e5e2 !important;
+  color: white !important;
+}
+.rbc-agenda-event-cell{
+    color: #235daf;
+    cursor: pointer;
+}
+.rbc-timeslot-group .rbc-time-slot{
+    border-color: white !important;
+    background-color: white !important;
+}
