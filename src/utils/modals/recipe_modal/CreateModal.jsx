@@ -11,6 +11,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
     const [ingredients, setIngredients] = useState([]);
     const [ingredientQuantities, setIngredientQuantities] = useState({});
     const [searchText, setSearchText] = useState('');
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         getAllIngredients()
@@ -40,6 +41,11 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+        if (value !== "" && !validateField(name, value)) {
+            return;
+        }
+
         setProductData({
             ...productData,
             [name]: value,
@@ -48,23 +54,28 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
 
     const handleQuantityChange = (event, ingredientId) => {
         const quantity = event.target.value;
+      
+        if (isNaN(quantity) || quantity < 0) {
+          return;
+        }
+      
         setIngredientQuantities(prevState => {
-            const updatedIngredient = {
-                ...prevState[ingredientId],
-                quantity: quantity
-            };
-            const updatedQuantities = {
-                ...prevState,
-                [ingredientId]: updatedIngredient
-            };
-            const updatedIngredients = Object.values(updatedQuantities);
-            setProductData(prevData => ({
-                ...prevData,
-                ingredients: updatedIngredients
-            }));
-            return updatedQuantities;
+          const updatedIngredient = {
+            ...prevState[ingredientId],
+            quantity: quantity
+          };
+          const updatedQuantities = {
+            ...prevState,
+            [ingredientId]: updatedIngredient
+          };
+          const updatedIngredients = Object.values(updatedQuantities);
+          setProductData(prevData => ({
+            ...prevData,
+            ingredients: updatedIngredients
+          }));
+          return updatedQuantities;
         });
-    };
+      };      
 
     const handleUnitChange = (event, ingredientId) => {
         const unit = event.target.value;
@@ -90,6 +101,42 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
         setSearchText(event.target.value);
     };
 
+    const validateField = (name, value) => {
+        let errorMessage = "";
+
+        switch (name) {
+            case "name":
+            case "instructions":
+                if (!/^[a-zA-Z\s]+$/.test(value)) {
+                    errorMessage = "Solo se permiten letras";
+                }
+                break;
+            case "preparation_time_minutes":
+                case "quantity":
+                if (!/^[0-9]+$/.test(value)) {
+                    errorMessage = "Solo se permiten números";
+                }
+                break;
+            default:
+                break;
+        }
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: errorMessage,
+        }));
+
+        return errorMessage === ""; 
+    };
+
+    const isAnyError = () => {
+        return Object.values(errors).some((error) => error !== "");
+    };
+
+    const isAnyQuantity = () => {
+        return Object.values(ingredientQuantities).some((ingredient) => ingredient.quantity !== "");
+      };
+
     return (
         <Modal open={open} onClose={handleClose}>
             <Box component="form" onSubmit={handleSubmit}
@@ -108,9 +155,9 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: '#f1e5d5', marginBottom: 2 }} >
                     Alta de receta
                 </Typography>
-                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions} onChange={handleChange} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="preparation_time_minutes" label="Tiempo de preparación en minutos" value={productData.preparation_time} onChange={handleChange} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} helperText={errors.name} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions} onChange={handleChange} helperText={errors.instructions} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="preparation_time_minutes" label="Tiempo de preparación en minutos" value={productData.preparation_time} onChange={handleChange} helperText={errors.preparation_time_minutes} />
                 <Box
                     component="form"
                     sx={{
@@ -196,6 +243,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                             backgroundColor: '#CCA870',
                         },
                     }}
+                    disabled={isAnyError() || !isAnyQuantity()}
                 >
                     Dar de alta
                 </Button>
