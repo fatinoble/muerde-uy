@@ -141,7 +141,7 @@ const Detail = () => {
       <div className="product-detail-main-container">
         <ThemeProvider theme={theme}>
           <Box className="product-detail-container">
-            <img src="/images/croassant.jpg" alt={title} className="product-detail-image" />
+            <img src={image || '/images/unavailable.png'} alt={title} className="product-detail-image" />
             <div className="product-detail-content">
               <div className="product-detail-content-left">
                 <Typography variant="h6" className="product-detail-title-box">
