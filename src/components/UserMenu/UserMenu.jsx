@@ -15,7 +15,14 @@ const UserMenu = () => {
   const router = useRouter();
 
   const handleLogout = () => {
-    // Handle logout logic
+    localStorage.removeItem('user_name');
+    localStorage.removeItem('user_mail');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('token_login_user');
+    localStorage.removeItem('user_role');
+    localStorage.removeItem('user_phone');
+    localStorage.removeItem('user_address');
+    router.push('/user/login');
   };
 
   const handleNavigateTo = (route) => {
