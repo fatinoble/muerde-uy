@@ -41,12 +41,15 @@ const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
           <TextField
             label="Nombre"
             value={modifyIngredient.name}
-            onChange={(e) =>
-              setModifyIngredient((prevIngredient) => ({
-                ...prevIngredient,
-                name: e.target.value,
-              }))
-            }
+            onChange={(e) => {
+              const value = e.target.value;          
+              if (/^[a-zA-Z\s]*$/.test(value)) {
+                setModifyIngredient((prevIngredient) => ({
+                  ...prevIngredient,
+                  name: value,
+                }));
+              }
+            }}
             fullWidth
             margin="normal"
             variant="outlined"
