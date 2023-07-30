@@ -34,7 +34,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
         setImageFileName(file.name);
         setProductData({
             ...productData,
-            image: file.name,
+            image: file,
         });
     };
 

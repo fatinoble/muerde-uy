@@ -96,7 +96,7 @@ const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
       {filteredProducts?.map((product) => (
         <a className="product-card-link" href={`/product/detail?id=${product.id_product}`} key={product.id}>
           <ProductCard
-            imageSrc="/images/croassant.jpg"
+            imageSrc={product.image || '/images/unavailable.png'}
             title={product.title}
             price={product.price}
             isOutOfStock={product.is_out_of_stock}

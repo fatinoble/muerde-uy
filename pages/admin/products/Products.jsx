@@ -41,10 +41,10 @@ const Products = () => {
         setNewProductData(newProductData);
         handleCloseCreateModal();
         getAllProducts()
-        .then(products => {
-          setProducts(products);
-          setLoading(false);
-        });
+          .then(products => {
+            setProducts(products);
+            setLoading(false);
+          });
       })
   }
 
@@ -124,11 +124,15 @@ const Products = () => {
       {products.map((product) => (
         <ProductPaper elevation={3} key={product.id_product} status={product.status}>
           <div className="small-image-container">
-            <img className="product-image-small" src={product.image} alt={product.title}></img>
+            <img
+              className="product-image-small"
+              src={product.image ? product.image : '/images/unavailable.png'} alt={product.title}
+              style={{ width: '300px' }}
+            ></img>
           </div>
           <div className="price-name-container">
             <h1 className="product-name"> {product.title} </h1>
-            <span className="product-price">{product.price}</span>
+            <span className="product-price">${product.price}</span>
           </div>
           <div className="product-admin-actions-container">
             <StyledButton status={product.status} variant="outlined" onClick={() => handleOpen(product)}>
