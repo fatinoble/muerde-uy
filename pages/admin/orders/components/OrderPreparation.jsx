@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { TextField } from '@mui/material';
+import { isObjectEmpty } from '../../../../src/utils';
 
 const orderPreparationResponseMock = {
   order_preparation_suggestion_per_day: [
     {
-      day: '2023-07-25',
+      day: '2023-08-06',
       preparation_suggestions: [
         {
           total_preparation_time_minutes: 30,
@@ -65,12 +67,39 @@ const orderPreparationResponseMock = {
 const OrderPreparation = () => {
   const [orderPreparationSuggestions, setOrderPreparationSuggestions] = useState(orderPreparationResponseMock.order_preparation_suggestion_per_day);
   const [preparationSuggestionDay, setPreparationSuggestionDay] = useState(orderPreparationResponseMock.order_preparation_suggestion_per_day[0]);
+  const [suggestionDay, setSuggestionDay] = useState(orderPreparationResponseMock.order_preparation_suggestion_per_day[0]?.day);
+
+  const today = new Date();
+  const formattedToday = today.toISOString().split('T')[0];
+
+  const handleSetDate = (date) => {
+    setSuggestionDay(date);
+    const orderPreparationSuggestion = orderPreparationSuggestions?.find((suggestion) => suggestion?.day === date) || {}
+    setPreparationSuggestionDay(orderPreparationSuggestion);
+  }
 
   return (
     <div className="order-preparation-container">
       <div className="order-preparation-title-container">
-        <span className="order-preparation-main-title">Sugerencia de preparación para el día {preparationSuggestionDay?.day}: </span>
+        <span className="order-preparation-main-title">Sugerencia de preparación para el día: </span>
+        <TextField
+          label="Seleccione día"
+          type="date"
+          value={suggestionDay}
+          onChange={(e) => handleSetDate(e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          inputProps={{
+            min: formattedToday,
+          }}
+        />
       </div>
+      {(!preparationSuggestionDay ||
+        isObjectEmpty(preparationSuggestionDay) ||
+        preparationSuggestionDay?.preparation_suggestions?.length === 0) &&
+        <span>Aún no hay pedidos para este día.</span>
+      }
       <div className="order-preparation-suggestions-container">
         {preparationSuggestionDay?.preparation_suggestions?.map((suggestion, index) => {
           return (
