@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Layout from '../../../src/components/AdminLayout';
+import OrderPreparation from './components/OrderPreparation';
 import {
   Button,
   List,
@@ -122,10 +123,11 @@ const Orders = () => {
 
   return (
     <Layout>
-      <Head>
+      <Head style={{ marginBottom: '10px' }}>
         <title>Pedidos</title>
       </Head>
       <h1>Pedidos</h1>
+      <OrderPreparation />
       <TableContainer component={Paper} style={{ maxWidth: '500', margin: '0 auto' }}>
         <Table aria-label="My Table">
           <TableHead>
