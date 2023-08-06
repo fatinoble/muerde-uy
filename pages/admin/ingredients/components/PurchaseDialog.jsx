@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Select, MenuItem } from '@mui/material';
+import { Tooltip } from '@mui/material';
+import { UNIT_MEASURES_CONVERTER, calculateQuantity } from '@/utils/units_converter/helper';
 
 const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
 
   const [openPurchaseModal, setOpenPurchaseModal] = useState(false);
+  const [ingredientUnit, setIngredientUnit] = useState(ingredient?.unit?.toLowerCase());
   const [newPurchase, setNewPurchase] = useState({
     quantity: 0,
     cost: 0,
@@ -22,8 +25,13 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
 
   const handlePurchaseIngredient = async () => {
     try {
+      const finalPurchase = { ...newPurchase };
+      if (ingredient?.unit !== 'UN' && ingredient?.unit !== 'un') {
+        finalPurchase.quantity = calculateQuantity(ingredientUnit, newPurchase.quantity);
+      }
+
       await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient/purchase`, {
-        purchase_ingredient: newPurchase,
+        purchase_ingredient: finalPurchase,
       });
       fetchIngredients();
       handleClosePurchaseodal();
@@ -42,21 +50,44 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
           <DialogContentText>
             Complete los campos para registrar la compra:
           </DialogContentText>
-          <TextField
-            label={`Cantidad en ${ingredient?.unit}`}
-            type="number"
-            inputProps={{ min: 0, step: 0.01 }}
-            value={newPurchase.quantity}
-            onChange={(e) =>
-              setNewPurchase((prevPurchase) => ({
-                ...prevPurchase,
-                quantity: parseFloat(e.target.value),
-              }))
-            }
-            fullWidth
-            margin="normal"
-            variant="outlined"
-          />
+
+
+          <div style={{ justifyContent: 'space-between' }}>
+            <TextField
+              label="Cantidad"
+              type="number"
+              inputProps={{ min: 0, step: 0.01 }}
+              value={newPurchase.quantity}
+              onChange={(e) =>
+                setNewPurchase((prevPurchase) => ({
+                  ...prevPurchase,
+                  quantity: parseFloat(e.target.value),
+                }))
+              }
+              fullWidth
+              margin="normal"
+              variant="outlined"
+            >
+            </TextField >
+
+            <Tooltip title="Todo se guarda en gramos menos las unidades" placement="right">
+              <Select
+                label="Unidad"
+                value={ingredientUnit}
+                onChange={(event) => setIngredientUnit(event.target.value)}
+              >
+                {
+                  ingredient?.unit === 'UN' ?
+                    <MenuItem value="UN">Unidad/es</MenuItem> :
+                    UNIT_MEASURES_CONVERTER.map((unitOption) => (
+                      <MenuItem key={unitOption.key} value={unitOption.key}>{unitOption.text}</MenuItem>
+                    ))
+                }
+              </Select>
+            </Tooltip>
+          </div>
+
+
           <TextField
             label="Precio en UYU"
             type="number"
