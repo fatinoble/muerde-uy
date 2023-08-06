@@ -1,82 +1,54 @@
 import { useState, useEffect } from 'react';
 import { TextField } from '@mui/material';
 import { isObjectEmpty } from '../../../../src/utils';
-
-const orderPreparationResponseMock = {
-  order_preparation_suggestion_per_day: [
-    {
-      day: '2023-08-06',
-      preparation_suggestions: [
-        {
-          total_preparation_time_minutes: 30,
-          common_ingredients: [
-            {
-              id_ingredient: 1,
-              name: "Azucar",
-            }
-          ],
-          products: [
-            {
-              id_product: 2,
-              title: "Sufle",
-              description: "El mejor sufle",
-              image: "",
-              preparation_time_minutes: 30,
-              quantity: 1
-            }
-          ]
-        },
-        {
-          total_preparation_time_minutes: 50,
-          common_ingredients: [
-            {
-              id_ingredient: 3,
-              name: "Aceite",
-            },
-            {
-              id_ingredient: 2,
-              name: "Huevo",
-            }
-          ],
-          products: [
-            {
-              id_product: 1,
-              title: "Torta",
-              description: "La mejor torta",
-              image: "",
-              preparation_time_minutes: 40,
-              quantity: 1
-            },
-            {
-              id_product: 8,
-              title: "Tiramisu",
-              description: "La mejor torta",
-              image: "https://muerde-bucket-test-1.s3.amazonaws.com/1690748479204_croassant.jpg",
-              preparation_time_minutes: 5,
-              quantity: 2
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-};
-
+import axios from 'axios';
 
 const OrderPreparation = () => {
-  const [orderPreparationSuggestions, setOrderPreparationSuggestions] = useState(orderPreparationResponseMock.order_preparation_suggestion_per_day);
-  const [preparationSuggestionDay, setPreparationSuggestionDay] = useState(orderPreparationResponseMock.order_preparation_suggestion_per_day[0]);
-  const [suggestionDay, setSuggestionDay] = useState(orderPreparationResponseMock.order_preparation_suggestion_per_day[0]?.day);
+  const [orderPreparationSuggestions, setOrderPreparationSuggestions] = useState([]);
+  const [preparationSuggestionDay, setPreparationSuggestionDay] = useState({});
+  const [suggestionDay, setSuggestionDay] = useState("");
 
   const today = new Date();
   const formattedToday = today.toISOString().split('T')[0];
+
+  useEffect(() => {
+    if (!orderPreparationSuggestions.length) {
+      fetchOrderPreparationSuggestions();
+    }
+  }, []);
+
+  const fetchOrderPreparationSuggestions = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/order_preparation_suggestions`);
+      const data = response.data;
+      setOrderPreparationSuggestions(data.order_preparation_suggestion_per_day);
+      setPreparationSuggestionDay(data.order_preparation_suggestion_per_day[0]);
+      setSuggestionDay(data.order_preparation_suggestion_per_day[0]?.day);
+    } catch (error) {
+      console.error('Error fetching order preparation suggestions:', error);
+    }
+  };
+
+
 
   const handleSetDate = (date) => {
     setSuggestionDay(date);
     const orderPreparationSuggestion = orderPreparationSuggestions?.find((suggestion) => suggestion?.day === date) || {}
     setPreparationSuggestionDay(orderPreparationSuggestion);
   }
+
+  const formatTime = (minutes) => {
+    if (minutes <= 59) {
+      return `${minutes} minutos`;
+    } else if (minutes === 60) {
+      return `1 hora`;
+    } else {
+      const hours = Math.floor(minutes / 60);
+      const restOfMinutes = minutes % 60;
+      return `${hours} horas ${restOfMinutes} minutos`;
+    }
+  };
+
 
   return (
     <div className="order-preparation-container">
@@ -105,7 +77,7 @@ const OrderPreparation = () => {
           return (
             <div className="suggestion-container">
               <div className='suggestion-title-container'>
-                <span className='suggestion-title'>Agrupación de preparación {index + 1}  - {suggestion?.total_preparation_time_minutes}' minutos</span>
+                <span className='suggestion-title'>Agrupación de preparación {index + 1}  - {formatTime(suggestion?.total_preparation_time_minutes)}</span>
               </div>
 
               <div className="common-ingredients-container">
