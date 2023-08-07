@@ -2,9 +2,8 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import './admin_settings_menu_styles.css';
 
-import AdminNavigation from './AdminNavigation';
+import AdminSettingsMenu from './AdminSettingsMenu';
 
-import './admin_navigation_styles.css';
-
-export default AdminNavigation;
+export default AdminSettingsMenu;

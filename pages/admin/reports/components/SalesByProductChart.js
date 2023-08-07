@@ -16,7 +16,8 @@ const SalesByProductChart = ({ initStartDate, initEndDate, tomorrow }) => {
   const fetchSalesData = async (start, end) => {
     try {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/total_product?start=${start}&end=${tomorrow}`);
-      setSalesData(data.sales_by_product);
+      const productWithSales = data.sales_by_product?.filter(product => product.sales_count > 0);
+      setSalesData(productWithSales);
     } catch (error) {
       console.error('Error fetching sales data:', error);
     }

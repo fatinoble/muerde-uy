@@ -5,6 +5,8 @@ import { styled, Box } from '@mui/system';
 import DetailsModal from '../../../src/utils/modals/product_modal/DetailsModal';
 import EditModal from '../../../src/utils/modals/product_modal/EditModal';
 import CreateModal from '../../../src/utils/modals/product_modal/CreateModal';
+import Head from 'next/head';
+import Storefront from "@mui/icons-material/Storefront";
 import { getAllProducts, modifyProduct, createProduct } from '../../../services/productService';
 
 const Products = () => {
@@ -118,6 +120,12 @@ const Products = () => {
 
   return (
     <Layout>
+      <Head style={{ marginBottom: '10px' }}>
+        <title>Productos</title>
+      </Head>
+      <div className="title-container">
+        <h1><Storefront className="icon-title" />Productos</h1>
+      </div>
       <Box display="flex" justifyContent="center" alignItems="center">
         <InvertedButton variant="outlined" onClick={handleOpenCreateModal}>Nuevo producto</InvertedButton>
       </Box>

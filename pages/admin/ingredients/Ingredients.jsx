@@ -1,7 +1,8 @@
 import Layout from '../../../src/components/AdminLayout';
 import axios from 'axios';
 import { List, ListItem, ListItemText } from '@mui/material';
-
+import Head from 'next/head';
+import Kitchen from "@mui/icons-material/Kitchen";
 import DeleteDialog from './components/DeleteDialog';
 import AddDialog from './components/AddDialog';
 import PurchaseDialog from './components/PurchaseDialog';
@@ -51,8 +52,13 @@ const Ingredients = () => {
 
   return (
     <Layout>
+      <Head style={{ marginBottom: '10px' }}>
+        <title>Ingredientes</title>
+      </Head>
+      <div className="title-container">
+        <h1><Kitchen className="icon-title" />Ingredientes</h1>
+      </div>
       <div>
-        <h1>Ingredientes</h1>
         <AddDialog fetchIngredients={fetchIngredients} />
         <List>
           {ingredients.map((ingredient) => {

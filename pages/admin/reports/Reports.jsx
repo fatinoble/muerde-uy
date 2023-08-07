@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import BarChart from "@mui/icons-material/BarChart";
 import dynamic from "next/dynamic";
+import Head from 'next/head';
 import Layout from '../../../src/components/AdminLayout';
 import SaleByDateChart from './components/SaleByDateChart';
 import SalesByProductChart from './components/SalesByProductChart';
@@ -117,7 +119,12 @@ const Reports = () => {
   return (
 
     <Layout>
-      <br />
+      <Head style={{ marginBottom: '10px' }}>
+        <title>Dashboard</title>
+      </Head>
+      <div className="title-container">
+        <h1><BarChart className="icon-title" />Dashboard</h1>
+      </div>
       <div className="featured">
 
         <div className="featuredItem">
