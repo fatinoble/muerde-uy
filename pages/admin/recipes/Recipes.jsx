@@ -7,14 +7,16 @@ import EditModal from '../../../src/utils/modals/recipe_modal/EditModal';
 import DeleteModal from '../../../src/utils/modals/recipe_modal/DeleteModal';
 import CreateModal from '../../../src/utils/modals/recipe_modal/CreateModal';
 import { calculateQuantity } from '../../../src/utils/units_converter/helper';
+import Head from 'next/head';
+import RestaurantMenu from "@mui/icons-material/RestaurantMenu";
 import { getAllRecipes, modifyRecipe, deleteRecipe, createRecipe } from '../../../services/recipeService';
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [recipeToEdit, setRecipeToEdit] = useState(null);
-  const [open, setOpen] = useState(false); 
-  const [selectedRecipe, setSelectedRecipe] = useState(null); 
+  const [open, setOpen] = useState(false);
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
   const [recipeToDelete, setRecipeToDelete] = useState(null);
@@ -23,9 +25,9 @@ const Recipes = () => {
 
   useEffect(() => {
     getAllRecipes()
-    .then(recipes => {
-      setRecipes(recipes);
-    });
+      .then(recipes => {
+        setRecipes(recipes);
+      });
   }, []);
 
   const editRecipe = (editedRecipe) => {
@@ -63,31 +65,31 @@ const Recipes = () => {
 
   const removeRecipe = (recipe) => {
     deleteRecipe(recipe)
-    .then(() => {
-      setRecipes(prevRecipes => prevRecipes.filter(r => r.id_recipe !== recipe.id_recipe));
-      setDeleteModalOpen(false);
-    })
+      .then(() => {
+        setRecipes(prevRecipes => prevRecipes.filter(r => r.id_recipe !== recipe.id_recipe));
+        setDeleteModalOpen(false);
+      })
   }
 
   const newRecipe = (recipe) => {
     const modifiedRecipe = JSON.parse(JSON.stringify(recipe));
 
     modifiedRecipe.ingredients = modifiedRecipe.ingredients.map(ingredient => {
-        const newQuantity = calculateQuantity(ingredient.unit, ingredient.quantity);
-        return {
-            ...ingredient,
-            quantity: newQuantity,
-            unit: undefined, 
-        };
+      const newQuantity = calculateQuantity(ingredient.unit, ingredient.quantity);
+      return {
+        ...ingredient,
+        quantity: newQuantity,
+        unit: undefined,
+      };
     });
 
     createRecipe(modifiedRecipe)
-        .then(() => {
-            setRecipes((prevRecipes) => [...prevRecipes, modifiedRecipe]);
-            setCreateModalOpen(false);
-        });;
+      .then(() => {
+        setRecipes((prevRecipes) => [...prevRecipes, modifiedRecipe]);
+        setCreateModalOpen(false);
+      });;
   };
-  
+
   const showDeleteModal = (recipe) => {
     setRecipeToDelete(recipe);
     setDeleteModalOpen(true);
@@ -124,8 +126,14 @@ const Recipes = () => {
 
   return (
     <Layout>
+      <Head style={{ marginBottom: '10px' }}>
+        <title>Recetas</title>
+      </Head>
+      <div className="title-container">
+        <h1><RestaurantMenu className="icon-title" />Recetas</h1>
+      </div>
       <Box display="flex" justifyContent="center" alignItems="center">
-        <InvertedButton variant="outlined" onClick={handleOpenCreateModal }>Nueva receta</InvertedButton>
+        <InvertedButton variant="outlined" onClick={handleOpenCreateModal}>Nueva receta</InvertedButton>
       </Box>
       {recipes.map((recipe) => (
         <ProductPaper elevation={3} key={recipe.id}>
@@ -137,9 +145,9 @@ const Recipes = () => {
             <StyledButton variant="outlined" onClick={() => handleOpen(recipe)}>
               Ver detalles
             </StyledButton>
-            { selectedRecipe ? ( 
+            {selectedRecipe ? (
               <DetailsModal open={open} handleClose={handleClose} data={selectedRecipe} />
-            ) : null }
+            ) : null}
             <StyledButton variant="outlined" onClick={() => { setRecipeToEdit(recipe); setEditModalOpen(true); }}>
               Editar receta
             </StyledButton>
@@ -147,7 +155,7 @@ const Recipes = () => {
           </div>
         </ProductPaper>
       ))}
-      { editModalOpen ? (
+      {editModalOpen ? (
         <EditModal
           open={editModalOpen}
           handleClose={() => setEditModalOpen(false)}
@@ -156,7 +164,7 @@ const Recipes = () => {
           handleUpdate={editRecipe}
         />
       ) : null}
-      { deleteModalOpen ? (
+      {deleteModalOpen ? (
         <DeleteModal
           open={deleteModalOpen}
           handleClose={() => setDeleteModalOpen(false)}
@@ -164,7 +172,7 @@ const Recipes = () => {
           handleDelete={removeRecipe}
         />
       ) : null}
-      { isCreateModalOpen ? (
+      {isCreateModalOpen ? (
         <CreateModal
           open={isCreateModalOpen}
           handleClose={handleCloseCreateModal}

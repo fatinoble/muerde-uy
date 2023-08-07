@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import AdminSettingsMenu from '../AdminSettingsMenu';
 
 import {
   Drawer,
@@ -16,6 +17,7 @@ import RestaurantMenu from "@mui/icons-material/RestaurantMenu";
 import Kitchen from "@mui/icons-material/Kitchen";
 import BarChart from "@mui/icons-material/BarChart";
 import People from "@mui/icons-material/People";
+import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 
 const routingList = [
   { name: "Dashboard", icon: <BarChart />, route: "/admin/reports" },
@@ -37,7 +39,7 @@ const AdminNavigation = () => {
 
   const getList = () => (
     <div style={{
-      backgroundColor: '#A87658',
+      backgroundColor: '#A95C5C',
       color: '#FDF7E3',
       width: '250px',
       height: '100%',
@@ -70,18 +72,22 @@ const AdminNavigation = () => {
   );
 
   return (
-    <div>
+    <div className="admin-navigation-container" style={{
+      backgroundColor: "#D88282",
+      height: "60px",
+    }}>
       <Button 
         className='open-navigation-button'
         variant="contained"
-        style={{backgroundColor: "#A87658", color: "#FDF7E3"}}
+        style={{backgroundColor: "#A95C5C", color: "#FDF7E3", marginTop: "10px", marginLeft: "15px"}}
         onClick={() => setOpen(true)}
       >
-        Abrir Menú
+       <MenuOpenIcon />
       </Button>
       <Drawer open={open} anchor="left" onClose={() => setOpen(false)}>
         {getList()}
       </Drawer>
+      <AdminSettingsMenu/>
     </div>
   );
 };

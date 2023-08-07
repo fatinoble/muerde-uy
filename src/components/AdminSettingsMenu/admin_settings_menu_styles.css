@@ -1,0 +1,28 @@
+.user-settings-menu-container {
+  position: absolute;
+  left: 87%;
+  top: 0%;
+  color: #533b2d;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+}
+
+.user-name-container {
+  color: #3e2222;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-right: 5px;
+  white-space:nowrap;
+}
+
+.user-icon {
+  color: #3e2222;
+  margin-left: 10px;
+}
+
+.user-icon svg {
+  font-size: 40px;
+}

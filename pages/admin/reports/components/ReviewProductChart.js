@@ -17,7 +17,7 @@ const ReviewProductChart = ({ getReviewColorFromScore = () => { } }) => {
     try {
       const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/review/product_review_summary`);
       setProductsData(data?.products);
-      setSelectedProduct(data?.products[0]?.product);
+      setSelectedProduct(data?.products[0]);
 
     } catch (error) {
       console.error('Error fetching products review data:', error);
@@ -85,12 +85,16 @@ const ReviewProductChart = ({ getReviewColorFromScore = () => { } }) => {
                 </div>
               )
             })
-          ) : (<span> Este producto aún no tiene reviews de clientes.</span>)}
+          ) : (
+            <div style={{ marginTop: "30px" }}>
+              <span > Este producto aún no tiene reviews de clientes.</span>
+            </div>
+          )}
 
         </div>
 
         <div className="featuredItem">
-          <span className="featuredTitle">Porcentaje de puntaje de reviews de {selectedProduct?.title}</span>
+          <span className="featuredTitle">Porcentaje de puntaje de reviews de {selectedProduct?.product?.title}</span>
           <div className="featuredMoneyContainer">
           </div>
 

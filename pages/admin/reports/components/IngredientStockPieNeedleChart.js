@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PieChart, Pie, Cell } from 'recharts';
 import { InputLabel, Grid, MenuItem, Select } from '@mui/material';
 
@@ -35,11 +35,18 @@ const needle = (value, stockIndicators, cx, cy, iR, oR, color) => {
 };
 const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo = () => { }, stockIndicators }) => {
   const [selectedIngredient, setSelectedIngredient] = useState(ingredients[0] || {});
-
+  console.log("selected ingredientt ", selectedIngredient)
   const handleIngredientChange = (event) => {
     const selectedIngredient = event.target.value;
     setSelectedIngredient(selectedIngredient);
   };
+
+  useEffect(() => {
+    if (ingredients && ingredients.length > 0) {
+
+      setSelectedIngredient(ingredients[0]);
+    }
+  }, [ingredients]);
 
   return (
     <>
@@ -60,8 +67,6 @@ const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo = () => {
               ))}
             </Select>
           </InputLabel>
-
-
           <span style={{ color: getStockIndicatorInfo(selectedIngredient)?.color }}>{getStockIndicatorInfo(selectedIngredient)?.name}</span >
         </Grid>
       </Grid>

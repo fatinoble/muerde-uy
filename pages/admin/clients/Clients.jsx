@@ -4,7 +4,9 @@ import { useEffect } from 'react';
 import { Button, styled, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TableFooter, TablePagination, Select, MenuItem, Box } from '@mui/material';
 import React, { useState } from "react";
 import EditModal from '../../../src/utils/modals/user_modal/EditModal';
-import {  modifyUser } from '../../../services/userService';
+import { modifyUser } from '../../../services/userService';
+import Head from 'next/head';
+import People from "@mui/icons-material/People";
 
 const Clients = () => {
   const [users, setUsers] = useState([]);
@@ -79,6 +81,12 @@ const Clients = () => {
 
   return (
     <Layout>
+      <Head style={{ marginBottom: '10px' }}>
+        <title>Clientes</title>
+      </Head>
+      <div className="title-container">
+        <h1><People className="icon-title" />Clientes</h1>
+      </div>
       <SelectContainer>
         <StyledSelect value={role} onChange={handleRoleChange}>
           <MenuItem value='all'>Todos</MenuItem>
@@ -133,7 +141,7 @@ const Clients = () => {
         </Table>
       </StyledTableContainer>
       {modalOpen ? (
-        <EditModal open={modalOpen} handleClose={handleClose} user={currentUser} handleUpdate={editUser}/>
+        <EditModal open={modalOpen} handleClose={handleClose} user={currentUser} handleUpdate={editUser} />
       ) : null}
     </Layout>
   );

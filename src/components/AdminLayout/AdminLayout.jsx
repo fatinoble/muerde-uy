@@ -2,9 +2,11 @@ import AdminNavigation from "../AdminNavigation/AdminNavigation";
 
 const AdminLayout = ({ children }) => {
   return (
-    <div className="admin-layout-container">
+    <div>
       <AdminNavigation />
-      {children}
+      <div className="admin-layout-container">
+        {children}
+      </div>
     </div>
   );
 };
