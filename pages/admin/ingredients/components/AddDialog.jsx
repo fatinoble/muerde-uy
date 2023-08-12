@@ -44,12 +44,15 @@ const AddDialog = ({ fetchIngredients }) => {
           <TextField
             label="Nombre"
             value={newIngredient.name}
-            onChange={(e) =>
-              setNewIngredient((prevIngredient) => ({
-                ...prevIngredient,
-                name: e.target.value,
-              }))
-            }
+            onChange={(e) => {
+              const value = e.target.value;          
+              if (/^[a-zA-Z\s]*$/.test(value)) {
+                setNewIngredient((prevIngredient) => ({
+                  ...prevIngredient,
+                  name: value,
+                }));
+              }
+            }}
             fullWidth
             margin="normal"
             variant="outlined"

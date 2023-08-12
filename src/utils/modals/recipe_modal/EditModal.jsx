@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 
 const EditModal = ({ open, handleClose, data, handleUpdate }) => {
     const [productData, setProductData] = useState(data);
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         setProductData(data);
@@ -15,6 +16,11 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+        if (value !== "" && !validateField(name, value)) {
+            return;
+        }
+
         setProductData(prevData => ({ ...prevData, [name]: value }));
     };
 
@@ -30,6 +36,37 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                 ingredient
             )
         }));
+    };
+
+    const validateField = (name, value) => {
+        let errorMessage = "";
+
+        switch (name) {
+            case "name":
+            case "instructions":
+                if (!/^[a-zA-Z\s]+$/.test(value)) {
+                    errorMessage = "Solo se permiten letras";
+                }
+                break;
+            case "preparationTimeMinutes":
+                if (!/^[0-9]+$/.test(value)) {
+                    errorMessage = "Solo se permiten números";
+                }
+                break;
+            default:
+                break;
+        }
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: errorMessage,
+        }));
+
+        return errorMessage === ""; 
+    };
+
+    const isAnyError = () => {
+        return Object.values(errors).some((error) => error !== "");
     };
 
     return (
@@ -50,9 +87,9 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: '#f1e5d5', marginBottom: 2 }} >
                     Actualizar receta
                 </Typography>
-                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions} onChange={handleChange} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="preparationTimeMinutes" label="Tiempo de preparación" value={productData.preparationTimeMinutes} onChange={handleChange} /><br /><br /><br />
+                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} helperText={errors.name}/>
+                <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions} onChange={handleChange} helperText={errors.instructions} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="preparationTimeMinutes" label="Tiempo de preparación" value={productData.preparationTimeMinutes} onChange={handleChange} helperText={errors.preparationTimeMinutes}/><br /><br /><br />
                 <Typography variant="body1">
                     <strong>Ingredientes:</strong>
                 </Typography><br />
@@ -73,7 +110,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                         </Typography>
                     </div>
                 ))}
-                <Button type="submit" style={{ backgroundColor: 'rgb(168, 118, 88)', color: 'white' }}>
+                <Button type="submit" style={{ backgroundColor: 'rgb(168, 118, 88)', color: 'white' }} disabled={isAnyError()}>
                     Actualizar
                 </Button>
             </Box>

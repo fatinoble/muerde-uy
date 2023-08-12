@@ -2,12 +2,12 @@ import { Modal, Box, TextField, Button, Typography, Select, MenuItem } from '@mu
 import React, { useState, useEffect } from "react";
 
 const EditModal = ({ open, handleClose, data, handleUpdate }) => {
-    console.log("entra a edit modal product ", data);
     const [productData, setProductData] = useState({
         status: 'ENABLED',
         ...data,
     });
     const [imageFileName, setImageFileName] = useState("");
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         setProductData(data);
@@ -15,6 +15,11 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+        if (value !== "" && !validateField(name, value)) {
+            return;
+        }
+
         setProductData({
             ...productData,
             [name]: value,
@@ -35,6 +40,42 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
         });
     };
 
+    const validateField = (name, value) => {
+        let errorMessage = "";
+
+        switch (name) {
+            case "title":
+            case "description":
+                if (!/^[a-zA-Z\s]+$/.test(value)) {
+                    errorMessage = "Solo se permiten letras";
+                }
+                break;
+            case "price":
+                if (!/^[0-9]+$/.test(value)) {
+                    errorMessage = "Solo se permiten números";
+                }
+                break;
+                case "tags":
+                    if (!/^[a-zA-Z\s,]+$/.test(value)) {
+                        errorMessage = "Solo se permiten letras y comas";
+                    }
+                    break;
+            default:
+                break;
+        }
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: errorMessage,
+        }));
+
+        return errorMessage === ""; 
+    };
+
+    const isAnyError = () => {
+        return Object.values(errors).some((error) => error !== "");
+    };
+
     return (
         <Modal open={open} onClose={handleClose}>
             <Box component="form" onSubmit={handleSubmit}
@@ -53,8 +94,8 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: '#f1e5d5', marginBottom: 2 }} >
                     Editar Producto
                 </Typography>
-                <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title" value={productData.title} onChange={handleChange} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price" value={productData.price} onChange={handleChange} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title" value={productData.title} onChange={handleChange} helperText={errors.title}/>
+                <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price" value={productData.price} onChange={handleChange} helperText={errors.price}/>
                 <label htmlFor="raised-button-file">
                     <input
                         accept="image/*"
@@ -69,8 +110,8 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                     </Button>
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
-                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={productData.tags} onChange={handleChange} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} helperText={errors.description} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={productData.tags} onChange={handleChange} helperText={errors.tags}/>
                 <Select value={productData.catalog?.catalog_id} onChange={handleChange} name="catalog?id">
                     <MenuItem value={"1"}>Catálogo de usuario</MenuItem>
                     <MenuItem value={"2"}>Catálogo de servicios</MenuItem>
@@ -91,6 +132,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                             backgroundColor: '#CCA870',
                         },
                     }}
+                    disabled={isAnyError()}
                 >
                     Actualizar
                 </Button>
