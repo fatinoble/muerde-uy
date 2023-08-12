@@ -27,6 +27,10 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
     const handleIngredientChange = (event) => {
         const ingredientId = event.target.name; 
         const newQuantity = event.target.value;
+
+        if (!/^\d*$/.test(newQuantity)) {
+            return;
+        }
     
         setProductData(prevData => ({
             ...prevData, 
