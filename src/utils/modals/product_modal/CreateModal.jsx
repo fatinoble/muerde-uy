@@ -81,7 +81,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
         switch (name) {
             case "title":
             case "description":
-                if (!/^[a-zA-Z\s]+$/.test(value)) {
+                if (!/^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/.test(value)) {
                     errorMessage = "Solo se permiten letras";
                 }
                 break;
@@ -89,12 +89,12 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                 if (!/^[0-9]+$/.test(value)) {
                     errorMessage = "Solo se permiten números";
                 }
+                break;                
+            case "tags":
+                if (!/^[a-zA-ZáéíóúÁÉÍÓÚ\s,]+$/.test(value)) {
+                    errorMessage = "Solo se permiten letras y comas";
+                }
                 break;
-                case "tags":
-                    if (!/^[a-zA-Z\s,]+$/.test(value)) {
-                        errorMessage = "Solo se permiten letras y comas";
-                    }
-                    break;
             default:
                 break;
         }
