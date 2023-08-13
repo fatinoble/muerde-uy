@@ -1,8 +1,24 @@
-import React from 'react';
-
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 const WhatsAppButton = ({message}) => {
-  const phoneNumber = '+59899123455'; // TODO agregar el numbero de sofi bien, y tal vez una manera dinamica para que sea editable.
+  const [phoneNumber, setPhoneNumber] = useState('');
   const encodedMessage = encodeURIComponent(message);
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/setting`);
+      const { settings } = response.data;
+      const wpp_phone = settings.find(setting => setting.key === 'phone');
+      setPhoneNumber(wpp_phone?.value || '');
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+    }
+  };
+
 
   const handleClick = () => {
     window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
@@ -10,10 +26,14 @@ const WhatsAppButton = ({message}) => {
 
   return (
     <div className="wpp-container">
-    <button className='wpp-button' onClick={handleClick}>
-      <img src="/images/whatsapp-icon.png" alt="WhatsApp" className="wpp-icon"/>
-      <span>Escribinos por Whatsapp</span>
-    </button>
+      {
+        phoneNumber && (
+          <button className='wpp-button' onClick={handleClick}>
+          <img src="/images/whatsapp-icon.png" alt="WhatsApp" className="wpp-icon"/>
+          <span>Escribinos por Whatsapp</span>
+        </button>
+        )
+      }
     </div>
   );
 };

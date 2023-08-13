@@ -133,7 +133,7 @@ const Detail = () => {
 
   const { image, title, description, price, is_out_of_stock } = product;
 
-  const whatsappDetailMessage = `!Hola! Soy ${user.name}, y quisiera saber un poco más sobre el producto ${title}.`;
+  const whatsappDetailMessage = `Hola! Soy ${user.name}, y quisiera saber un poco más sobre el producto ${title}.`;
 
   return (
     <Layout>
