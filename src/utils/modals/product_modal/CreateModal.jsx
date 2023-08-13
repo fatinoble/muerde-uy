@@ -81,20 +81,20 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
         switch (name) {
             case "title":
             case "description":
-                if (!/^[a-zA-Z\s]+$/.test(value)) {
+                if (!/^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/.test(value)) {
                     errorMessage = "Solo se permiten letras";
                 }
                 break;
             case "price":
-                if (!/^[0-9]+$/.test(value)) {
-                    errorMessage = "Solo se permiten números";
+                if (!/^(0(\.\d+)?|[1-9]\d*(\.\d*)?)$/.test(value)) {
+                    errorMessage = "Solo se permiten números mayores o iguales que 0 o números con decimales";
+                }
+                break;                                                   
+            case "tags":
+                if (!/^[a-zA-ZáéíóúÁÉÍÓÚ\s,]+$/.test(value)) {
+                    errorMessage = "Solo se permiten letras y comas";
                 }
                 break;
-                case "tags":
-                    if (!/^[a-zA-Z\s,]+$/.test(value)) {
-                        errorMessage = "Solo se permiten letras y comas";
-                    }
-                    break;
             default:
                 break;
         }
