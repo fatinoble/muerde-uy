@@ -28,7 +28,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
         const ingredientId = event.target.name; 
         const newQuantity = event.target.value;
 
-        if (!/^\d*$/.test(newQuantity)) {
+        if (newQuantity !== "" && !/^(0(\.\d+)?|[1-9]\d*(\.\d*)?)$/.test(newQuantity)) {
             return;
         }
     
@@ -47,13 +47,17 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
 
         switch (name) {
             case "name":
-            case "instructions":
-                if (!/^[a-zA-Z\s]+$/.test(value)) {
+                if (!/^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/.test(value)) {
                     errorMessage = "Solo se permiten letras";
                 }
                 break;
+            case "instructions":
+                if (!/^[a-zA-Z0-9áéíóúÁÉÍÓÚ\s]+$/.test(value)) {
+                    errorMessage = "Solo se permiten letras y números";
+                }
+                break;
             case "preparationTimeMinutes":
-                if (!/^[0-9]+$/.test(value)) {
+                if (!/^(0|[1-9]\d*)$/.test(value)) {
                     errorMessage = "Solo se permiten números";
                 }
                 break;
