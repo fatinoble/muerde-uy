@@ -42,11 +42,27 @@ export const getAllProducts = () => {
     });
 };
 
-export const modifyProduct = (editedProduct) => {
-  const { title, price, image, description, tags, status, catalog } = editedProduct;
+export const modifyProduct = (editedProduct = {}) => {
+  const { title, price, image, description, tags, status, catalog = {} } = editedProduct;
   const { catalog_id } = catalog;
-  const product = { title, price, image, description, tags, catalog_id, status };
-  return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product?id=${editedProduct.id_product}`, { product })
+
+  const formData = new FormData();
+  if (image) {
+    formData.append('image', image);
+  }
+
+  formData.append('title', title);
+  formData.append('description', description);
+  formData.append('price', price);
+  formData.append('tags', tags);
+  formData.append('catalog_id', catalog_id);
+  formData.append('status', status);
+
+  return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product?id=${editedProduct.id_product}`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  })
     .then(response => {
       return response.data;
     })

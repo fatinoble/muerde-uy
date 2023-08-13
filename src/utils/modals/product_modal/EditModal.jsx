@@ -28,7 +28,11 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        handleUpdate(productData);
+        const infoToUpdate = {...productData}
+        if (infoToUpdate.image === data.image) {
+            delete infoToUpdate.image;
+        }
+       handleUpdate(infoToUpdate);
     };
 
     const handleImageUpload = (event) => {
@@ -36,7 +40,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
         setImageFileName(file.name);
         setProductData({
             ...productData,
-            image: file.name,
+            image: file,
         });
     };
 
