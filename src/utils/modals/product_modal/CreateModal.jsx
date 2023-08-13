@@ -13,6 +13,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
     const [selectedCatalog, setSelectedRecipeIdlectedCatalog] = useState('');
     const router = useRouter();
     const [errors, setErrors] = useState({});
+    const userCatalog = catalogs?.find(catalog => catalog.type === 'User');
 
     useEffect(() => {
         getAllRecipesWithProducts()
@@ -154,14 +155,8 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
                 <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} helperText={errors.description} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={productData.tags} onChange={handleChange} helperText={errors.tags} />
-                <Select value={selectedCatalog} onChange={handleChangeSelectedCatalog} name="catalog_id">
-                    {Array.isArray(catalogs) && catalogs.map((catalog) => (
-                        <MenuItem key={catalog.id_catalog} value={catalog.id_catalog}>
-                            {catalog.type}
-                        </MenuItem>
-                    ))}
-                </Select>
+                <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={productData.tags} onChange={handleChange} helperText={errors.tags} /><br/><br/>
+                <TextField fullWidth disabled label="Catálogo" value={userCatalog?.type || 'No se encontró el catálogo de Usuario'} /><br/><br/>
                 <Select required value={selectedRecipeId} onChange={handleChangeSelectedRecipe} name="recipe_id">
                     {filteredRecipes.map((recipe) => (
                         <MenuItem key={recipe.id_recipe} value={recipe.id_recipe}>

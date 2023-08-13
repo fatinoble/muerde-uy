@@ -116,10 +116,6 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                 </label>
                 <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} helperText={errors.description} />
                 <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={productData.tags} onChange={handleChange} helperText={errors.tags}/>
-                <Select value={productData.catalog?.catalog_id} onChange={handleChange} name="catalog?id">
-                    <MenuItem value={"1"}>Catálogo de usuario</MenuItem>
-                    <MenuItem value={"2"}>Catálogo de servicios</MenuItem>
-                </Select>
                 <Select value={productData.status || 'ENABLED'} onChange={handleChange} name="status">
                     <MenuItem value={"ENABLED"}>Activo</MenuItem>
                     <MenuItem value={"DISABLED"}>Inactivo</MenuItem>
