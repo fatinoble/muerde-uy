@@ -55,10 +55,10 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                 }
                 break;
             case "price":
-                if (!/^[0-9]+$/.test(value)) {
-                    errorMessage = "Solo se permiten números";
+                if (!/^(0(\.\d+)?|[1-9]\d*(\.\d*)?)$/.test(value)) {
+                    errorMessage = "Solo se permiten números mayores o iguales que 0 o números con decimales";
                 }
-                break;                
+                break;                  
             case "tags":
                 if (!/^[a-zA-ZáéíóúÁÉÍÓÚ\s,]+$/.test(value)) {
                     errorMessage = "Solo se permiten letras y comas";
