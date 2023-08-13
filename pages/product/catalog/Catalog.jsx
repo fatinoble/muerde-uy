@@ -20,7 +20,7 @@ const Catalog = () => {
     if (localStorageUserName) {
       setUserName(localStorageUserName);
     }
-  }, []); 
+  }, []);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -38,7 +38,7 @@ const Catalog = () => {
     setSelectedTags([]);
   };
 
-  const whatsappCatalogMessage = `!Hola! Soy ${userName}, y quisiera saber un poco más sobre los productos en Muerde.`;
+  const whatsappCatalogMessage = `Hola! Soy ${userName}, y quisiera saber un poco más sobre los productos en Muerde.`;
 
   return (
     <Layout>
