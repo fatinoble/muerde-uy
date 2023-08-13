@@ -106,14 +106,17 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
 
         switch (name) {
             case "name":
-            case "instructions":
-                if (!/^[a-zA-Z\s]+$/.test(value)) {
+                if (!/^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/.test(value)) {
                     errorMessage = "Solo se permiten letras";
                 }
                 break;
+            case "instructions":
+                if (!/^[a-zA-Z0-9áéíóúÁÉÍÓÚ\s]+$/.test(value)) {
+                    errorMessage = "Solo se permiten letras y números";
+                }
+                break;
             case "preparation_time_minutes":
-                case "quantity":
-                if (!/^[0-9]+$/.test(value)) {
+                if (!/^(0|[1-9]\d*)$/.test(value)) {
                     errorMessage = "Solo se permiten números";
                 }
                 break;

@@ -19,6 +19,7 @@ import BarChart from "@mui/icons-material/BarChart";
 import People from "@mui/icons-material/People";
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
+import ExitToApp  from '@mui/icons-material/ExitToApp';
 
 const routingList = [
   { name: "Dashboard", icon: <BarChart />, route: "/admin/reports" },
@@ -28,6 +29,7 @@ const routingList = [
   { name: "Ingredientes", icon: <Kitchen />, route: "/admin/ingredients" },
   { name: "Clientes", icon: <People />, route: "/admin/clients" },
   { name: "Configuración", icon: <SettingsApplicationsIcon />, route: "/admin/settings" },
+  { name: "Cerrar sesión", icon: <ExitToApp />, route: "/admin/logout" },
 ];
 
 const AdminNavigation = () => {

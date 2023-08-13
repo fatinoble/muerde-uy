@@ -50,10 +50,10 @@ const Login = () => {
         try {
             const response = await findUserByMail(data);
             if (response.statusText == "OK" && response.data.role == "ADMIN") {
-                localStorage.setItem('token login admin', response.data.token);
-                localStorage.setItem('user role', response.data.role);
-                localStorage.setItem('user name', response.data.name);
-                localStorage.setItem('user mail', response.data.mail);
+                localStorage.setItem('token_login_admin', response.data.token);
+                localStorage.setItem('user_role', response.data.role);
+                localStorage.setItem('user_name', response.data.name);
+                localStorage.setItem('user_mail', response.data.mail);
                 handleMessage("Login correcto, bienvenid@ " + response.data.name + "!", "success");
                 router.push('/admin/reports')
             } else {
