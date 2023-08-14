@@ -25,6 +25,7 @@ const routingList = [
   { name: "Dashboard", icon: <BarChart />, route: "/admin/reports" },
   { name: "Pedidos", icon: <Receipt />, route: "/admin/orders" },
   { name: "Productos", icon: <Storefront />, route: "/admin/products" },
+  { name: "Servicios", icon: <Storefront />, route: "/admin/services" },
   { name: "Recetas", icon: <RestaurantMenu />, route: "/admin/recipes" },
   { name: "Ingredientes", icon: <Kitchen />, route: "/admin/ingredients" },
   { name: "Clientes", icon: <People />, route: "/admin/clients" },
