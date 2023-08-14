@@ -49,8 +49,6 @@ const Catalog = () => {
         <div className="actions-container">
           <div className="actions-filter-container">
             <Search handleSearchChange={handleSearchChange} searchQuery={searchQuery} />
-            {selectedCatalog === 'products' && (
-              <>
                 <TagFilter allTags={allTags} selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
                 <Button
                   variant="contained"
@@ -66,9 +64,6 @@ const Catalog = () => {
                 >
                   Limpiar
                 </Button>
-              </>
-            )
-            }
           </div>
 
           <div className="catalog-switch-container">
@@ -95,7 +90,7 @@ const Catalog = () => {
         <div className="catalogs-container">
           {selectedCatalog === 'products'
             ? <ProductCatalog searchQuery={searchQuery} setAllTags={setAllTags} selectedTags={selectedTags} />
-            : <ServiceCatalog searchQuery={searchQuery} />}
+            : <ServiceCatalog searchQuery={searchQuery} setAllTags={setAllTags} selectedTags={selectedTags} />}
         </div>
       </div>
     </Layout>

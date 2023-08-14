@@ -1,16 +1,13 @@
 import { Modal, Box, TextField, Button, Typography, Select, MenuItem } from '@mui/material';
 import React, { useState, useEffect } from "react";
 import { getAllRecipesWithProducts } from '../../../../services/recipeService';
-import { getAllCatalogs } from '../../../../services/catalogService';
 import { useRouter } from 'next/router';
 
 const CreateModal = ({ open, handleClose, handleAdd }) => {
     const [productData, setProductData] = useState([]);
     const [recipes, setRecipes] = useState({});
-    const [catalogs, setCatalogs] = useState([]);
     const [imageFileName, setImageFileName] = useState("");
     const [selectedRecipeId, setSelectedRecipeId] = useState('');
-    const [selectedCatalog, setSelectedRecipeIdlectedCatalog] = useState('');
     const router = useRouter();
     const [errors, setErrors] = useState({});
 
@@ -18,10 +15,6 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
         getAllRecipesWithProducts()
             .then(response => {
                 setRecipes(response.recipes);
-            })
-        getAllCatalogs()
-            .then(response => {
-                setCatalogs(response.Catalogs);
             })
     }, []);
 
@@ -48,15 +41,6 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
         }));
     };
 
-    const handleChangeSelectedCatalog = (event) => {
-        setSelectedRecipeIdlectedCatalog(event.target.value);
-        const { value } = event.target;
-        setProductData((prevData) => ({
-            ...prevData,
-            catalog_id: value,
-        }));
-    };
-
     const handleChange = (event) => {
         const { name, value } = event.target;
 
@@ -72,6 +56,10 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        setProductData({
+            ...productData,
+            catalog_id: 1,
+        });
         handleAdd(productData);
     };
 
@@ -155,13 +143,6 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                 </label>
                 <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} helperText={errors.description} />
                 <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={productData.tags} onChange={handleChange} helperText={errors.tags} />
-                <Select value={selectedCatalog} onChange={handleChangeSelectedCatalog} name="catalog_id">
-                    {Array.isArray(catalogs) && catalogs.map((catalog) => (
-                        <MenuItem key={catalog.id_catalog} value={catalog.id_catalog}>
-                            {catalog.type}
-                        </MenuItem>
-                    ))}
-                </Select>
                 <Select required value={selectedRecipeId} onChange={handleChangeSelectedRecipe} name="recipe_id">
                     {filteredRecipes.map((recipe) => (
                         <MenuItem key={recipe.id_recipe} value={recipe.id_recipe}>
