@@ -131,30 +131,43 @@ const Products = () => {
       </Box>
       {products.map((product) => (
         <ProductPaper elevation={3} key={product.id_product} status={product.status}>
-          <div className="small-image-container">
-            <img
-              className="product-image-small"
-              src={product.image ? product.image : '/images/unavailable.png'} alt={product.title}
-              style={{ width: '300px' }}
-            ></img>
-          </div>
-          <div className="price-name-container">
-            <h1 className="product-name"> {product.title} </h1>
-            <span className="product-price">${product.price}</span>
-          </div>
-          <div className="product-admin-actions-container">
-            <StyledButton status={product.status} variant="outlined" onClick={() => handleOpen(product)}>
-              Ver detalles
-            </StyledButton>
-            {selectedProduct ? (
-              <DetailsModal open={open} handleClose={handleClose} data={selectedProduct} />
-            ) : null}
-            <StyledButton status={product.status} variant="outlined" onClick={() => { setProductToEdit(product); setEditModalOpen(true); }}>
-              Editar producto
-            </StyledButton>
-            <Switch checked={product.status === 'ENABLED'} onChange={() => toggleProductStatus(product)} />
-            {product.is_out_of_stock ? <span>Sin Stock</span> : <span>En Stock</span>}
-          </div>
+          <Box display="flex" width="100%">
+            <Box>
+              <img
+                className=""
+                src={product.image ? product.image : '/images/unavailable.png'}
+                alt={product.title}
+                style={{ width: '300px' }}
+              ></img>
+            </Box>
+            <Box flex="1" pl={2} display="flex" flexDirection="column">
+              <h1 className=""> {product.title} </h1>
+              <span className="product-price">${product.price}</span>
+              <Box mt={2}>
+                <StyledButton
+                  status={product.status}
+                  variant="outlined"
+                  onClick={() => handleOpen(product)}
+                >
+                  Ver detalles
+                </StyledButton>
+
+                {selectedProduct ? (
+                  <DetailsModal open={open} handleClose={handleClose} data={selectedProduct} />
+                ) : null}
+
+                <StyledButton
+                  status={product.status}
+                  variant="outlined"
+                  onClick={() => { setProductToEdit(product); setEditModalOpen(true); }}
+                >
+                  Editar producto
+                </StyledButton>
+                <Switch checked={product.status === 'ENABLED'} onChange={() => toggleProductStatus(product)} />
+                {product.is_out_of_stock ? <span>Sin Stock</span> : <span>En Stock</span>}
+              </Box>
+            </Box>
+          </Box>
         </ProductPaper>
       ))}
       {editModalOpen ? (
