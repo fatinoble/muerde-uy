@@ -155,7 +155,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     p: 3,
                 }}
             >
-                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: '#f1e5d5', marginBottom: 2 }} >
+                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: 'rgb(216, 130, 130)', marginBottom: 2 }} >
                     Alta de receta
                 </Typography>
                 <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} helperText={errors.name} />
@@ -240,10 +240,12 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                         mt: 2,
                         ml: 'auto',
                         mr: 'auto',
-                        backgroundColor: '#EDCBA2',
-                        color: '#7B3E19',
+                        backgroundColor: 'rgb(216, 130, 130)',
+                        color: 'white',
                         '&:hover': {
-                            backgroundColor: '#CCA870',
+                            backgroundColor: 'white',
+                            color: 'rgb(216, 130, 130)',
+                            borderColor: 'rgb(216, 130, 130)',
                         },
                     }}
                     disabled={isAnyError() || !isAnyQuantity()}
