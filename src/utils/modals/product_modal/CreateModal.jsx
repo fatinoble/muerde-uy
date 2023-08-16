@@ -77,7 +77,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                 if (!/^(0(\.\d+)?|[1-9]\d*(\.\d*)?)$/.test(value)) {
                     errorMessage = "Solo se permiten números mayores o iguales que 0 o números con decimales";
                 }
-                break;                                                   
+                break;
             case "tags":
                 if (!/^[a-zA-ZáéíóúÁÉÍÓÚ\s,]+$/.test(value)) {
                     errorMessage = "Solo se permiten letras y comas";
@@ -92,7 +92,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
             [name]: errorMessage,
         }));
 
-        return errorMessage === ""; 
+        return errorMessage === "";
     };
 
     const isAnyError = () => {
@@ -143,7 +143,15 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                 </label>
                 <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} helperText={errors.description} />
                 <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={productData.tags} onChange={handleChange} helperText={errors.tags} />
-                <Select required value={selectedRecipeId} onChange={handleChangeSelectedRecipe} name="recipe_id">
+                <Select
+                    required
+                    value={selectedRecipeId}
+                    onChange={handleChangeSelectedRecipe}
+                    name="recipe_id"
+                >
+                    <MenuItem value="" disabled>
+                        Elija receta
+                    </MenuItem>
                     {filteredRecipes.map((recipe) => (
                         <MenuItem key={recipe.id_recipe} value={recipe.id_recipe}>
                             {recipe.name}
@@ -166,7 +174,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     disabled={isAnyError()}
                 >
                     Dar de alta
-                </Button>                
+                </Button>
                 <Button variant="contained" onClick={() => router.push('/admin/recipes')}
                     sx={{
                         display: 'block',
