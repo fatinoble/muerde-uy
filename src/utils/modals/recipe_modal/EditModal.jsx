@@ -92,7 +92,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                     p: 3,
                 }}
             >
-                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: '#f1e5d5', marginBottom: 2 }} >
+                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: 'rgb(216, 130, 130)', marginBottom: 2 }} >
                     Actualizar receta
                 </Typography>
                 <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} helperText={errors.name}/>
@@ -101,24 +101,26 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                 <Typography variant="body1">
                     <strong>Ingredientes:</strong>
                 </Typography><br />
-                {productData.ingredients.map((ingredient) => (
-                    <div key={ingredient.ingredient_id}>
-                        <Typography variant="body1">{ingredient.name}</Typography>
-                        <Typography variant="body1">
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                required
-                                fullWidth
-                                name={ingredient.ingredient_id} 
-                                label="Cantidad"
-                                value={ingredient.quantity} 
-                                onChange={handleIngredientChange} 
-                            />
-                        </Typography>
-                    </div>
-                ))}
-                <Button type="submit" style={{ backgroundColor: 'rgb(168, 118, 88)', color: 'white' }} disabled={isAnyError()}>
+                <div style={{maxHeight: '300px', overflowY: 'auto'}}>
+                    {productData.ingredients.map((ingredient) => (
+                        <div key={ingredient.ingredient_id}>
+                            <Typography variant="body1">{ingredient.name}</Typography>
+                            <Typography variant="body1">
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    required
+                                    fullWidth
+                                    name={ingredient.ingredient_id} 
+                                    label="Cantidad"
+                                    value={ingredient.quantity} 
+                                    onChange={handleIngredientChange} 
+                                />
+                            </Typography>
+                        </div>
+                    ))}
+                </div>
+                <Button type="submit" style={{ backgroundColor: 'rgb(216, 130, 130)', color: 'white' }} disabled={isAnyError()}>
                     Actualizar
                 </Button>
             </Box>

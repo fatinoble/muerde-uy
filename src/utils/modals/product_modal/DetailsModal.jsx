@@ -1,4 +1,3 @@
-import { OneKPlusOutlined } from '@mui/icons-material';
 import { Modal, Box, Typography, Button } from '@mui/material';
 
 const DetailsModal = ({ open, handleClose, data }) => {
@@ -75,10 +74,11 @@ const DetailsModal = ({ open, handleClose, data }) => {
                         mt: 2,
                         ml: 'auto',
                         mr: 'auto',
-                        backgroundColor: '#EDCBA2',
-                        color: '#7B3E19',
+                        backgroundColor: 'rgb(216, 130, 130)',
+                        color: 'white',
                         '&:hover': {
-                            backgroundColor: '#CCA870',
+                            backgroundColor: 'white',
+                            color: 'rgb(216, 130, 130)',
                         },
                     }}
                     onClick={handleClose}

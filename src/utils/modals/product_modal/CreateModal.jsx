@@ -77,7 +77,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                 if (!/^(0(\.\d+)?|[1-9]\d*(\.\d*)?)$/.test(value)) {
                     errorMessage = "Solo se permiten números mayores o iguales que 0 o números con decimales";
                 }
-                break;                                                   
+                break;
             case "tags":
                 if (!/^[a-zA-ZáéíóúÁÉÍÓÚ\s,]+$/.test(value)) {
                     errorMessage = "Solo se permiten letras y comas";
@@ -92,7 +92,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
             [name]: errorMessage,
         }));
 
-        return errorMessage === ""; 
+        return errorMessage === "";
     };
 
     const isAnyError = () => {
@@ -131,56 +131,76 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                             mt: 2,
                             ml: 'auto',
                             mr: 'auto',
-                            backgroundColor: '#EDCBA2',
-                            color: '#7B3E19',
+                            backgroundColor: 'rgb(216, 130, 130)',
+                            color: 'white',
                             '&:hover': {
-                                backgroundColor: '#CCA870',
+                                backgroundColor: 'white',
+                                color: 'rgb(216, 130, 130)',
                             },
-                        }}>
+                        }}
+                    >
                         Subir imagen
                     </Button>
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
                 <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} helperText={errors.description} />
                 <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={productData.tags} onChange={handleChange} helperText={errors.tags} />
-                <Select required value={selectedRecipeId} onChange={handleChangeSelectedRecipe} name="recipe_id">
+                <Select
+                    required
+                    value={selectedRecipeId}
+                    onChange={handleChangeSelectedRecipe}
+                    name="recipe_id"
+                >
+                    <MenuItem value="" disabled>
+                        Elija receta
+                    </MenuItem>
                     {filteredRecipes.map((recipe) => (
                         <MenuItem key={recipe.id_recipe} value={recipe.id_recipe}>
                             {recipe.name}
                         </MenuItem>
                     ))}
                 </Select>
-                <Typography variant="h6" sx={{ mt: 2 }}>Si la receta no se encuentra en la lista debes crearla para dar de alta el producto</Typography>
+                {selectedRecipeId == "" ?
+                    <>
+                        <Typography variant="h6" sx={{ mt: 2, fontWeight: 'normal', fontSize: '16px' }}>
+                            Si la receta no se encuentra en la lista debes crearla para dar de alta el producto
+                        </Typography>
+                        <Button variant="contained" onClick={() => router.push('/admin/recipes')}
+                            sx={{
+                                display: 'block',
+                                mt: 2,
+                                ml: 'auto',
+                                mr: 'auto',
+                                backgroundColor: 'white',
+                                color: 'rgb(216, 130, 130)',
+                                '&:hover': {
+                                    backgroundColor: 'rgb(216, 130, 130)',
+                                    color: 'white',
+                                },
+                            }}>
+                            Crear receta
+                        </Button>
+                    </>
+                    :
+                    null
+                }
                 <Button type="submit"
                     sx={{
                         display: 'block',
                         mt: 2,
                         ml: 'auto',
                         mr: 'auto',
-                        backgroundColor: '#EDCBA2',
-                        color: '#7B3E19',
+                        backgroundColor: 'rgb(216, 130, 130)',
+                        color: 'white',
                         '&:hover': {
-                            backgroundColor: '#CCA870',
+                            backgroundColor: 'white',
+                            color: 'rgb(216, 130, 130)',
                         },
                     }}
                     disabled={isAnyError()}
                 >
                     Dar de alta
-                </Button>                
-                <Button variant="contained" onClick={() => router.push('/admin/recipes')}
-                    sx={{
-                        display: 'block',
-                        mt: 2,
-                        ml: 'auto',
-                        mr: 'auto',
-                        backgroundColor: '#faf0e6',
-                        color: '#CCA870',
-                        '&:hover': {
-                            backgroundColor: '#faf0e6',
-                        },
-                    }}>
-                    Crear receta
-                </Button>
+                </Button>          
             </Box>
         </Modal>
     );

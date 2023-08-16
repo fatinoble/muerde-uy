@@ -1,6 +1,6 @@
 import Layout from '../../../src/components/AdminLayout';
 import React, { useState, useEffect, useRef } from "react";
-import { Button, Paper, Switch } from '@mui/material';
+import { Button, Paper } from '@mui/material';
 import { styled, Box } from '@mui/system';
 import DetailsModal from '../../../src/utils/modals/recipe_modal/DetailsModal';
 import EditModal from '../../../src/utils/modals/recipe_modal/EditModal';
@@ -10,6 +10,9 @@ import { calculateQuantity } from '../../../src/utils/units_converter/helper';
 import Head from 'next/head';
 import RestaurantMenu from "@mui/icons-material/RestaurantMenu";
 import { getAllRecipes, modifyRecipe, deleteRecipe, createRecipe } from '../../../services/recipeService';
+import { useRouter } from 'next/router';
+import { Tooltip } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -18,10 +21,9 @@ const Recipes = () => {
   const [open, setOpen] = useState(false);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [productToDelete, setProductToDelete] = useState(null);
   const [recipeToDelete, setRecipeToDelete] = useState(null);
-  const [newRecipeToAdd, setNewRecipe] = useState({});
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     getAllRecipes()
@@ -39,7 +41,6 @@ const Recipes = () => {
   }
 
   const handleOpen = (recipe) => {
-    console.log("selected recipe", recipe);
     setSelectedRecipe(recipe);
     setOpen(true);
   };
@@ -104,26 +105,31 @@ const Recipes = () => {
 
   const StyledButton = styled(Button)(({ theme }) => ({
     borderRadius: '10px',
-    borderColor: 'beige',
-    backgroundColor: '#f1e5d5',
-    color: 'black',
+    borderColor: 'rgb(216, 130, 130)',
+    backgroundColor: 'white',
+    color: 'rgb(216, 130, 130)',
+    marginRight: theme.spacing(1),
     '&:hover': {
-      backgroundColor: '#ffffff',
+      backgroundColor: 'rgb(216, 130, 130)',
+      color: 'white',
+      borderColor: 'white',
     },
   }));
 
   const InvertedButton = styled(Button)(({ theme }) => ({
     marginBottom: theme.spacing(2),
     borderRadius: '10px',
-    backgroundColor: 'beige',
     backgroundColor: '#ffff',
-    color: 'black',
-    borderColor: 'black',
+    color: 'rgb(216, 130, 130)',
+    borderColor: 'rgb(216, 130, 130)',
     '&:hover': {
-      backgroundColor: 'f1e5d5',
+      backgroundColor: 'rgb(216, 130, 130)',
+      color: 'white',
+      borderColor: 'rgb(216, 130, 130)',
     },
   }));
 
+  console.log(recipes)
   return (
     <Layout>
       <Head style={{ marginBottom: '10px' }}>
@@ -137,11 +143,10 @@ const Recipes = () => {
       </Box>
       {recipes.map((recipe) => (
         <ProductPaper elevation={3} key={recipe.id}>
-          <div className="image-name-container">
-            {/* <img src={recipe.product.image} alt="Product Image" /> */}
+          <div className="name-container">
             <h1 className="recipe-name"> {recipe.name} </h1>
           </div>
-          <div className="recipe-admin-actions-container">
+          <div className="recipe-admin-actions-container" style={{ display: 'flex', alignItems: 'center' }}>
             <StyledButton variant="outlined" onClick={() => handleOpen(recipe)}>
               Ver detalles
             </StyledButton>
@@ -152,6 +157,15 @@ const Recipes = () => {
               Editar receta
             </StyledButton>
             <StyledButton variant="outlined" onClick={() => { showDeleteModal(recipe) }}>Eliminar receta</StyledButton>
+            {recipe.product == null ?
+              <Tooltip title="Esta receta no se encuentra asociada a ningún producto">
+                <StyledButton variant="outlined" onClick={() => router.push('/admin/products')}>Crear producto</StyledButton>
+              </Tooltip>
+              :
+              <Tooltip title="Esta receta se encuentra asociada a un producto">
+                <InfoIcon style={{ color: 'rgb(216, 130, 130)' }} />
+              </Tooltip>
+            }
           </div>
         </ProductPaper>
       ))}

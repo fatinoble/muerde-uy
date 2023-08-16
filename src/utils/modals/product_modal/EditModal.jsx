@@ -95,7 +95,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                     p: 3,
                 }}
             >
-                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: '#f1e5d5', marginBottom: 2 }} >
+                <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: 'rgb(216, 130, 130)', marginBottom: 2 }} >
                     Editar Producto
                 </Typography>
                 <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title" value={productData.title} onChange={handleChange} helperText={errors.title}/>
@@ -109,17 +109,26 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                         type="file"
                         onChange={handleImageUpload}
                     />
-                    <Button variant="contained" component="span">
+                    <Button variant="contained" component="span"
+                    sx={{
+                        display: 'block',
+                        mt: 2,
+                        ml: 'auto',
+                        mr: 'auto',
+                        backgroundColor: 'rgb(216, 130, 130)',
+                        color: 'white',
+                        '&:hover': {
+                            backgroundColor: 'white',
+                            color: 'rgb(216, 130, 130)',
+                        },
+                    }}                    
+                    >
                         Subir imagen
                     </Button>
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
                 <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} helperText={errors.description} />
                 <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={productData.tags} onChange={handleChange} helperText={errors.tags}/>
-                <Select value={productData.catalog?.catalog_id} onChange={handleChange} name="catalog?id">
-                    <MenuItem value={"1"}>Catálogo de usuario</MenuItem>
-                    <MenuItem value={"2"}>Catálogo de servicios</MenuItem>
-                </Select>
                 <Select value={productData.status || 'ENABLED'} onChange={handleChange} name="status">
                     <MenuItem value={"ENABLED"}>Activo</MenuItem>
                     <MenuItem value={"DISABLED"}>Inactivo</MenuItem>
@@ -130,10 +139,11 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                         mt: 2,
                         ml: 'auto',
                         mr: 'auto',
-                        backgroundColor: '#EDCBA2',
-                        color: '#7B3E19',
+                        backgroundColor: 'rgb(216, 130, 130)',
+                        color: 'white',
                         '&:hover': {
-                            backgroundColor: '#CCA870',
+                            backgroundColor: 'white',
+                            color: 'rgb(216, 130, 130)',
                         },
                     }}
                     disabled={isAnyError()}
