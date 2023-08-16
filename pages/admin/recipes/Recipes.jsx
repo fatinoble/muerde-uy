@@ -104,23 +104,27 @@ const Recipes = () => {
 
   const StyledButton = styled(Button)(({ theme }) => ({
     borderRadius: '10px',
-    borderColor: 'beige',
-    backgroundColor: '#f1e5d5',
-    color: 'black',
+    borderColor: 'rgb(216, 130, 130)',
+    backgroundColor: 'white',
+    color: 'rgb(216, 130, 130)',
+    marginRight: theme.spacing(1),
     '&:hover': {
-      backgroundColor: '#ffffff',
+      backgroundColor: 'rgb(216, 130, 130)',
+      color: 'white',
+      borderColor: 'white',
     },
   }));
 
   const InvertedButton = styled(Button)(({ theme }) => ({
     marginBottom: theme.spacing(2),
     borderRadius: '10px',
-    backgroundColor: 'beige',
     backgroundColor: '#ffff',
-    color: 'black',
-    borderColor: 'black',
+    color: 'rgb(216, 130, 130)',
+    borderColor: 'rgb(216, 130, 130)',
     '&:hover': {
-      backgroundColor: 'f1e5d5',
+      backgroundColor: 'rgb(216, 130, 130)',
+      color: 'white',
+      borderColor: 'rgb(216, 130, 130)',
     },
   }));
 

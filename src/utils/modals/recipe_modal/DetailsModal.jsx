@@ -23,7 +23,7 @@ const DetailsModal = ({ open, handleClose, data }) => {
                 <Typography variant="h5" align="center"
                     sx={{
                         fontWeight: 'bold',
-                        color: '#f1e5d5',
+                        color: 'rgb(216, 130, 130)',
                         marginBottom: 2,
                     }}
                 >
@@ -48,15 +48,20 @@ const DetailsModal = ({ open, handleClose, data }) => {
                 <Typography variant="body1">
                     <strong>Ingredientes:</strong>
                 </Typography>
-                {data.ingredients.map((ingredient) => (
-                    <Typography key={ingredient.ingredient_id} variant="body1">
-                        <span>Id: {ingredient.ingredient_id}</span><br />
-                        <span>Nombre: {ingredient.name}</span><br />
-                        <span>Unidad: {ingredient.unit}</span><br />
-                        <span>Costo de última compra: {ingredient.last_purchase_cost}</span><br />
-                        <span>Cantidad: {ingredient.quantity}</span><br />
-                    </Typography>
-                ))}
+                <div style={{
+                    maxHeight: '300px', overflowY: 'auto', borderTop: '2px dotted rgb(216, 130, 130)',
+                    borderBottom: '2px dotted rgb(216, 130, 130)', marginBottom: '20px'
+                }}>
+                    {data.ingredients.map((ingredient) => (
+                        <Typography key={ingredient.ingredient_id} variant="body1">
+                            <span>Id: {ingredient.ingredient_id}</span><br />
+                            <span>Nombre: {ingredient.name}</span><br />
+                            <span>Unidad: {ingredient.unit}</span><br />
+                            <span>Costo de última compra: {ingredient.last_purchase_cost}</span><br />
+                            <span>Cantidad: {ingredient.quantity}</span><br />
+                        </Typography>
+                    ))}
+                </div>
                 {data.product != null ? (
                     <>
                         <Typography variant="body1">
@@ -81,10 +86,11 @@ const DetailsModal = ({ open, handleClose, data }) => {
                         mt: 2,
                         ml: 'auto',
                         mr: 'auto',
-                        backgroundColor: '#EDCBA2',
-                        color: '#7B3E19',
+                        backgroundColor: 'rgb(216, 130, 130)',
+                        color: 'white',
                         '&:hover': {
-                            backgroundColor: '#CCA870',
+                            backgroundColor: 'white',
+                            color: 'rgb(216, 130, 130)',
                         },
                     }}
                     onClick={handleClose}

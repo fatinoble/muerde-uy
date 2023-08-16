@@ -31,7 +31,7 @@ const DeleteModal = ({ open, handleClose, data, handleDelete }) => {
                     <Typography variant="h5" align="center"
                         sx={{
                             fontWeight: 'bold',
-                            color: '#f1e5d5',
+                            color: 'rgb(216, 130, 130)',
                             marginBottom: 2,
                         }}
                     >
@@ -62,10 +62,11 @@ const DeleteModal = ({ open, handleClose, data, handleDelete }) => {
                             mt: 2,
                             ml: 'auto',
                             mr: 'auto',
-                            backgroundColor: '#EDCBA2',
-                            color: '#7B3E19',
+                            backgroundColor: 'rgb(216, 130, 130)',
+                            color: 'white',
                             '&:hover': {
-                                backgroundColor: '#CCA870',
+                                backgroundColor: 'white',
+                                color: 'rgb(216, 130, 130)',
                             },
                         }}
                     >Cancelar
