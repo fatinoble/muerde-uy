@@ -131,12 +131,14 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                             mt: 2,
                             ml: 'auto',
                             mr: 'auto',
-                            backgroundColor: '#EDCBA2',
-                            color: '#7B3E19',
+                            backgroundColor: 'rgb(216, 130, 130)',
+                            color: 'white',
                             '&:hover': {
-                                backgroundColor: '#CCA870',
+                                backgroundColor: 'white',
+                                color: 'rgb(216, 130, 130)',
                             },
-                        }}>
+                        }}
+                    >
                         Subir imagen
                     </Button>
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
@@ -158,37 +160,47 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                         </MenuItem>
                     ))}
                 </Select>
-                <Typography variant="h6" sx={{ mt: 2 }}>Si la receta no se encuentra en la lista debes crearla para dar de alta el producto</Typography>
+                {selectedRecipeId == "" ?
+                    <>
+                        <Typography variant="h6" sx={{ mt: 2, fontWeight: 'normal', fontSize: '16px' }}>
+                            Si la receta no se encuentra en la lista debes crearla para dar de alta el producto
+                        </Typography>
+                        <Button variant="contained" onClick={() => router.push('/admin/recipes')}
+                            sx={{
+                                display: 'block',
+                                mt: 2,
+                                ml: 'auto',
+                                mr: 'auto',
+                                backgroundColor: 'white',
+                                color: 'rgb(216, 130, 130)',
+                                '&:hover': {
+                                    backgroundColor: 'rgb(216, 130, 130)',
+                                    color: 'white',
+                                },
+                            }}>
+                            Crear receta
+                        </Button>
+                    </>
+                    :
+                    null
+                }
                 <Button type="submit"
                     sx={{
                         display: 'block',
                         mt: 2,
                         ml: 'auto',
                         mr: 'auto',
-                        backgroundColor: '#EDCBA2',
-                        color: '#7B3E19',
+                        backgroundColor: 'rgb(216, 130, 130)',
+                        color: 'white',
                         '&:hover': {
-                            backgroundColor: '#CCA870',
+                            backgroundColor: 'white',
+                            color: 'rgb(216, 130, 130)',
                         },
                     }}
                     disabled={isAnyError()}
                 >
                     Dar de alta
-                </Button>
-                <Button variant="contained" onClick={() => router.push('/admin/recipes')}
-                    sx={{
-                        display: 'block',
-                        mt: 2,
-                        ml: 'auto',
-                        mr: 'auto',
-                        backgroundColor: '#faf0e6',
-                        color: '#CCA870',
-                        '&:hover': {
-                            backgroundColor: '#faf0e6',
-                        },
-                    }}>
-                    Crear receta
-                </Button>
+                </Button>          
             </Box>
         </Modal>
     );
