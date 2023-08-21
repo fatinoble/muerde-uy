@@ -20,7 +20,7 @@ const TransferDialog = ({ open, handleClose, data, handleAdd }) => {
 
         setOrderData({
             ...orderData,
-            name: value,
+            transfer_number: value,
         });
     };
 
