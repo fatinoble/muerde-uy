@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { useState, useRef } from "react";
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import Grid from '@mui/material/Grid';
@@ -26,6 +27,15 @@ const Login = () => {
         setOpen(false);
     };
 
+
+    const getTransferNumber = () => {
+        return axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/setting`)
+            .then(response => {
+                return response.data;
+            })
+            .catch(error => console.error('Error:', error.response.data));
+      }
+
     const handleSubmit = async event => {
         event.preventDefault();
         if (!mail || !password) {
@@ -50,6 +60,7 @@ const Login = () => {
 
         try {
             const response = await findUserByMail(data);
+            const transferNumber =await getTransferNumber();
             if (response.statusText == "OK" && response.data.role == "USER") {
                 console.log("response login    ", response.data);
                 localStorage.setItem('token_login_user', response.data.token);
@@ -59,6 +70,7 @@ const Login = () => {
                 localStorage.setItem('user_mail', response.data.mail);
                 localStorage.setItem('user_address', response.data.address);
                 localStorage.setItem('user_phone', response.data.phone);
+                localStorage.setItem('bank_number', transferNumber.settings.filter(setting => setting.key === 'bank_number')[0].value);
                 handleMessage("Login correcto, bienvenid@ " + response.data.name + "!", "success");
                 router.push('/product/catalog')
             } else {

@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { useState, useRef } from "react";
 import { Container, Typography, TextField, Button, Box } from '@mui/material';
 import { createUser } from '../../../services/userService';
@@ -28,6 +29,13 @@ const Register = () => {
     const handleClose = () => {
         setOpen(false);
     };
+    const getTransferNumber = () => {
+        return axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/setting`)
+            .then(response => {
+                return response.data;
+            })
+            .catch(error => console.error('Error:', error.response.data));
+      }
 
     const handleSubmit = async event => {
         event.preventDefault();
@@ -61,6 +69,7 @@ const Register = () => {
 
         try {
             const response = await createUser(data);
+            const transferNumber =await getTransferNumber();
             if (response.statusText == "OK") {
                 localStorage.setItem('token_registration_user', response.data.token);
                 localStorage.setItem('user_id', response.data.id_user);
@@ -69,6 +78,7 @@ const Register = () => {
                 localStorage.setItem('user_mail', response.data.mail);
                 localStorage.setItem('user_address', response.data.address);
                 localStorage.setItem('user_phone', response.data.phone);
+                localStorage.setItem('bank_number', transferNumber.settings.filter(setting => setting.key === 'bank_number')[0].value);
                 handleMessage("Usuario creado con éxito, bienvenid@ " + response.data.name + "!", "success");
                 router.push('/product/catalog')
             } else {

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, RadioGroup, FormControlLabel, Radio, Grid, TextField } from '@mui/material';
@@ -9,8 +9,13 @@ tomorrow.setDate(today.getDate() + 1);
 
 const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
   const [openSaleModal, setOpenSaleModal] = useState(false);
+  const [transferNumber, setTransferNumber] = useState("");
 
   const router = useRouter();
+
+  useEffect(() => {
+    setTransferNumber(localStorage.getItem("bank_number"))
+  }, []);
 
   const handleCloseSaleModal = () => {
     setOpenSaleModal(false);
@@ -44,6 +49,12 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
     }));
   };
 
+  const handlePaymentMethodChange = (event) => {
+    setNewSale(prevSale => ({
+      ...prevSale,
+      payment_method: event.target.value
+    }));
+  };
   const handleDateChange = (event) => {
     setNewSale(prevSale => ({
       ...prevSale,
@@ -98,7 +109,17 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
             </DialogContent>
 
           </Grid>
-
+          <Grid item xs={12} sm={12}>
+            <DialogContent>
+              <DialogContentText>
+                Seleccione el método de pago:
+              </DialogContentText>
+              <RadioGroup value={newSale?.payment_method} onChange={handlePaymentMethodChange}>
+                <FormControlLabel value="CASH" control={<Radio />} label="Efectivo" />
+                <FormControlLabel value="TRANSFER" control={<Radio />} label="Transferencia bancaria" />
+              </RadioGroup>
+            </DialogContent>
+            </Grid>
         </Grid>
         <DialogActions>
           <Button onClick={handleCloseSaleModal} color="primary">
