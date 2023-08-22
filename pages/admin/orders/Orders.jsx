@@ -26,7 +26,7 @@ import {
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { getOrderStateName } from '@/utils';
+import { getOrderPaymentMethodName, getOrderStateName } from '@/utils';
 
 const Orders = () => {
 
@@ -36,6 +36,7 @@ const Orders = () => {
   const [ordersState, setOrdersState] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [openStateModal, setOpenStateModal] = useState(false);
+  const [openPaymentModal, setOpenPaymentModal] = useState(false);
   const [selectedState, setSelectedState] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -67,6 +68,10 @@ const Orders = () => {
 
   const handleConfirm = async () => {
     try {
+      if(selectedOrder.payment_method == 'TRANSFER' && selectedOrder.transfer_number == null){
+        setOpenPaymentModal(true);
+        return;
+      }
       await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale?id=${selectedOrder.id_sale}`, {
         state: selectedState,
       });
@@ -77,9 +82,26 @@ const Orders = () => {
     setOpenStateModal(false);
   };
 
+  const handleConfirmPayment = async () => {
+    try {
+      await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale?id=${selectedOrder.id_sale}`, {
+        state: selectedState,
+      });
+      fetchOrders();
+    } catch (error) {
+      console.error('Error updating state:', error);
+    }
+    setOpenPaymentModal(false);
+    setOpenStateModal(false);
+  };
+
   const handleCancel = () => {
     setOpenStateModal(false);
     setSelectedState('');
+  };
+
+  const handleCancelPayment = () => {
+    setOpenPaymentModal(false);
   };
 
   const handleSelectChange = (e, order) => {
@@ -141,6 +163,7 @@ const Orders = () => {
               <TableCell>Fecha de compra</TableCell>
               <TableCell>Fecha de entrega solicitada</TableCell>
               <TableCell>Precio total</TableCell>
+              <TableCell>Metodo de pago</TableCell>
               <TableCell>Estado</TableCell>
               <TableCell>Detalle</TableCell>
             </TableRow>
@@ -163,6 +186,7 @@ const Orders = () => {
                 {order.status == 'FINISHED' ? <TableCell>{order.user_date.substring(0, 10)}</TableCell>
                   : <TableCell style={{ color: getCellColor(order.user_date) }}>{order.user_date.substring(0, 10)}</TableCell>}
                 <TableCell>${order.total_earn_cost}</TableCell>
+                <TableCell>{getOrderPaymentMethodName(order.payment_method)}</TableCell>
                 <TableCell>
                   <Select
                     value={order.status}
@@ -229,6 +253,32 @@ const Orders = () => {
                 No
               </Button>
               <Button onClick={handleConfirm} color="primary" autoFocus>
+                Sí
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )
+      }
+
+{
+        openPaymentModal && (
+          <Dialog
+            open={openPaymentModal}
+            onClose={() => setOpenPaymentModal(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">Pago transferencia</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                Esta compra fue realizada con pago por transferencia y aun no se ha ingresado el número de transferencia. ¿Desea cambiar el estado de todos modos?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCancelPayment} color="primary">
+                No
+              </Button>
+              <Button onClick={handleConfirmPayment} color="primary" autoFocus>
                 Sí
               </Button>
             </DialogActions>
