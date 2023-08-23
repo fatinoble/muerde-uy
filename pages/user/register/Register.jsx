@@ -78,7 +78,7 @@ const Register = () => {
                 localStorage.setItem('user_mail', response.data.mail);
                 localStorage.setItem('user_address', response.data.address);
                 localStorage.setItem('user_phone', response.data.phone);
-                localStorage.setItem('bank_number', transferNumber.settings.filter(setting => setting.key === 'bank_number')[0].value);
+                localStorage.setItem('account_number', transferNumber.settings.filter(setting => setting.key === 'account_number')[0].value);
                 handleMessage("Usuario creado con éxito, bienvenid@ " + response.data.name + "!", "success");
                 router.push('/product/catalog')
             } else {

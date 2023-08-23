@@ -1,14 +1,14 @@
-import { Modal, Box, TextField, Button, Typography, Select, MenuItem } from '@mui/material';
+import { Modal, Box, TextField, Button } from '@mui/material';
 import React, { useState, useEffect } from "react";
-import { useRouter } from 'next/router';
 
 const TransferDialog = ({ open, handleClose, data, handleAdd }) => {
     const [orderData, setOrderData] = useState([]);
-    const router = useRouter();
+    const [accountNumber, setAccountNumber] = useState("");
     const [error, setError] = useState({});
 
     useEffect(() => {
         setOrderData(data);
+        setAccountNumber(localStorage.getItem("account_number"));
     }, [data]);
 
     const handleChange = (event) => {
@@ -62,7 +62,7 @@ const TransferDialog = ({ open, handleClose, data, handleAdd }) => {
                     p: 3,
                 }}
             >
-                <TextField variant="outlined" margin="normal" label="Numero de cuenta" disabled value={localStorage.getItem("bank_number")} />
+                <TextField variant="outlined" margin="normal" label="Numero de cuenta" disabled value={accountNumber} />
                 <TextField variant="outlined" margin="normal" required fullWidth name="transfer_number" label="Numero de trasferencia" value={orderData?.transfer_number} onChange={handleChange} helperText={error.transfer_number} />
 
                 <Button type="submit" variant="contained" sx={{
