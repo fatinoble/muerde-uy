@@ -1,21 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, RadioGroup, FormControlLabel, Radio, Grid, TextField } from '@mui/material';
 
 const today = new Date();
-const tomorrow = new Date(today);
-tomorrow.setDate(today.getDate() + 1);
+const gmtMinus3Offset = 180;
+const newDate = new Date(today.getTime() - gmtMinus3Offset * 60 * 1000);
+const tomorrow = new Date(newDate);
+tomorrow.setDate(newDate.getDate() + 1);
 
 const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
   const [openSaleModal, setOpenSaleModal] = useState(false);
-  const [transferNumber, setTransferNumber] = useState("");
 
   const router = useRouter();
-
-  useEffect(() => {
-    setTransferNumber(localStorage.getItem("bank_number"))
-  }, []);
 
   const handleCloseSaleModal = () => {
     setOpenSaleModal(false);
