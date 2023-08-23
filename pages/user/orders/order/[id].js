@@ -3,21 +3,23 @@ import Layout from '../../../../src/components/UserLayout';
 import { useRouter } from 'next/router';
 import { useState, useEffect, useRef } from 'react';
 import { Container, Grid, List, ListItem, ListItemText, MenuItem, Paper, Select, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
-import { getOrderStateName } from '@/utils';
+import { getOrderPaymentMethodName, getOrderStateName } from '@/utils';
 import LinearProgress from '@mui/material/LinearProgress';
 import ReviewForm from '@/utils/rating/ReviewForm';
 import { getAllReviews, newReview } from '../../../../services/reviewService';
 import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
 import SuccessMessage from '../components/SuccessMessage';
+import TransferDialog from '../components/TransferDialog';
+import { setTransferNumber } from '../../../../services/saleService';
 
-function OrderScreen() {
+const OrderScreen = () => {
     const router = useRouter();
     const orderId = router.query.id;
     const { exito } = router.query;
     const doneSale = router.asPath.includes('exito=true') && exito === 'true';
     const [order, setOrder] = useState({});
-
+    const [isTransferModalOpen, setTransferModalOpen] = useState(false);
     const [orderHasReview, setOrderHasReview] = useState(false);
     const [showReviewForm, setShowReviewForm] = useState(true);
     const [open, setOpen] = useState(false);
@@ -99,6 +101,39 @@ function OrderScreen() {
         setOpen(false);
     };
 
+    const showTransferButton = (order) => {
+
+        if (order?.payment_method == 'TRANSFER') {
+            if (order?.transfer_number == null) {
+                return <Button variant="outlined" size="small" onClick={(e) => {
+                    e.preventDefault();
+                    setTransferModalOpen(true);
+                }}>
+                    Agregar nro. trasferencia
+                </Button>
+            }
+            return <Button variant="outlined" color="secondary" size="small" onClick={(e) => {
+                e.preventDefault();
+                setTransferModalOpen(true);
+            }}>
+                Modificar nro. trasferencia
+            </Button>
+        }
+        return false;
+    }
+
+    const handleCloseTransferModal = () => {
+        setTransferModalOpen(false);
+      };
+
+      const newTransferNumber = (newOrderNumberData) => {
+        setTransferNumber(newOrderNumberData.id_sale, newOrderNumberData.transfer_number)
+            .then(() => {
+                handleCloseTransferModal();
+                setOrder({...order, transfer_number: newOrderNumberData.transfer_number})
+            })
+    }
+
     return (
         <Layout>
             <h1>Pedido Nro {orderId}</h1>
@@ -119,6 +154,7 @@ function OrderScreen() {
                             <Typography style={{ marginBottom: '20px' }} variant="h6">Fecha del pedido: {order?.start_date?.substring(0, 10)}</Typography>
                             {order.finish_date && <Typography style={{ marginBottom: '20px' }} variant="h6">Fecha Entregado: {order?.finish_date?.substring(0, 10)}</Typography>}
                             <Typography style={{ marginBottom: '20px' }} variant="h6">Tipo de pedido: {order?.delivery_type}</Typography>
+                            <Typography style={{ marginBottom: '20px' }} variant="h6">Tipo de pago: {getOrderPaymentMethodName(order?.payment_method)} {showTransferButton(order)}</Typography>
                             <Typography style={{ marginBottom: '20px' }} variant="h6"> Estado: {getOrderStateName(order?.status)}</Typography>
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -157,6 +193,14 @@ function OrderScreen() {
 
                 </Paper>
             </Container>
+            {isTransferModalOpen ? (
+                <TransferDialog
+                    open={isTransferModalOpen}
+                    handleClose={handleCloseTransferModal}
+                    data={order}
+                    handleAdd={newTransferNumber}
+                />
+            ) : null}
         </Layout >
     );
 }

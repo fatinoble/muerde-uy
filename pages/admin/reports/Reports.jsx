@@ -13,6 +13,7 @@ import ReviewScoreQuantityChart from './components/ReviewScoreQuantityChart';
 import ReviewProductChart from './components/ReviewProductChart';
 import Warnings from './components/Warnings';
 import CSVDownloader from '../../../src/components/CSVDownloader'
+import CalendarOrders from './components/CalendarOrders';
 const ProductStockChartWithoutSSR = dynamic(
   import("./components/ProductStockChart"),
   { ssr: false }
@@ -161,7 +162,7 @@ const Reports = () => {
           <OrdersChart orderStatusData={orderStatusData} />
         </div>
       </div>
-
+          <CalendarOrders></CalendarOrders>
       <div className="big-chart">
         <SaleByDateChart initStartDate={getDateFromMonthAgo()} initEndDate={getDateFromToday()} tomorrow={getDateFromTomorrow()} />
       </div>

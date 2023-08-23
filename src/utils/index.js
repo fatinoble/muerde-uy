@@ -22,6 +22,15 @@ const getOrderStateName = (state) => {
   }
 }
 
+const getOrderPaymentMethodName = (paymentMethod) => {
+  if (paymentMethod === 'CASH') {
+    return "Efectivo"
+  }
+  else if (paymentMethod === 'TRANSFER') {
+    return "Trasferencia"
+  }
+}
+
 const isObjectEmpty = (objectName) => {
   for (let prop in objectName) {
     if (objectName.hasOwnProperty(prop)) {
@@ -44,4 +53,4 @@ const getCurrentDateTimeFormatted = () => {
   return `${day}-${month}-${year}-${hours}-${minutes}-${seconds}`;
 }
 
-export { formatDate, UNIT_MEASURES, getOrderStateName, isObjectEmpty, getCurrentDateTimeFormatted };
+export { formatDate, UNIT_MEASURES, getOrderStateName, getOrderPaymentMethodName, isObjectEmpty, getCurrentDateTimeFormatted };
