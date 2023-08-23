@@ -27,6 +27,7 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { getOrderPaymentMethodName, getOrderStateName } from '@/utils';
+import CalendarOrders from '../reports/components/CalendarOrders';
 
 const Orders = () => {
 
@@ -68,7 +69,7 @@ const Orders = () => {
 
   const handleConfirm = async () => {
     try {
-      if(selectedOrder.payment_method == 'TRANSFER' && selectedOrder.transfer_number == null){
+      if (selectedOrder.payment_method == 'TRANSFER' && selectedOrder.transfer_number == null) {
         setOpenPaymentModal(true);
         return;
       }
@@ -153,6 +154,10 @@ const Orders = () => {
         <h1><Receipt className="icon-title" />Pedidos</h1>
       </div>
       <OrderPreparation />
+      <div style={{ margin: '20px 0' }}>
+        <CalendarOrders />
+
+      </div>
       <TableContainer component={Paper} style={{ maxWidth: '500', margin: '0 auto' }}>
         <Table aria-label="My Table">
           <TableHead>
@@ -260,7 +265,7 @@ const Orders = () => {
         )
       }
 
-{
+      {
         openPaymentModal && (
           <Dialog
             open={openPaymentModal}
