@@ -73,7 +73,7 @@ const Register = () => {
             let transferNumber = '';
 
             if (settingsResponse && settingsResponse.settings && settingsResponse.settings.length) {
-                const setting = settingsResponse.settings.filter(setting => setting.key === 'account_number');
+                const setting = settingsResponse.settings.find(setting => setting.key === 'account_number');
                 if (setting) {
                     transferNumber = setting.value || '';
                 }
