@@ -34,7 +34,7 @@ const Login = () => {
                 return response.data;
             })
             .catch(error => console.error('Error:', error.response.data));
-      }
+    }
 
     const handleSubmit = async event => {
         event.preventDefault();
@@ -60,7 +60,15 @@ const Login = () => {
 
         try {
             const response = await findUserByMail(data);
-            const transferNumber =await getTransferNumber();
+            const settingsResponse = await getTransferNumber();
+            let transferNumber = '';
+
+            if (settingsResponse && settingsResponse.settings && settingsResponse.settings.length) {
+                const setting = settingsResponse.settings.filter(setting => setting.key === 'account_number');
+                if (setting) {
+                    transferNumber = setting.value || '';
+                }
+            }
             if (response.statusText == "OK" && response.data.role == "USER") {
                 console.log("response login    ", response.data);
                 localStorage.setItem('token_login_user', response.data.token);
@@ -70,7 +78,7 @@ const Login = () => {
                 localStorage.setItem('user_mail', response.data.mail);
                 localStorage.setItem('user_address', response.data.address);
                 localStorage.setItem('user_phone', response.data.phone);
-                localStorage.setItem('account_number', transferNumber.settings.filter(setting => setting.key === 'account_number')[0].value);
+                localStorage.setItem('account_number', transferNumber);
                 handleMessage("Login correcto, bienvenid@ " + response.data.name + "!", "success");
                 router.push('/product/catalog')
             } else {
@@ -89,7 +97,7 @@ const Login = () => {
 
     return (
         <Grid container direction="row">
-            <Grid item xs={6} sx={{ backgroundColor: '#e28d8d'}}>
+            <Grid item xs={6} sx={{ backgroundColor: '#e28d8d' }}>
                 <Container component="main" maxWidth="xs">
                     <Box
                         sx={{
@@ -100,7 +108,7 @@ const Login = () => {
                         }}
                     >
                         <img src="/images/muerde_logo_small.png" alt="Muerde logo" />
-                        <Typography component="h1" variant="h5" sx={{ color: '#fff', fontSize: '60px', textAlign: 'left', fontFamily: 'Poppins, sans-serif', fontWeight: 'bold',mt: 'auto' }}>
+                        <Typography component="h1" variant="h5" sx={{ color: '#fff', fontSize: '60px', textAlign: 'left', fontFamily: 'Poppins, sans-serif', fontWeight: 'bold', mt: 'auto' }}>
                             Inicia sesión
                         </Typography>
                         <Typography component="h1" variant="h5" sx={{ color: '#fff', fontSize: '25px', textAlign: 'left', fontFamily: 'Poppins, sans-serif' }}>
