@@ -35,7 +35,7 @@ const Register = () => {
                 return response.data;
             })
             .catch(error => console.error('Error:', error.response.data));
-      }
+    }
 
     const handleSubmit = async event => {
         event.preventDefault();
@@ -69,7 +69,15 @@ const Register = () => {
 
         try {
             const response = await createUser(data);
-            const transferNumber =await getTransferNumber();
+            const settingsResponse = await getTransferNumber();
+            let transferNumber = '';
+
+            if (settingsResponse && settingsResponse.settings && settingsResponse.settings.length) {
+                const setting = settingsResponse.settings.find(setting => setting.key === 'account_number');
+                if (setting) {
+                    transferNumber = setting.value || '';
+                }
+            }
             if (response.statusText == "OK") {
                 localStorage.setItem('token_registration_user', response.data.token);
                 localStorage.setItem('user_id', response.data.id_user);
@@ -78,7 +86,7 @@ const Register = () => {
                 localStorage.setItem('user_mail', response.data.mail);
                 localStorage.setItem('user_address', response.data.address);
                 localStorage.setItem('user_phone', response.data.phone);
-                localStorage.setItem('account_number', transferNumber.settings.filter(setting => setting.key === 'account_number')[0].value);
+                localStorage.setItem('account_number', transferNumber);
                 handleMessage("Usuario creado con éxito, bienvenid@ " + response.data.name + "!", "success");
                 router.push('/product/catalog')
             } else {
