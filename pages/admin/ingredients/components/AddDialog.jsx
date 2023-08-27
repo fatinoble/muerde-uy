@@ -61,7 +61,7 @@ const AddDialog = ({ fetchIngredients }) => {
             value={newIngredient.name}
             onChange={(e) => {
               const value = e.target.value;          
-              if (/^[a-zA-Z\s]*$/.test(value)) {
+              if (/^[a-zA-ZáéíóúÁÉÍÓÚ\s]*$/.test(value)) {
                 setNewIngredient((prevIngredient) => ({
                   ...prevIngredient,
                   name: value,
