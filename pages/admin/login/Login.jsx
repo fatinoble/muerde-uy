@@ -37,11 +37,6 @@ const Login = () => {
             return;
         }
 
-        if (!/(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/.test(password)) {
-            handleMessage("La contraseña debe tener al menos 8 caracteres, incluyendo al menos un número y un carácter especial.", "error");
-            return;
-        }
-
         const data = {
             mail: mail,
             password: password,
@@ -49,7 +44,7 @@ const Login = () => {
 
         try {
             const response = await findUserByMail(data);
-            if (response.statusText == "OK" && response.data.role == "ADMIN") {
+            if (response.data && response.data.role == "ADMIN") {
                 localStorage.setItem('token_login_admin', response.data.token);
                 localStorage.setItem('user_role', response.data.role);
                 localStorage.setItem('user_name', response.data.name);
@@ -57,10 +52,13 @@ const Login = () => {
                 handleMessage("Login correcto, bienvenid@ " + response.data.name + "!", "success");
                 router.push('/admin/reports')
             } else {
-                handleMessage("Hubo un error al iniciar sesión. Por favor, intenta de nuevo.", "error");
-            }
+                if (response.data.error.status == 404) {
+                    handleMessage("No se encontró usuario, por favor verificar mail y contraseña.", "error");
+                } else {
+                    handleMessage("Contraseña incorrecta, por favor intente nuevamente.", "error");
+                }            }
         } catch (error) {
-            console.error('Error:', error);
+            console.log(`Error Admin - Login.jsx :: `, error);
             handleMessage('Hubo un error al iniciar sesión. Por favor, intenta de nuevo.', "error");
         }
     }

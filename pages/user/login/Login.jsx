@@ -83,7 +83,7 @@ const Login = () => {
                 }
             }
         } catch (error) {
-            console.log(`Error - Login.jsx :: `, error);
+            console.log(`Error User - Login.jsx :: `, error);
             handleMessage('Hubo un error al iniciar sesión. Por favor, intenta de nuevo.', "error");
         }
     }
