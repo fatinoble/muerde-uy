@@ -40,7 +40,7 @@ const AddDialog = ({ fetchIngredients }) => {
   const validateExistingIngredient = async (newIngredient) => {
     const ingredients = await fetchIngredients();
     if (ingredients) { 
-      const existingIngredient = ingredients.find(ing => ing.name === newIngredient.name);
+      const existingIngredient = ingredients.find(ing => ing.name.toLowerCase() === newIngredient.name.toLowerCase());
       return existingIngredient != undefined;
     }
     return false; 
