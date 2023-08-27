@@ -46,6 +46,7 @@ const Login = () => {
             const response = await findUserByMail(data);
             if (response.data && response.data.role == "ADMIN") {
                 localStorage.setItem('token_login_admin', response.data.token);
+                localStorage.setItem('user_id', response.data.id_user);
                 localStorage.setItem('user_role', response.data.role);
                 localStorage.setItem('user_name', response.data.name);
                 localStorage.setItem('user_mail', response.data.mail);
