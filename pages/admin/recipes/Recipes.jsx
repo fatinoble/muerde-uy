@@ -129,7 +129,6 @@ const Recipes = () => {
     },
   }));
 
-  console.log(recipes)
   return (
     <Layout>
       <Head style={{ marginBottom: '10px' }}>

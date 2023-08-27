@@ -24,7 +24,6 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
 
   const handleDoSale = async () => {
     try {
-      console.log("sale to be excecuted ", newSale)
       const s = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale`, {
         sale: newSale,
       });

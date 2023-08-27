@@ -35,7 +35,6 @@ const needle = (value, stockIndicators, cx, cy, iR, oR, color) => {
 };
 const StockPieNeedleChart = ({ ingredients = [], getStockIndicatorInfo = () => { }, stockIndicators }) => {
   const [selectedIngredient, setSelectedIngredient] = useState(ingredients[0] || {});
-  console.log("selected ingredientt ", selectedIngredient)
   const handleIngredientChange = (event) => {
     const selectedIngredient = event.target.value;
     setSelectedIngredient(selectedIngredient);

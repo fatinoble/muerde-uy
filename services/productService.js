@@ -96,7 +96,6 @@ export const createProduct = (newProduct = {}) => {
     },
   })
     .then(response => {
-      console.log("response data: ", response.data);
       return response.data;
     })
     .catch(error => console.error('Error:', error.response.data));

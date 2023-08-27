@@ -71,7 +71,6 @@ const Clients = () => {
   };
 
   const editUser = (editedUser) => {
-    console.log("editedUser ", editedUser);
     modifyUser(editedUser)
       .then(() => {
         setUsers(users.map(user => user.id === editedUser.id ? editedUser : user));

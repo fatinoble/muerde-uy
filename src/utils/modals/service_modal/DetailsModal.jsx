@@ -2,7 +2,6 @@ import { OneKPlusOutlined } from '@mui/icons-material';
 import { Modal, Box, Typography, Button } from '@mui/material';
 
 const DetailsModal = ({ open, handleClose, data }) => {
-    console.log(data)
     return (
         <Modal open={open} onClose={handleClose}>
             <Box

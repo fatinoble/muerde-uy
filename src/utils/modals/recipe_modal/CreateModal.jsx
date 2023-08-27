@@ -110,11 +110,6 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     errorMessage = "Solo se permiten letras";
                 }
                 break;
-            case "instructions":
-                if (!/^[a-zA-Z0-9áéíóúÁÉÍÓÚ\s]+$/.test(value)) {
-                    errorMessage = "Solo se permiten letras y números";
-                }
-                break;
             case "preparation_time_minutes":
                 if (!/^(0|[1-9]\d*)$/.test(value)) {
                     errorMessage = "Solo se permiten números";

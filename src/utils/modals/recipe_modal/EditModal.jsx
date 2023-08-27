@@ -51,11 +51,6 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                     errorMessage = "Solo se permiten letras";
                 }
                 break;
-            case "instructions":
-                if (!/^[a-zA-Z0-9áéíóúÁÉÍÓÚ\s]+$/.test(value)) {
-                    errorMessage = "Solo se permiten letras y números";
-                }
-                break;
             case "preparationTimeMinutes":
                 if (!/^(0|[1-9]\d*)$/.test(value)) {
                     errorMessage = "Solo se permiten números";

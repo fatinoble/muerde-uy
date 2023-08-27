@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal, TextField, Box, Typography } from '@mui/material';
 
 function EditModal({ open, handleClose, user, handleUpdate }) {
-    console.log("user que llega al edit modal ", user);
     const [userData, setUserData] = useState(user);
 
     useEffect(() => {
