@@ -29,6 +29,7 @@ const Register = () => {
     const handleClose = () => {
         setOpen(false);
     };
+
     const getTransferNumber = () => {
         return axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/setting`)
             .then(response => {
@@ -39,6 +40,7 @@ const Register = () => {
 
     const handleSubmit = async event => {
         event.preventDefault();
+        
         if (!name || !mail || !address || !phone || !password) {
             handleMessage("Por favor, completa todos los campos.", "error");
             return;
@@ -64,7 +66,8 @@ const Register = () => {
             mail: mail,
             password: password,
             address: address,
-            phone: phone
+            phone: phone,
+            role: 'USER'
         };
 
         try {
