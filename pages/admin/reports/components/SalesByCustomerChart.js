@@ -43,7 +43,7 @@ const SalesByCustomerChart = ({ initStartDate, initEndDate, tomorrow }) => {
         <Typography variant="h6" component="h2" gutterBottom>
           {getDateLabel()}
         </Typography>
-        {salesData && salesData.length &&
+        {salesData && salesData.length > 0 &&
           <CSVDownloader
             jsonData={salesData}
             fileName={`ventas-clientes-${startDate}-al-${endDate}`}

@@ -75,7 +75,7 @@ const StockChart = ({ ingredients = [] }) => {
                   </div>
                 </Tooltip>
               </div>
-              {ingredientsDataForCSVDownload && ingredientsDataForCSVDownload.length &&
+              {ingredientsDataForCSVDownload && ingredientsDataForCSVDownload.length > 0 &&
                 <CSVDownloader
                   jsonData={ingredientsDataForCSVDownload}
                   fileName="stock-ingredientes"

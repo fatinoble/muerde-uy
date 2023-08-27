@@ -52,7 +52,7 @@ const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow, getRev
         <Typography variant="h6" component="h2" gutterBottom>
           {getDateLabel()}
         </Typography>
-        {reviewsDataForCSVDownload && reviewsDataForCSVDownload.length &&
+        {reviewsDataForCSVDownload && reviewsDataForCSVDownload.length > 0 &&
           <CSVDownloader
             jsonData={reviewsDataForCSVDownload}
             fileName={`reviews-${startDate}-al-${endDate}`}

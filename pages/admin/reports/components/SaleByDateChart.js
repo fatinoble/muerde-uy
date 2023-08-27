@@ -66,7 +66,7 @@ const SalesByDateChart = ({ initStartDate, initEndDate, tomorrow }) => {
             <Typography variant="h6" component="h2" gutterBottom className="chartTitle">
               {getDateLabel()}
             </Typography>
-            {salesData && salesData.length &&
+            {salesData && salesData.length > 0 &&
               <CSVDownloader
                 jsonData={salesData}
                 fileName={`ventas-ganancias-${startDate}-al-${endDate}`}
