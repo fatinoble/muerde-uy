@@ -13,13 +13,14 @@ const SalesByDateChart = ({ initStartDate, initEndDate, tomorrow }) => {
     fetchSalesData(initStartDate, initEndDate);
   }, []);
 
-  const fetchSalesData = async (start, end) => {
-    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/sales_earnings_per_day?start=${start}&end=${tomorrow}`);
+  const fetchSalesData = async (start, end, isFromFilter) => {
+    const endDateForFetching = isFromFilter ? end : tomorrow;
+    const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/sales_earnings_per_day?start=${start}&end=${endDateForFetching}`);
     setSalesData(data.sales_earnings_per_day);
   };
 
   const handleFilterClick = () => {
-    fetchSalesData(startDate, endDate);
+    fetchSalesData(startDate, endDate, true);
   };
 
   const getDateLabel = () => {

@@ -13,9 +13,10 @@ const SalesByProductChart = ({ initStartDate, initEndDate, tomorrow }) => {
     fetchSalesData(initStartDate, initEndDate);
   }, []);
 
-  const fetchSalesData = async (start, end) => {
+  const fetchSalesData = async (start, end, isFromFilter) => {
     try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/total_product?start=${start}&end=${tomorrow}`);
+      const endDateForFetching = isFromFilter ? end : tomorrow;
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/total_product?start=${start}&end=${endDateForFetching}`);
       const productWithSales = data.sales_by_product?.filter(product => product.sales_count > 0);
       setSalesData(productWithSales);
     } catch (error) {
@@ -24,7 +25,7 @@ const SalesByProductChart = ({ initStartDate, initEndDate, tomorrow }) => {
   };
 
   const handleFilterClick = () => {
-    fetchSalesData(startDate, endDate);
+    fetchSalesData(startDate, endDate, true);
   };
 
   const getDateLabel = () => {

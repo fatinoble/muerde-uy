@@ -13,9 +13,10 @@ const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow, getRev
     fetchReviewsScoreData(initStartDate, initEndDate);
   }, []);
 
-  const fetchReviewsScoreData = async (start, end) => {
+  const fetchReviewsScoreData = async (start, end, isFromFilter) => {
     try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/review/score?start=${start}&end=${tomorrow}`);
+      const endDateForFetching = isFromFilter ? end : tomorrow;
+      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/review/score?start=${start}&end=${endDateForFetching}`);
       setReviewsData(data.review_score_quantity);
     } catch (error) {
       console.error('Error fetching reviews score data:', error);
@@ -23,7 +24,7 @@ const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow, getRev
   };
 
   const handleFilterClick = () => {
-    fetchReviewsScoreData(startDate, endDate);
+    fetchReviewsScoreData(startDate, endDate, true);
   };
 
   const getDateLabel = () => {
