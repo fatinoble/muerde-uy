@@ -116,11 +116,6 @@ const Clients = () => {
                 <TableCell>{user.address}</TableCell>
                 <TableCell>{user.creation_date}</TableCell>
                 <TableCell>{user.role}</TableCell>
-                <TableCell>
-                  <Button variant="contained" color="primary" onClick={() => handleEdit(user)} style={{ backgroundColor: 'rgb(168, 118, 88)', color: 'white' }}>
-                    Editar
-                  </Button>
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>
