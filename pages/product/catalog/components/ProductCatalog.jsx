@@ -48,9 +48,18 @@ const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
     if (!products?.length) {
       fetchProducts();
     }
-    const allTags = [...new Set(products.flatMap((product) => product.tags))];
-    setAllTags(allTags);
   }, [])
+
+  const getUniqueProductTags = (products = []) => {
+    const uniqueTags = new Set();
+
+    products.forEach(product => {
+      const tags = product.tags?.split(',')?.map(tag => tag?.trim());
+      tags.forEach(tag => uniqueTags.add(tag));
+    });
+
+    return Array.from(uniqueTags);
+  }
 
   const fetchProducts = async () => {
     try {
@@ -58,6 +67,8 @@ const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
       const data = response.data;
       const catalogProducts = data.Products.filter(product => product.catalog_id !== undefined && product.catalog_id !== null && product.status === 'ENABLED');
       setProducts(catalogProducts);
+      const allTags = getUniqueProductTags(catalogProducts);
+      setAllTags(allTags);
     } catch (error) {
       console.error('Error fetching products:', error);
       setError('Algo salió mal');
