@@ -25,6 +25,7 @@ const Ingredients = () => {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient`);
       const data = response.data;
       setIngredients(data.ingredients);
+      return data.ingredients;
     } catch (error) {
       console.error('Error fetching ingredients:', error);
     }

@@ -4,7 +4,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import {UNIT_MEASURES} from '../../../../src/utils'
 
 const AddDialog = ({ fetchIngredients }) => {
-
+  const [existingIngredientError, setexistingIngredientError] = useState('');
   const [openAddModal, setOpenAddModal] = useState(false);
   const [newIngredient, setNewIngredient] = useState({
     name: '',
@@ -13,6 +13,7 @@ const AddDialog = ({ fetchIngredients }) => {
 
   const handleCloseAddModal = () => {
     setOpenAddModal(false);
+    setexistingIngredientError('');
     setNewIngredient({
       name: '',
       unit: '',
@@ -20,16 +21,30 @@ const AddDialog = ({ fetchIngredients }) => {
   };
 
   const handleAddIngredient = async () => {
-    try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient`, {
-        ingredient: newIngredient,
-      });
-      fetchIngredients();
-      handleCloseAddModal();
-    } catch (error) {
-      console.error('Error adding ingredient:', error);
+    const existIngredient = await validateExistingIngredient(newIngredient)
+    if (!existIngredient) {
+      try {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient`, {
+          ingredient: newIngredient,
+        });
+        fetchIngredients();
+        handleCloseAddModal();
+      } catch (error) {
+        console.error('Error adding ingredient:', error);
+      }
+    } else {
+      setexistingIngredientError('Ya existe un ingrediente con ese nombre');
     }
   };
+
+  const validateExistingIngredient = async (newIngredient) => {
+    const ingredients = await fetchIngredients();
+    if (ingredients) { 
+      const existingIngredient = ingredients.find(ing => ing.name === newIngredient.name);
+      return existingIngredient != undefined;
+    }
+    return false; 
+  };  
 
   return (
     <>
@@ -56,6 +71,7 @@ const AddDialog = ({ fetchIngredients }) => {
             fullWidth
             margin="normal"
             variant="outlined"
+            helperText={existingIngredientError}
           />
           <Select
             label="Unidad"
