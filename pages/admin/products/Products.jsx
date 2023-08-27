@@ -1,6 +1,6 @@
 import Layout from '../../../src/components/AdminLayout';
 import React, { useState, useEffect } from "react";
-import { Button, Switch } from '@mui/material';
+import { Button, Switch, Tooltip } from '@mui/material';
 import { Box } from '@mui/system';
 import DetailsModal from '../../../src/utils/modals/product_modal/DetailsModal';
 import EditModal from '../../../src/utils/modals/product_modal/EditModal';
@@ -148,6 +148,17 @@ const Products = () => {
               />
               <CardContent>
                 <h1>{product.title}</h1>
+                <Tooltip title={product.is_out_of_stock == true ? 'Por no tener stock de ingredientes, no está disponible para la venta.' : ''}>
+                  <h2 style={{
+                    padding: '4px 12px',
+                    borderRadius: '16px',
+                    width: 'fit-content',
+                    backgroundColor: product.is_out_of_stock == false ? 'rgb(216, 130, 130)' : 'grey',
+                    color: 'white'
+                  }}>
+                    {product.is_out_of_stock == false ? "En stock" : "Fuera de stock"}
+                  </h2>
+                </Tooltip>
                 <span className="product-price">${product.price}</span>
                 <CardActions style={{ padding: 0 }}>
                   <StyledButton
@@ -170,7 +181,7 @@ const Products = () => {
                     Editar producto
                   </StyledButton>
                   <Switch checked={product.status === 'ENABLED'} onChange={() => toggleProductStatus(product)} />
-                  {product.status === 'ENABLED' ? <span>En Stock</span> : <span>Sin Stock</span>}
+                  {product.status === 'ENABLED' ? <span>Activo</span> : <span>Inactivo</span>}
                 </CardActions>
               </CardContent>
             </Box>
