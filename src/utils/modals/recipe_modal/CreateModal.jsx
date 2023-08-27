@@ -133,7 +133,17 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
 
     const isAnyQuantity = () => {
         return Object.values(ingredientQuantities).some((ingredient) => ingredient.quantity !== "");
-      };
+    };
+
+    const isMismatchBetweenQuantityAndUnit = () => {
+        for (let id in ingredientQuantities) {
+          const { quantity, unit } = ingredientQuantities[id];
+          if ((quantity && !unit) || (unit && !quantity)) {
+            return true;
+          }
+        }
+        return false;
+    };
 
     return (
         <Modal open={open} onClose={handleClose}>
@@ -243,7 +253,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                             borderColor: 'rgb(216, 130, 130)',
                         },
                     }}
-                    disabled={isAnyError() || !isAnyQuantity()}
+                    disabled={isAnyError() || !isAnyQuantity() || isMismatchBetweenQuantityAndUnit()}
                 >
                     Dar de alta
                 </Button>
