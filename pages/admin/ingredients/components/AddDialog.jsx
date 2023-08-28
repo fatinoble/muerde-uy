@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, MenuItem, Select } from '@mui/material';
-import {UNIT_MEASURES} from '../../../../src/utils'
+import { Button, InvertedButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, MenuItem, Select } from '@mui/material';
+import { UNIT_MEASURES } from '../../../../src/utils'
+import { styled } from '@mui/system';
 
 const AddDialog = ({ fetchIngredients }) => {
 
@@ -31,12 +32,27 @@ const AddDialog = ({ fetchIngredients }) => {
     }
   };
 
+  const InvertedButton = styled(Button)(({ theme }) => ({
+    marginBottom: theme.spacing(2),
+    borderRadius: '10px',
+    backgroundColor: '#ffff',
+    color: 'rgb(216, 130, 130)',
+    borderColor: 'rgb(216, 130, 130)',
+    '&:hover': {
+      backgroundColor: 'rgb(216, 130, 130)',
+      color: 'white',
+      borderColor: 'rgb(216, 130, 130)',
+    },
+  }));
+
   return (
     <>
-      <Button variant="contained" color="primary" onClick={() => setOpenAddModal(true)}>Agregar nuevo ingrediente</Button>
+      <div className="add-title">
+        <InvertedButton className="add-title" variant="contained" color="primary" onClick={() => setOpenAddModal(true)}>Agregar nuevo ingrediente</InvertedButton>
+      </div>
 
       <Dialog open={openAddModal} onClose={handleCloseAddModal}>
-        <DialogTitle>Agregar nuevo ingrediente</DialogTitle>
+        <DialogTitle >Agregar nuevo ingrediente</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Complete los campos para agregar un nuevo ingrediente:
@@ -45,7 +61,7 @@ const AddDialog = ({ fetchIngredients }) => {
             label="Nombre"
             value={newIngredient.name}
             onChange={(e) => {
-              const value = e.target.value;          
+              const value = e.target.value;
               if (/^[a-zA-Z\s]*$/.test(value)) {
                 setNewIngredient((prevIngredient) => ({
                   ...prevIngredient,

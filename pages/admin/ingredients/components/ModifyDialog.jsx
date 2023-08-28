@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import EditIcon from '@mui/icons-material/Edit';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, MenuItem, Select } from '@mui/material';
 
 const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
@@ -30,7 +31,9 @@ const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
 
   return (
     <>
-      <Button variant="outlined" color="primary" onClick={() => setOpenModifyModal(true)}>Modificar</Button>
+      <Button variant="outlined" className="action-button" color="primary" style={{ color: 'white', backgroundColor: 'rgba(216, 130, 130, 0.737)' }} onClick={() => setOpenModifyModal(true)}>
+        <EditIcon style={{ color: 'white' }}></EditIcon>
+      </Button>
 
       <Dialog open={openModifyModal} onClose={handleCloseModifyModal}>
         <DialogTitle>{`Modificar ingrediente ${ingredient.name}`}</DialogTitle>
@@ -42,7 +45,7 @@ const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
             label="Nombre"
             value={modifyIngredient.name}
             onChange={(e) => {
-              const value = e.target.value;          
+              const value = e.target.value;
               if (/^[a-zA-Z\s]*$/.test(value)) {
                 setModifyIngredient((prevIngredient) => ({
                   ...prevIngredient,
