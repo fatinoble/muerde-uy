@@ -35,7 +35,7 @@ const Recipes = () => {
   const editRecipe = (editedRecipe) => {
     modifyRecipe(editedRecipe)
       .then(() => {
-        setRecipes(recipes.map(recipe => recipe.id === editedRecipe.id ? editedRecipe : recipe));
+        setRecipes(recipes.map(recipe => recipe.id_recipe === editedRecipe.id_recipe ? editedRecipe : recipe));
         setEditModalOpen(false);
       })
   }
