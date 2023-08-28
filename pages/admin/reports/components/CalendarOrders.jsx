@@ -12,9 +12,6 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./index.css";
 import { Modal } from '@mui/material';
 import { Select, MenuItem } from '@mui/material';
-import { Label } from '@mui/icons-material';
-
-
 
 const locales = {
     es
@@ -136,7 +133,7 @@ const CalendarOrders = () => {
         <div style={{backgroundColor: 'white'}}>
 
         
-            <label id='lbl-filter'>Filtrar por estado</label>
+            <label className="featuredTitle" id='lbl-filter'>Filtrar por estado</label>
             <Select
                 labelId="lbl-filter"
                 value={selectedStatusFilter || ''}
@@ -144,12 +141,12 @@ const CalendarOrders = () => {
                 displayEmpty
                 inputProps={{ 'aria-label': 'Filter by status' }}
             >
-                <MenuItem value="">All</MenuItem>
-                <MenuItem value="FINISHED">Finished</MenuItem>
-                <MenuItem value="TODO">Todo</MenuItem>
-                <MenuItem value="WIP">Work in progress</MenuItem>
-                <MenuItem value="DONE_PICK_UP">Done Pick-up</MenuItem>
-                <MenuItem value="DONE_DELIVERY">Done Delivery</MenuItem>
+                <MenuItem value="">Todos</MenuItem>
+                <MenuItem value="TODO">Pendiente</MenuItem>
+                <MenuItem value="WIP">En proceso</MenuItem>
+                <MenuItem value="DONE_PICK_UP">Listo para retiro</MenuItem>
+                <MenuItem value="DONE_DELIVERY">Listo para delivery</MenuItem>
+                <MenuItem value="FINISHED">Finalizado</MenuItem>
             </Select>
             <Calendar
                 localizer={localizer}

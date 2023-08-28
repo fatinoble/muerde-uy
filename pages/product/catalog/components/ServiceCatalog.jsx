@@ -1,7 +1,9 @@
-import React, { useEffect, useMemo, useState, memo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import ServiceCard from './ServiceCard';
-import { Grid } from '@mui/material';
 import axios from 'axios';
+import { Snackbar, Typography, Box, } from '@mui/material';
+import { Alert } from '@mui/material';
+import { CircularProgress } from '@mui/material';
 
 
 const ServiceCatalog = ({ searchQuery = '', selectedTags }) => {
@@ -50,20 +52,43 @@ const ServiceCatalog = ({ searchQuery = '', selectedTags }) => {
       setIsLoading(false);
     }
   };
+  
+  const handleSnackbarClose = () => {
+    setError(null);
+  };
+
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+        <Typography variant="body1" sx={{ marginLeft: '0.5rem' }}>
+          Cargando servicios...
+        </Typography>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Snackbar open={Boolean(error)} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <Alert severity="error" onClose={handleSnackbarClose}>
+          {error}
+        </Alert>
+      </Snackbar>
+    );
+  }
 
   return (
-    <Grid container spacing={3} sx={{ display: 'flex', alignItems: 'stretch' }}>
+    <div className="product-catalog">
       {filteredServices.map((service) => (
-        <Grid item key={service.id} xs={12} sm={6} md={4}>
           <a className="product-card-link" href={`/product/detailService?id=${service.id_service}`} key={service.id_service}>
-            <ServiceCard
-              imageSrc={service.image || '/images/unavailable.png'}
-              title={service.title}
-              price={service.price}
-            /></a>
-        </Grid>
+          <ServiceCard
+            imageSrc={service.image || '/images/unavailable.png'}
+            title={service.title}
+            price={service.price}
+          /></a>
       ))}
-    </Grid>
+    </div>
   );
 };
 

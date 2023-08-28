@@ -22,7 +22,9 @@ import {
   TableRow,
   Paper,
   TablePagination,
+  Tooltip
 } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -191,7 +193,16 @@ const Orders = () => {
                 {order.status == 'FINISHED' ? <TableCell>{order.user_date.substring(0, 10)}</TableCell>
                   : <TableCell style={{ color: getCellColor(order.user_date) }}>{order.user_date.substring(0, 10)}</TableCell>}
                 <TableCell>${order.total_earn_cost}</TableCell>
-                <TableCell>{getOrderPaymentMethodName(order.payment_method)}</TableCell>
+                {order.payment_method === "CASH"
+                  ?
+                  <TableCell>{getOrderPaymentMethodName(order.payment_method)}</TableCell>
+                  :
+                  <TableCell style={{ color: order.transfer_number === null ? 'red' : 'green' }}>{getOrderPaymentMethodName(order.payment_method)}
+                    <Tooltip title={order.transfer_number == null ? "Aún no se realizó la transferencia" : "Nro. transferencia: " + order.transfer_number}>
+                      <InfoIcon style={{ color: 'rgb(216, 130, 130)' }} />
+                    </Tooltip>
+                  </TableCell>
+                }
                 <TableCell>
                   <Select
                     value={order.status}

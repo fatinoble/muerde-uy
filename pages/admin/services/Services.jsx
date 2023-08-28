@@ -1,11 +1,11 @@
 import Layout from '../../../src/components/AdminLayout';
 import React, { useState, useEffect } from "react";
-import { Button, Paper, Switch } from '@mui/material';
+import { Button, Switch, Card, CardContent, CardMedia, CardActions  } from '@mui/material';
 import { styled, Box } from '@mui/system';
 import DetailsModal from '../../../src/utils/modals/service_modal/DetailsModal';
 import EditModal from '../../../src/utils/modals/service_modal/EditModal';
 import CreateModal from '../../../src/utils/modals/service_modal/CreateModal';
-import { getAllServices, modifyService, createService, deleteService } from '../../../services/serviceService';
+import { getAllServices, modifyService, createService } from '../../../services/serviceService';
 import CategoryIcon from '@mui/icons-material/Category';
 import Head from 'next/head';
 
@@ -86,35 +86,42 @@ const Services = () => {
     return <p>Cargando servicios...</p>;
   }
 
-  const ServicePaper = styled(Paper)(({ theme, status }) => ({
+  const ServiceContainer = styled('div')({
+    maxHeight: '100%',
+    overflowY: 'auto',
+  });
+
+  const StyledCard = styled(Card)(({ theme, status }) => ({
     borderRadius: '10px',
     borderColor: status === 'ENABLED' ? 'brown' : 'lightgrey',
-    padding: theme.spacing(2),
     marginBottom: theme.spacing(2),
     background: status === 'ENABLED' ? 'white' : 'lightgrey',
-    color: status === 'ENABLED' ? '#black' : 'grey'
   }));
 
   const StyledButton = styled(Button)(({ theme, status }) => ({
     borderRadius: '10px',
-    borderColor: status === 'ENABLED' ? 'beige' : 'lightgrey',
-    backgroundColor: status === 'ENABLED' ? '#f1e5d5' : 'lightgrey',
-    color: status === 'ENABLED' ? 'black' : 'grey',
+    borderColor: status === 'ENABLED' ? 'rgb(216, 130, 130)' : 'lightgrey',
+    backgroundColor: status === 'ENABLED' ? 'white' : 'lightgrey',
+    color: status === 'ENABLED' ? 'rgb(216, 130, 130)' : 'grey',
+    marginRight: theme.spacing(1),
+    marginTop: theme.spacing(2),
     '&:hover': {
-      borderColor: status === 'ENABLED' ? 'brown' : 'grey',
-      backgroundColor: status === 'ENABLED' ? 'fff' : 'lightgrey',
+      borderColor: status === 'ENABLED' ? 'white' : 'grey',
+      backgroundColor: status === 'ENABLED' ? 'rgb(216, 130, 130)' : 'lightgrey',
+      color: 'white'
     },
   }));
 
   const InvertedButton = styled(Button)(({ theme }) => ({
     marginBottom: theme.spacing(2),
     borderRadius: '10px',
-    backgroundColor: 'beige',
     backgroundColor: '#ffff',
-    color: 'black',
-    borderColor: 'black',
+    color: 'rgb(216, 130, 130)',
+    borderColor: 'rgb(216, 130, 130)',
     '&:hover': {
-      backgroundColor: 'f1e5d5',
+      backgroundColor: 'rgb(216, 130, 130)',
+      color: 'white',
+      borderColor: 'rgb(216, 130, 130)',
     },
   }));
 
@@ -129,49 +136,64 @@ const Services = () => {
       <Box display="flex" justifyContent="center" alignItems="center">
         <InvertedButton variant="outlined" onClick={handleOpenCreateModal}>Nuevo servicio</InvertedButton>
       </Box>
-      {services.map((service) => (
-        <ServicePaper elevation={3} key={service.id_service} status={service.status}>
-          <div className="small-image-container">
-            <img
-              className="service-image-small"
-              src={service.image ? service.image : '/images/unavailable.png'} alt={service.title}
-              style={{ width: '300px' }}
-            ></img>
-          </div>
-          <div className="price-name-container">
-            <h1 className="service-name"> {service.title} </h1>
-            <span className="service-price">${service.price}</span>
-          </div>
-          <div className="service-admin-actions-container">
-            <StyledButton status={service.status} variant="outlined" onClick={() => handleOpen(service)}>
-              Ver detalles
-            </StyledButton>
-            {selectedService ? (
-              <DetailsModal open={open} handleClose={handleClose} data={selectedService} />
-            ) : null}
-            <StyledButton status={service.status} variant="outlined" onClick={() => { setServiceToEdit(service); setEditModalOpen(true); }}>
-              Editar servicio
-            </StyledButton>
-            <Switch checked={service.status === 'ENABLED'} onChange={() => toggleServiceStatus(service)} />
-          </div>
-        </ServicePaper>
-      ))}
-      {editModalOpen ? (
+      <ServiceContainer>
+        {services.map((service) => (
+          <StyledCard elevation={3} key={service.id_service} status={service.status}>
+            <Box display="flex">
+              <CardMedia
+                component="img"
+                image={service.image ? service.image : '/images/unavailable.png'}
+                alt={service.title}
+                style={{ width: '300px' }}
+              />
+              <CardContent>
+                <h1>{service.title}</h1>
+                <span className="product-price">${service.price}</span>
+                <CardActions style={{ padding: 0 }}>
+                  <StyledButton
+                    status={service.status}
+                    variant="outlined"
+                    onClick={() => handleOpen(service)}
+                  >
+                    Ver detalles
+                  </StyledButton>
+
+                  {selectedService ? (
+                    <DetailsModal open={open} handleClose={handleClose} data={selectedService} />
+                  ) : null}
+
+                  <StyledButton
+                    status={service.status}
+                    variant="outlined"
+                    onClick={() => { setServiceToEdit(service); setEditModalOpen(true); }}
+                    >
+                    Editar servicio
+                  </StyledButton>
+                  <Switch checked={service.status === 'ENABLED'} onChange={() => toggleServiceStatus(service)} />
+                  {service.status === 'ENABLED' ? <span>En Stock</span> : <span>Sin Stock</span>}
+                </CardActions>
+              </CardContent>
+            </Box>
+          </StyledCard>
+        ))}
+          </ServiceContainer>
+      {
+            editModalOpen?(
         <EditModal
-          open={editModalOpen}
-          handleClose={() => setEditModalOpen(false)}
-          data={serviceToEdit}
-          handleInputChange={handleInputChange}
-          handleUpdate={editService}
+          open = { editModalOpen }
+          handleClose = {() => setEditModalOpen(false)}
+        data={serviceToEdit}
+        handleInputChange={handleInputChange}
+        handleUpdate={editService}
         />
       ) : null}
-      {isCreateModalOpen ? (
-        <CreateModal
-          open={isCreateModalOpen}
-          handleClose={handleCloseCreateModal}
-          handleAdd={newService}
-        />
-      ) : null}
+        {isCreateModalOpen ? (
+          <CreateModal
+            open={isCreateModalOpen}
+            handleClose={handleCloseCreateModal}
+            handleAdd={newService}
+          />
+        ) : null}
     </Layout>
   );
 };
