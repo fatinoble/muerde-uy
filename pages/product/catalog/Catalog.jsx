@@ -49,21 +49,23 @@ const Catalog = () => {
         <div className="actions-container">
           <div className="actions-filter-container">
             <Search handleSearchChange={handleSearchChange} searchQuery={searchQuery} />
-                <TagFilter allTags={allTags} selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => handleClearFilters()}
-                  sx={{
-                    borderRadius: '1rem',
-                    textTransform: 'none',
-                    fontWeight: 'bold',
-                    fontSize: '10px',
-                    backgroundColor: '#E28D8D'
-                  }}
-                >
-                  Limpiar
-                </Button>
+            {selectedCatalog === 'products' &&
+              < TagFilter allTags={allTags} selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+            }
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => handleClearFilters()}
+              sx={{
+                borderRadius: '1rem',
+                textTransform: 'none',
+                fontWeight: 'bold',
+                fontSize: '10px',
+                backgroundColor: '#E28D8D'
+              }}
+            >
+              Limpiar
+            </Button>
           </div>
 
           <div className="catalog-switch-container">

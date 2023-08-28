@@ -7,6 +7,7 @@ import EditModal from '../../../src/utils/modals/user_modal/EditModal';
 import { modifyUser } from '../../../services/userService';
 import Head from 'next/head';
 import People from "@mui/icons-material/People";
+import { formatDate } from '../../../src/utils';
 
 const Clients = () => {
   const [users, setUsers] = useState([]);
@@ -114,7 +115,7 @@ const Clients = () => {
                 <TableCell>{user.mail}</TableCell>
                 <TableCell>{user.phone}</TableCell>
                 <TableCell>{user.address}</TableCell>
-                <TableCell>{user.creation_date}</TableCell>
+                <TableCell>{user.creation_date && formatDate(user.creation_date)}</TableCell>
                 <TableCell>{user.role}</TableCell>
               </TableRow>
             ))}

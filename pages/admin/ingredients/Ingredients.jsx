@@ -65,9 +65,9 @@ const Ingredients = () => {
           {ingredients.map((ingredient) => {
             const { text: totalQuantityText, color: totalQuantityColor } = getTotalQuantityDisplayData(ingredient.total_quantity, ingredient.unit, ingredient.stock_percentage_status);
             return (
-              <ListItem key={ingredient?.id_ingredient}>
+              <ListItem className="ingredient-card" key={ingredient?.id_ingredient}>
                 <ListItemText
-                  primary={ingredient.name}
+                  primary={<span className="ingredient-main-title">{ingredient.name}</span>}
                   secondary={
                     <>
                       {totalQuantityText && (

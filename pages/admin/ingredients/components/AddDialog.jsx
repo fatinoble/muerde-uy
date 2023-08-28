@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, MenuItem, Select } from '@mui/material';
-import {UNIT_MEASURES} from '../../../../src/utils'
+import { Button, InvertedButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, MenuItem, Select } from '@mui/material';
+import { UNIT_MEASURES } from '../../../../src/utils'
+import { styled } from '@mui/system';
 
 const AddDialog = ({ fetchIngredients }) => {
   const [existingIngredientError, setexistingIngredientError] = useState('');
@@ -48,10 +49,12 @@ const AddDialog = ({ fetchIngredients }) => {
 
   return (
     <>
-      <Button variant="contained" color="primary" onClick={() => setOpenAddModal(true)}>Agregar nuevo ingrediente</Button>
+      <div className="add-title">
+        <InvertedButton className="add-title" variant="contained" color="primary" onClick={() => setOpenAddModal(true)}>Agregar nuevo ingrediente</InvertedButton>
+      </div>
 
       <Dialog open={openAddModal} onClose={handleCloseAddModal}>
-        <DialogTitle>Agregar nuevo ingrediente</DialogTitle>
+        <DialogTitle >Agregar nuevo ingrediente</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Complete los campos para agregar un nuevo ingrediente:

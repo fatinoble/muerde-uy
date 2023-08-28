@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const DeleteDialog = ({ fetchIngredients, ingredientId, disabled }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -22,15 +23,16 @@ const DeleteDialog = ({ fetchIngredients, ingredientId, disabled }) => {
       <Tooltip title={disabled ? 'No se pueden eliminar ingredientes que son utilizados en recetas' : ''}>
         <span>
           <Button
+            className="action-button"
             variant="outlined"
             color="secondary"
             onClick={() => setOpenDeleteModal(true)}
             disabled={disabled}
           >
-            Eliminar
+            <DeleteIcon style={{ color: disabled ? 'grey' : 'rgb(221, 51, 51)' }}></DeleteIcon>
           </Button>
         </span>
-      </Tooltip>
+      </Tooltip >
       <Dialog
         open={openDeleteModal}
         onClose={() => setOpenDeleteModal(false)}
