@@ -47,6 +47,19 @@ const AddDialog = ({ fetchIngredients }) => {
     return false; 
   };  
 
+  const InvertedButton = styled(Button)(({ theme }) => ({
+    marginBottom: theme.spacing(2),
+    borderRadius: '10px',
+    backgroundColor: '#ffff',
+    color: 'rgb(216, 130, 130)',
+    borderColor: 'rgb(216, 130, 130)',
+    '&:hover': {
+      backgroundColor: 'rgb(216, 130, 130)',
+      color: 'white',
+      borderColor: 'rgb(216, 130, 130)',
+    },
+  }));
+
   return (
     <>
       <div className="add-title">
