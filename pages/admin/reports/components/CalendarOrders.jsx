@@ -12,6 +12,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./index.css";
 import { Modal } from '@mui/material';
 import { Select, MenuItem } from '@mui/material';
+import { formatDate } from '@/utils';
 
 const locales = {
     es
@@ -168,7 +169,7 @@ const CalendarOrders = () => {
                     <div className="modal-content">
                         <h2 id="event-details-modal">Detalles del pedido</h2>
                         <p>Pedido nro: {selectedEvent?.id_sale}</p>
-                        <p>Fecha entrega solicitada: {selectedEvent?.user_date?.toLocaleString()}</p>
+                        <p>Fecha entrega solicitada: {formatDate(selectedEvent?.user_date)}</p>
                         <p>Productos solicitados:
                             <ul>
                                 {selectedEvent?.products?.map((product) =>
