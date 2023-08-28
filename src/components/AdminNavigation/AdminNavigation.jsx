@@ -20,12 +20,13 @@ import People from "@mui/icons-material/People";
 import MenuOpenIcon from '@mui/icons-material/MenuOpen';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import ExitToApp  from '@mui/icons-material/ExitToApp';
+import CategoryIcon from '@mui/icons-material/Category';
 
 const routingList = [
   { name: "Dashboard", icon: <BarChart />, route: "/admin/reports" },
   { name: "Pedidos", icon: <Receipt />, route: "/admin/orders" },
   { name: "Productos", icon: <Storefront />, route: "/admin/products" },
-  { name: "Servicios", icon: <Storefront />, route: "/admin/services" },
+  { name: "Servicios", icon: <CategoryIcon />, route: "/admin/services" },
   { name: "Recetas", icon: <RestaurantMenu />, route: "/admin/recipes" },
   { name: "Ingredientes", icon: <Kitchen />, route: "/admin/ingredients" },
   { name: "Clientes", icon: <People />, route: "/admin/clients" },
