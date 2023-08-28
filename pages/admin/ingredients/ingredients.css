@@ -1,0 +1,31 @@
+.add-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.ingredient-card {
+  background-color: white;
+  border-radius: 25px;
+  margin-bottom: 15px;
+  padding: 20px;
+  -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
+}
+
+.action-button {
+  margin-right: 15px;
+  border-color: rgba(216, 130, 130, 0.166);
+}
+
+.action-button:hover{
+  border-color: rgba(216, 130, 130, 0.777);
+  background-color: rgba(216, 130, 130, 0.325);
+}
+
+.ingredient-main-title {
+  margin-bottom: 30px;
+  font-weight: bold;
+  color: rgb(64, 48, 48);
+}

@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 import axios from 'axios';
 
 
-const ServiceCatalog = ({ searchQuery = '', setAllTags, selectedTags  }) => {
+const ServiceCatalog = ({ searchQuery = '', selectedTags }) => {
 
   const [services, setServices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,8 +35,6 @@ const ServiceCatalog = ({ searchQuery = '', setAllTags, selectedTags  }) => {
     if (!services?.length) {
       fetchServices();
     }
-    const allTags = [...new Set(services.flatMap((service) => service.tags))];
-    setAllTags(allTags);
   }, [])
 
   const fetchServices = async () => {
@@ -58,11 +56,11 @@ const ServiceCatalog = ({ searchQuery = '', setAllTags, selectedTags  }) => {
       {filteredServices.map((service) => (
         <Grid item key={service.id} xs={12} sm={6} md={4}>
           <a className="product-card-link" href={`/product/detailService?id=${service.id_service}`} key={service.id_service}>
-          <ServiceCard
-            imageSrc={service.image || '/images/unavailable.png'}
-            title={service.title}
-            price={service.price}
-          /></a>
+            <ServiceCard
+              imageSrc={service.image || '/images/unavailable.png'}
+              title={service.title}
+              price={service.price}
+            /></a>
         </Grid>
       ))}
     </Grid>

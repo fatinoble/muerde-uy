@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-key */
 import React from 'react';
-import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid } from 'recharts';
+import { BarChart, Bar, Cell, XAxis, YAxis, Brush, CartesianGrid } from 'recharts';
 
 const getPath = (x, y, width, height) => {
   return `M${x},${y + height}C${x + width / 3},${y + height} ${x + width / 2},${y + height / 3}
@@ -33,6 +33,7 @@ const StockBarChart = ({ ingredients = [], getStockIndicatorInfo }) => {
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="name" />
       <YAxis />
+      <Brush dataKey='name' height={7} stroke="#062338" />
       <Bar dataKey="stock_percentage_status" fill="#8884d8" shape={<TriangleBar />} label={{ position: 'top', formatter: (value) => `${value}%` }}>
         {ingredients.map((ingredient, index) => (
           <Cell key={`cell-${index}`} fill={getStockIndicatorInfo(ingredient)?.color} />

@@ -6,6 +6,8 @@ import DetailsModal from '../../../src/utils/modals/service_modal/DetailsModal';
 import EditModal from '../../../src/utils/modals/service_modal/EditModal';
 import CreateModal from '../../../src/utils/modals/service_modal/CreateModal';
 import { getAllServices, modifyService, createService, deleteService } from '../../../services/serviceService';
+import CategoryIcon from '@mui/icons-material/Category';
+import Head from 'next/head';
 
 const Services = () => {
   const [services, setServices] = useState([]);
@@ -118,6 +120,12 @@ const Services = () => {
 
   return (
     <Layout>
+      <Head style={{ marginBottom: '10px' }}>
+        <title>Servicios</title>
+      </Head>
+      <div className="title-container">
+        <h1><CategoryIcon className="icon-title" />Servicios</h1>
+      </div>
       <Box display="flex" justifyContent="center" alignItems="center">
         <InvertedButton variant="outlined" onClick={handleOpenCreateModal}>Nuevo servicio</InvertedButton>
       </Box>

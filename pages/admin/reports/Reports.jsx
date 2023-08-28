@@ -135,7 +135,7 @@ const Reports = () => {
         <div className="featuredItem">
           <div className="title-download-container">
             <span className="featuredTitle">Stock de productos</span>
-            {productsDataForCSVDownload && productsDataForCSVDownload.length &&
+            {productsDataForCSVDownload && productsDataForCSVDownload.length > 0 &&
               <CSVDownloader
                 jsonData={productsDataForCSVDownload}
                 fileName="stock-productos"
@@ -151,7 +151,7 @@ const Reports = () => {
         <div className="featuredItem">
           <div className="title-download-container">
             <span className="featuredTitle">Estado de pedidos</span>
-            {orderStatusData && orderStatusData.length &&
+            {orderStatusData && orderStatusData.length > 0 &&
               <CSVDownloader
                 jsonData={orderStatusData}
                 fileName="estado-pedidos"

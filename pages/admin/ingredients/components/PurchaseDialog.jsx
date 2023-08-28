@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Select, MenuItem } from '@mui/material';
 import { Tooltip } from '@mui/material';
 import { UNIT_MEASURES_CONVERTER, calculateQuantity } from '@/utils/units_converter/helper';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
 
@@ -42,7 +43,16 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
 
   return (
     <>
-      <Button variant="outlined" color="primary" onClick={() => setOpenPurchaseModal(true)}>Registrar compra</Button>
+      <Button
+        variant="outlined"
+        className="action-button"
+        color="primary"
+        onClick={() => setOpenPurchaseModal(true)}
+        style={{ color: 'white', backgroundColor: 'rgba(216, 130, 130, 0.737)' }}
+        startIcon={<ShoppingCartIcon style={{ color: 'white' }} />}
+      >
+        Registrar compra
+      </Button>
 
       <Dialog open={openPurchaseModal} onClose={handleClosePurchaseodal}>
         <DialogTitle>{`Registrar compra de ${ingredient?.name}`}</DialogTitle>
