@@ -9,7 +9,7 @@ import CreateModal from '../../../src/utils/modals/recipe_modal/CreateModal';
 import { calculateQuantity } from '../../../src/utils/units_converter/helper';
 import Head from 'next/head';
 import RestaurantMenu from "@mui/icons-material/RestaurantMenu";
-import { getAllRecipes, modifyRecipe, deleteRecipe, createRecipe } from '../../../services/recipeService';
+import { getAllRecipes, getSingleRecipe, modifyRecipe, deleteRecipe, createRecipe } from '../../../services/recipeService';
 import { useRouter } from 'next/router';
 import { Tooltip } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
@@ -85,10 +85,14 @@ const Recipes = () => {
     });
 
     createRecipe(modifiedRecipe)
-      .then(() => {
-        setRecipes((prevRecipes) => [...prevRecipes, modifiedRecipe]);
+      .then((newRecipe) => {
+        const newRecipeId = newRecipe.id_recipe;
+        getSingleRecipe(newRecipeId)
+          .then((completeNewRecipe) => {
+            setRecipes((prevRecipes) => [...prevRecipes, completeNewRecipe]);
+          });
         setCreateModalOpen(false);
-      });;
+      });
   };
 
   const showDeleteModal = (recipe) => {
