@@ -102,7 +102,6 @@ export const deleteRecipe = (recipe) => {
 export const createRecipe = (newRecipe) => {
   return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe`, { recipe: newRecipe })
     .then(response => {
-      console.log("la respuesta de la api es: ", response.data);
       return response.data;
     })
     .catch(error => console.error('Error:', error));
