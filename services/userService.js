@@ -16,12 +16,13 @@ export const createUser = (newUser) => {
       .catch(error => console.error('Error:', error.response.data));
 }
 
-export const findUserByMail = (data) => {
-  return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/login`, data)
-      .then(response => {
-          return response;
-      })
-      .catch(error => console.error('Error:', error.response.data));
+export const findUserByMail = async (data) => {
+  try {
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/login`, data);
+    return { data: response.data };
+  } catch (error) {
+    return { data: error.response.data };
+  }
 }
 
 export const modifyUser = (user) => {

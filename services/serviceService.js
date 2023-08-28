@@ -64,9 +64,7 @@ export const createService = (newService = {}) => {
     formData.append('price', newService.price);
     formData.append('tags', newService.tags);
     formData.append('catalog_id', newService.catalog_id);
-  
-    console.log("formData: ", formData);
-  
+    
     return axios
       .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/service`, formData, {
         headers: {
@@ -74,7 +72,6 @@ export const createService = (newService = {}) => {
         },
       })
       .then((response) => {
-        console.log("response data: ", response.data);
         return response.data;
       })
       .catch((error) => console.error('Error:', error.response.data));

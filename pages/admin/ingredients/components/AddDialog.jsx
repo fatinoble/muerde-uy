@@ -5,7 +5,7 @@ import { UNIT_MEASURES } from '../../../../src/utils'
 import { styled } from '@mui/system';
 
 const AddDialog = ({ fetchIngredients }) => {
-
+  const [existingIngredientError, setexistingIngredientError] = useState('');
   const [openAddModal, setOpenAddModal] = useState(false);
   const [newIngredient, setNewIngredient] = useState({
     name: '',
@@ -14,6 +14,7 @@ const AddDialog = ({ fetchIngredients }) => {
 
   const handleCloseAddModal = () => {
     setOpenAddModal(false);
+    setexistingIngredientError('');
     setNewIngredient({
       name: '',
       unit: '',
@@ -21,16 +22,30 @@ const AddDialog = ({ fetchIngredients }) => {
   };
 
   const handleAddIngredient = async () => {
-    try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient`, {
-        ingredient: newIngredient,
-      });
-      fetchIngredients();
-      handleCloseAddModal();
-    } catch (error) {
-      console.error('Error adding ingredient:', error);
+    const existIngredient = await validateExistingIngredient(newIngredient)
+    if (!existIngredient) {
+      try {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient`, {
+          ingredient: newIngredient,
+        });
+        fetchIngredients();
+        handleCloseAddModal();
+      } catch (error) {
+        console.error('Error adding ingredient:', error);
+      }
+    } else {
+      setexistingIngredientError('Ya existe un ingrediente con ese nombre');
     }
   };
+
+  const validateExistingIngredient = async (newIngredient) => {
+    const ingredients = await fetchIngredients();
+    if (ingredients) { 
+      const existingIngredient = ingredients.find(ing => ing.name.toLowerCase() === newIngredient.name.toLowerCase());
+      return existingIngredient != undefined;
+    }
+    return false; 
+  };  
 
   const InvertedButton = styled(Button)(({ theme }) => ({
     marginBottom: theme.spacing(2),
@@ -61,8 +76,8 @@ const AddDialog = ({ fetchIngredients }) => {
             label="Nombre"
             value={newIngredient.name}
             onChange={(e) => {
-              const value = e.target.value;
-              if (/^[a-zA-Z\s]*$/.test(value)) {
+              const value = e.target.value;          
+              if (/^[a-zA-ZáéíóúÁÉÍÓÚ\s]*$/.test(value)) {
                 setNewIngredient((prevIngredient) => ({
                   ...prevIngredient,
                   name: value,
@@ -72,6 +87,7 @@ const AddDialog = ({ fetchIngredients }) => {
             fullWidth
             margin="normal"
             variant="outlined"
+            helperText={existingIngredientError}
           />
           <Select
             label="Unidad"

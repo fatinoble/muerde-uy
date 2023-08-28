@@ -45,8 +45,8 @@ const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
             label="Nombre"
             value={modifyIngredient.name}
             onChange={(e) => {
-              const value = e.target.value;
-              if (/^[a-zA-Z\s]*$/.test(value)) {
+              const value = e.target.value;          
+              if (/^[a-zA-ZáéíóúÁÉÍÓÚ\s]*$/.test(value)) {
                 setModifyIngredient((prevIngredient) => ({
                   ...prevIngredient,
                   name: value,
