@@ -81,7 +81,7 @@ const Register = () => {
                     transferNumber = setting.value || '';
                 }
             }
-            if (response.statusText == "OK") {
+            if (response.data.id_user) {
                 localStorage.setItem('token_registration_user', response.data.token);
                 localStorage.setItem('user_id', response.data.id_user);
                 localStorage.setItem('user_role', response.data.role);
@@ -93,10 +93,14 @@ const Register = () => {
                 handleMessage("Usuario creado con éxito, bienvenid@ " + response.data.name + "!", "success");
                 router.push('/product/catalog')
             } else {
-                handleMessage("Hubo un error al crear la cuenta. Por favor, intenta de nuevo.", "error");
+                if (response.data.error.status == 409) {
+                    handleMessage("Ya existe un cliente con este correo electrónico.", "error");
+                } else {
+                    handleMessage("Ya existe un cliente con este teléfono.", "error");
+                }
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.log('Error with registration:', error);
             handleMessage('Hubo un error al crear la cuenta. Por favor, intenta de nuevo.', "error");
         }
     }
