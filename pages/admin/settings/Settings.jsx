@@ -7,7 +7,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DoneIcon from '@mui/icons-material/Done';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { TextField, Button } from '@mui/material';
-
+import EmailIcon from '@mui/icons-material/Email';
+import Switch from '@mui/material/Switch';
 import React, { useState, useRef, useEffect } from 'react';
 
 const Settings = () => {
@@ -19,7 +20,9 @@ const Settings = () => {
   const [accountNumber, setAccountNumber] = useState('');
   const [phoneLastModify, setPhoneLastModify] = useState('');
   const [bankLastModify, setBankLastModify] = useState('');
-
+  const [isEmailEnabled, setIsEmailEnabled] = useState(true);
+  const [mailLastEnabled, setMailLastEnabled] = useState('');
+  const [mailSwitchMessage, setMailSwitchMessage] = useState("El envío de correo está habilitado");
   const numberRef = useRef(null);
 
   useEffect(() => {
@@ -95,6 +98,18 @@ const Settings = () => {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
 
+  const handleToggle = () => {
+    setIsEmailEnabled(!isEmailEnabled);
+    axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/toggleEmail`)
+      .then(response => {
+        console.log('Respuesta del servidor:', response.data);
+        setMailLastEnabled(response.data.lastModified);
+        setMailSwitchMessage(response.data.message);
+      })
+      .catch(error => {
+        console.error('Error en la petición:', error);
+      });
+  };
 
   return (
     <Layout>
@@ -210,6 +225,29 @@ const Settings = () => {
         </div>
         <AccountBalanceIcon className="icon-background" />
       </div>
+
+      <div className="setting-container">
+        <div className='setting-title'>
+          <EmailIcon className="mail-icon" />
+          Activar envío de mails
+        </div>
+        <div className='setting-content content-mail mail-flex-container'>
+          {mailSwitchMessage &&
+            <span className="setting-text mail-text setting-last-modify mail-margin-right">{mailSwitchMessage}</span>
+          }
+          {mailLastEnabled &&
+            <span className="setting-text mail-text setting-last-modify mail-margin-right">Última modificación: {formatDate(mailLastEnabled)}</span>
+          }
+          <Switch
+            checked={isEmailEnabled}
+            onChange={handleToggle}
+            name="emailEnabled"
+            inputProps={{ 'aria-label': 'Activar envío de mails' }}
+          />
+        </div>
+        <EmailIcon className="icon-background" />
+      </div>
+
     </Layout >
   );
 };
