@@ -20,6 +20,9 @@ const Orders = () => {
 
   useEffect(() => {
     const userId = localStorage.getItem('user_id');
+    if(!userId){
+      router.push('/user/login')
+    }
     setUserId(userId);
     fetchOrders(userId);
   }, [])

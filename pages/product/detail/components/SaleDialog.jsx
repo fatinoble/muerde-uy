@@ -58,9 +58,17 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
     }));
   };
 
+  const handleOpenSaleModal = () => {
+    if(!localStorage.getItem('user_id')){
+      router.push('/user/login');
+      return;
+    }
+    setOpenSaleModal(true);
+  };
+
   return (
     <>
-      <Button variant="contained" color="primary" className="product-detail-buy-button" onClick={() => setOpenSaleModal(true)} disabled={product.is_out_of_stock}>
+      <Button variant="contained" color="primary" className="product-detail-buy-button" onClick={() => handleOpenSaleModal()} disabled={product.is_out_of_stock}>
         Comprar
       </Button>
 

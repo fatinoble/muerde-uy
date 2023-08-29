@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import Menu from '@mui/material/Menu';
@@ -12,7 +12,15 @@ import { Cupcacke, ShippingCart, SignOut } from '../../svg';
 import './user_menu_styles.css';
 
 const UserMenu = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const userToken = localStorage.getItem('token_login_user');
+    if (userToken) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('user_name');
@@ -22,6 +30,7 @@ const UserMenu = () => {
     localStorage.removeItem('user_role');
     localStorage.removeItem('user_phone');
     localStorage.removeItem('user_address');
+    setIsLoggedIn(false);
     router.push('/user/login');
   };
 
@@ -41,7 +50,7 @@ const UserMenu = () => {
         <img src="/images/muerde_pink.png" alt="Logo" style={{ marginBottom: '1rem' }} />
       </div>
       <List>
-        <ListItem
+      <ListItem
           button
           className={isCurrentRoute('product') ? "user-menu-selector-container-selected" : "user-menu-selector-container"}
           onClick={() => handleNavigateTo('/product/catalog')}
@@ -53,6 +62,9 @@ const UserMenu = () => {
             <ListItemText primary="Catálogo" className={isCurrentRoute('product') ? "user-menu-selector-selected" : "user-menu-selector"} />
           </div>
         </ListItem >
+
+      {isLoggedIn ? (
+        <>
         <ListItem
           button
           className={isCurrentRoute('orders')  ? "user-menu-selector-container-selected" : "user-menu-selector-container"}
@@ -73,6 +85,19 @@ const UserMenu = () => {
             <ListItemText primary="Cerrar sesión" className="user-menu-selector" />
           </div>
         </ListItem>
+        </>
+      ) : (
+        <>
+        <ListItem button className="user-menu-selector-container" onClick={() => handleNavigateTo('/user/login')}>
+          <div className='list-item-content-container'>
+            <ListItemIcon>
+              <SignOut />
+            </ListItemIcon>
+            <ListItemText primary="Iniciar sesión" className="user-menu-selector" />
+          </div>
+        </ListItem>
+        </>
+      )}
       </List>
     </Box>
   );
