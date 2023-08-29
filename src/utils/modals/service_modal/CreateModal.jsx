@@ -1,7 +1,9 @@
 import { Modal, Box, TextField, Button, Typography } from '@mui/material';
 import React, { useState, useEffect } from "react";
+import DynamicTags from "../../../components/DynamicTags"
 
 const CreateModal = ({ open, handleClose, handleAdd }) => {
+    const [tags, setTags] = useState([]);
     const [serviceData, setServiceData] = useState([]);
     const [imageFileName, setImageFileName] = useState("");
 
@@ -27,11 +29,12 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        setServiceData({
+        const finalServiceData = {
             ...serviceData,
-            catalog_id: 2,
-        });
-        handleAdd(serviceData);
+            tags: tags?.join(", ") || "",
+        }
+        setServiceData(finalServiceData);
+        handleAdd(finalServiceData);
     };
 
     return (
@@ -77,7 +80,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
                 <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={serviceData.description} onChange={handleChange} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={serviceData.tags} onChange={handleChange} />
+                <DynamicTags tags={tags} setTags={setTags}/>
                 
                 <Button type="submit"
                     sx={{
