@@ -57,7 +57,7 @@ const DynamicTags = ({ tags = [], setTags = () => { } }) => {
           size='small'
           sx={{ margin: "1rem 0" }}
           margin='none'
-          placeholder={tags.length < 5 ? "Agregar tag" : ""}
+          placeholder={tags.length < 3 ? "Agregar tag *" : ""}
           InputProps={{
             endAdornment: (
               <Button

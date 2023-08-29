@@ -94,6 +94,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                             backgroundColor: '#CCA870',
                         },
                     }}
+                    disabled={tags?.length === 0}
                 >
                     Dar de alta
                 </Button>
