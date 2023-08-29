@@ -91,3 +91,27 @@
   font-size: 200px;
   color:rgba(21, 19, 18, 0.151)
 }
+
+.mail-flex-container {
+  display: flex;
+  align-items: center;
+}
+
+.mail-margin-right {
+  margin-right: 20px;
+}
+
+.content-mail {
+  display: flex;
+  align-items: center;
+}
+
+.mail-text {
+  margin-right: 20px;
+}
+
+.mail-icon {
+  color:rgb(140,186,232);
+  margin-right: 7px;
+  font-size: 30px;
+}
