@@ -111,6 +111,11 @@
   line-height: normal;
 }
 
+.tag-container {
+  margin: 0 50px;
+  z-index: 100;
+}
+
 .tag-filter-form-control {
   min-width: 90px;
 }
@@ -124,6 +129,10 @@
 .tag-filter-form-control label {
   display: inline-block;
   vertical-align: middle;
+}
+
+.input-label-tag {
+  min-width: 80px;
 }
 
 .tag-filter-form-control fieldset {

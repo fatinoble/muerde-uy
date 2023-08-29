@@ -9,10 +9,10 @@ const TagFilter = ({ allTags, selectedTags, setSelectedTags }) => {
   };
 
   return (
-    <>
+    <div className="tag-container">
       <FormControl className="tag-filter-form-control">
 
-        <InputLabel id="tag-filter-label" > <Filter /></InputLabel>
+        <InputLabel id="tag-filter-label" className="input-label-tag"> <Filter /></InputLabel>
         <Select
           labelId="tag-filter-label"
           id="tag-filter-select"
@@ -28,7 +28,7 @@ const TagFilter = ({ allTags, selectedTags, setSelectedTags }) => {
           ))}
         </Select>
       </FormControl>
-    </>
+    </div>
   );
 };
 

@@ -26,6 +26,7 @@ const ProductStockChart = ({ productsData = [] }) => {
   const productsDataForChart = calculateProductsOutOfStockCountData(productsData);
 
   const getOOSPercentage = (value) => {
+    if (!value) return 0;
     if (typeof value === 'number') {
       return parseFloat(value)?.toFixed(0);
     }

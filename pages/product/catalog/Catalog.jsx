@@ -13,6 +13,10 @@ const Catalog = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [allTags, setAllTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+
+  const [allServiceTags, setAllServiceTags] = useState([]);
+  const [selectedServiceTags, setSelectedServiceTags] = useState([]);
+
   const [userName, setUserName] = useState('');
 
   useEffect(() => {
@@ -28,7 +32,7 @@ const Catalog = () => {
 
   const handleCatalogTypeChange = (event, newCatalogType) => {
     if (newCatalogType) {
-      setSearchQuery('');
+      handleClearFilters();
       setSelectedCatalog(newCatalogType);
     }
   };
@@ -36,6 +40,7 @@ const Catalog = () => {
   const handleClearFilters = () => {
     setSearchQuery('');
     setSelectedTags([]);
+    setSelectedServiceTags([]);
   };
 
   const whatsappCatalogMessage = `Hola! Soy ${userName}, y quisiera saber un poco más sobre los productos en Muerde.`;
@@ -49,9 +54,10 @@ const Catalog = () => {
         <div className="actions-container">
           <div className="actions-filter-container">
             <Search handleSearchChange={handleSearchChange} searchQuery={searchQuery} />
-            {selectedCatalog === 'products' &&
-              < TagFilter allTags={allTags} selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
-            }
+            < TagFilter
+              allTags={selectedCatalog === 'products' ? allTags : allServiceTags}
+              selectedTags={selectedCatalog === 'products' ? selectedTags : selectedServiceTags}
+              setSelectedTags={selectedCatalog === 'products' ? setSelectedTags : setSelectedServiceTags} />
             <Button
               variant="contained"
               color="primary"
@@ -92,7 +98,7 @@ const Catalog = () => {
         <div className="catalogs-container">
           {selectedCatalog === 'products'
             ? <ProductCatalog searchQuery={searchQuery} setAllTags={setAllTags} selectedTags={selectedTags} />
-            : <ServiceCatalog searchQuery={searchQuery} setAllTags={setAllTags} selectedTags={selectedTags} />}
+            : <ServiceCatalog searchQuery={searchQuery} setAllTags={setAllServiceTags} selectedTags={selectedServiceTags} />}
         </div>
       </div>
     </Layout>

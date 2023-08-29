@@ -1,7 +1,9 @@
 import { Modal, Box, TextField, Button, Typography, Select, MenuItem } from '@mui/material';
 import React, { useState, useEffect } from "react";
+import DynamicTags from "../../../components/DynamicTags";
 
-const EditModal = ({ open, handleClose, data, handleUpdate }) => {
+const EditModal = ({ open, handleClose, data = {}, handleUpdate }) => {
+    const [tags, setTags] = useState(data.tags?.split(", "));
     const [productData, setProductData] = useState({
         status: 'ENABLED',
         ...data,
@@ -28,7 +30,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const infoToUpdate = {...productData}
+        const infoToUpdate = {...productData, tags: tags?.join(", ") || "",}
         if (infoToUpdate.image === data.image) {
             delete infoToUpdate.image;
         }
@@ -128,7 +130,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
                 <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} helperText={errors.description} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={productData.tags} onChange={handleChange} helperText={errors.tags}/>
+                <DynamicTags tags={tags} setTags={setTags}/>
                 <Select value={productData.status || 'ENABLED'} onChange={handleChange} name="status">
                     <MenuItem value={"ENABLED"}>Activo</MenuItem>
                     <MenuItem value={"DISABLED"}>Inactivo</MenuItem>

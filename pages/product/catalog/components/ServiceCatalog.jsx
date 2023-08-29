@@ -6,7 +6,7 @@ import { Alert } from '@mui/material';
 import { CircularProgress } from '@mui/material';
 
 
-const ServiceCatalog = ({ searchQuery = '', selectedTags }) => {
+const ServiceCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
 
   const [services, setServices] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -39,12 +39,25 @@ const ServiceCatalog = ({ searchQuery = '', selectedTags }) => {
     }
   }, [])
 
+  const getUniqueServiceTags = (services = []) => {
+    const uniqueTags = new Set();
+
+    services.forEach(service => {
+      const tags = service.tags?.split(',')?.map(tag => tag?.trim());
+      tags.forEach(tag => uniqueTags.add(tag));
+    });
+
+    return Array.from(uniqueTags);
+  }
+
   const fetchServices = async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/service`);
       const data = response.data;
       const catalogService = data.Services.filter(service => service.catalog_id !== undefined && service.catalog_id !== null && service.status === 'ENABLED');
       setServices(catalogService);
+      const allTags = getUniqueServiceTags(catalogService);
+      setAllTags(allTags);
     } catch (error) {
       console.error('Error fetching services:', error);
       setError('Algo salió mal');
@@ -52,7 +65,7 @@ const ServiceCatalog = ({ searchQuery = '', selectedTags }) => {
       setIsLoading(false);
     }
   };
-  
+
   const handleSnackbarClose = () => {
     setError(null);
   };
@@ -81,7 +94,7 @@ const ServiceCatalog = ({ searchQuery = '', selectedTags }) => {
   return (
     <div className="product-catalog">
       {filteredServices.map((service) => (
-          <a className="product-card-link" href={`/product/detailService?id=${service.id_service}`} key={service.id_service}>
+        <a className="product-card-link" href={`/product/detailService?id=${service.id_service}`} key={service.id_service}>
           <ServiceCard
             imageSrc={service.image || '/images/unavailable.png'}
             title={service.title}

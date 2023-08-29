@@ -2,9 +2,11 @@ import { Modal, Box, TextField, Button, Typography, Select, MenuItem } from '@mu
 import React, { useState, useEffect } from "react";
 import { getAllRecipesWithProducts } from '../../../../services/recipeService';
 import { useRouter } from 'next/router';
+import DynamicTags from '../../../components/DynamicTags'
 
 const CreateModal = ({ open, handleClose, handleAdd }) => {
     const [productData, setProductData] = useState([]);
+    const [tags, setTags] = useState([]);
     const [recipes, setRecipes] = useState({});
     const [imageFileName, setImageFileName] = useState("");
     const [selectedRecipeId, setSelectedRecipeId] = useState('');
@@ -56,11 +58,12 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        setProductData({
+        const finalProductData = {
             ...productData,
-            catalog_id: 1,
-        });
-        handleAdd(productData);
+            tags: tags?.join(", ") || "",
+        }
+        setProductData(finalProductData);
+       handleAdd(finalProductData);
     };
 
     const validateField = (name, value) => {
@@ -144,7 +147,9 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
                 <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} helperText={errors.description} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="tags" label="Tags" value={productData.tags} onChange={handleChange} helperText={errors.tags} />
+               
+               <DynamicTags tags={tags} setTags={setTags}/>
+                
                 <Select
                     required
                     value={selectedRecipeId}
