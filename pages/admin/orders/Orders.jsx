@@ -131,16 +131,19 @@ const Orders = () => {
   const getDaysDifference = (date) => {
     const today = new Date();
     const userDate = new Date(date);
-    const timeDiff = Math.abs(userDate.getTime() - today.getTime());
+    const timeDiff = userDate.getTime() - today.getTime();
+    if (timeDiff < 0) {
+        return -Math.ceil(Math.abs(timeDiff) / (1000 * 3600 * 24));
+    }
     return Math.ceil(timeDiff / (1000 * 3600 * 24));
   };
 
   const getCellColor = (date) => {
     const daysDifference = getDaysDifference(date);
-    if (daysDifference <= 2) {
-      return '#FF0000';
-    } else if (daysDifference <= 7) {
+    if (daysDifference <= 7 && daysDifference > 2) {
       return '#FFA500';
+    } else if (daysDifference <= 2) {
+      return '#FF0000';
     } else {
       return '#008000';
     }
@@ -177,7 +180,7 @@ const Orders = () => {
           </TableHead>
           <TableBody>
             {rows.map((order, index) => (
-              <TableRow style={{ backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#F0EBEB' }}>
+              <TableRow key={order.id_sale} style={{ backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#F0EBEB' }}>
                 <TableCell>{order.id_sale}</TableCell>
                 <TableCell>{order.user ? order.user.name : 'Usuario eliminado'}</TableCell>
                 <TableCell>
