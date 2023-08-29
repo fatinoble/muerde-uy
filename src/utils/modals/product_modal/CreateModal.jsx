@@ -99,7 +99,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
     };
 
     const isAnyError = () => {
-        return Object.values(errors).some((error) => error !== "");
+        return Object.values(errors).some((error) => error !== "") || tags?.length === 0;
     };
 
     return (
