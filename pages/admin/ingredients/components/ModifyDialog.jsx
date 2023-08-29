@@ -31,7 +31,7 @@ const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
 
   return (
     <>
-      <Button variant="outlined" className="action-button" color="primary" style={{ color: 'white', backgroundColor: 'rgba(216, 130, 130, 0.737)' }} onClick={() => setOpenModifyModal(true)}>
+      <Button variant="outlined" className="action-button" color="primary" style={{ color: 'white', backgroundColor: 'rgba(216, 130, 130, 0.737)', marginRight: '10px' }} onClick={() => setOpenModifyModal(true)}>
         <EditIcon style={{ color: 'white' }}></EditIcon>
       </Button>
 
@@ -45,7 +45,7 @@ const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
             label="Nombre"
             value={modifyIngredient.name}
             onChange={(e) => {
-              const value = e.target.value;          
+              const value = e.target.value;
               if (/^[a-zA-ZáéíóúÁÉÍÓÚ\s]*$/.test(value)) {
                 setModifyIngredient((prevIngredient) => ({
                   ...prevIngredient,

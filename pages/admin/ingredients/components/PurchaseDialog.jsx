@@ -48,7 +48,7 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
         className="action-button"
         color="primary"
         onClick={() => setOpenPurchaseModal(true)}
-        style={{ color: 'white', backgroundColor: 'rgba(216, 130, 130, 0.737)' }}
+        style={{ color: 'white', backgroundColor: 'rgba(216, 130, 130, 0.737)', marginRight: '10px' }}
         startIcon={<ShoppingCartIcon style={{ color: 'white' }} />}
       >
         Registrar compra
