@@ -170,7 +170,7 @@ const Services = () => {
                     Editar servicio
                   </StyledButton>
                   <Switch checked={service.status === 'ENABLED'} onChange={() => toggleServiceStatus(service)} />
-                  {service.status === 'ENABLED' ? <span>En Stock</span> : <span>Sin Stock</span>}
+                  {service.status === 'ENABLED' ? <span>Activo</span> : <span>Inactivo</span>}
                 </CardActions>
               </CardContent>
             </Box>

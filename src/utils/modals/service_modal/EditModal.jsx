@@ -52,7 +52,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
         switch (name) {
             case "title":
             case "description":
-                if (!/^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$/.test(value)) {
+                if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
                     errorMessage = "Solo se permiten letras";
                 }
                 break;
@@ -62,7 +62,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                 }
                 break;                  
             case "tags":
-                if (!/^[a-zA-ZáéíóúÁÉÍÓÚ\s,]+$/.test(value)) {
+                if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s,]+$/.test(value)) {
                     errorMessage = "Solo se permiten letras y comas";
                 }
                 break;
