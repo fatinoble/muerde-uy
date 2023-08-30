@@ -3,6 +3,7 @@ import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 import CSVDownloader from '../../../../src/components/CSVDownloader';
+import { getApiUrl } from '../../../../services/utils';
 
 const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow, getReviewColorFromScore = () => { } }) => {
   const [reviewsData, setReviewsData] = useState([]);
@@ -16,7 +17,7 @@ const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow, getRev
   const fetchReviewsScoreData = async (start, end, isFromFilter) => {
     try {
       const endDateForFetching = isFromFilter ? end : tomorrow;
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/review/score?start=${start}&end=${endDateForFetching}`);
+      const { data } = await axios.get(`${getApiUrl()}/review/score?start=${start}&end=${endDateForFetching}`);
       setReviewsData(data.review_score_quantity);
     } catch (error) {
       console.error('Error fetching reviews score data:', error);

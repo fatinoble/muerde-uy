@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Container, Grid, List, ListItem, ListItemText, MenuItem, Paper, Select, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Tooltip } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import { getOrderPaymentMethodName, getOrderStateName } from '@/utils';
+import { getApiUrl } from '../../../../services/utils';
 
 function OrderScreen() {
 
@@ -29,12 +30,12 @@ function OrderScreen() {
     useEffect(() => {
         fetchOrder();
         fetchOrderState();
-        
+
     }, [])
 
     const fetchOrder = async () => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale`, {
+            const response = await axios.get(`${getApiUrl()}/sale`, {
                 params: {
                     id: localStorage.getItem('orderId'),
                 },
@@ -49,7 +50,7 @@ function OrderScreen() {
 
     const fetchOrderState = async () => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/states`);
+            const response = await axios.get(`${getApiUrl()}/sale/states`);
             const data = response.data;
             setOrdersState(data.available_order_states);
         } catch (error) {
@@ -59,7 +60,7 @@ function OrderScreen() {
 
     const handleConfirm = async () => {
         try {
-            await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale?id=${order.id_sale}`, {
+            await axios.put(`${getApiUrl()}/sale?id=${order.id_sale}`, {
                 state: selectedState,
             });
             fetchOrder();

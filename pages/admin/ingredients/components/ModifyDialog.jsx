@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, MenuItem, Select } from '@mui/material';
+import { getApiUrl } from '../../../../services/utils';
 
 const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
 
@@ -19,7 +20,7 @@ const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
 
   const handleModifyIngredient = async () => {
     try {
-      await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient?id=${ingredient?.id_ingredient}`, {
+      await axios.put(`${getApiUrl()}/ingredient?id=${ingredient?.id_ingredient}`, {
         ingredient: modifyIngredient,
       });
       fetchIngredients();

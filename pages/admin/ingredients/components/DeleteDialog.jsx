@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { getApiUrl } from '../../../../services/utils';
 
 const DeleteDialog = ({ fetchIngredients, ingredientId, disabled }) => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -9,7 +10,7 @@ const DeleteDialog = ({ fetchIngredients, ingredientId, disabled }) => {
   const handleConfirmDelete = async () => {
     if (ingredientId) {
       try {
-        await axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient?id=${ingredientId}`);
+        await axios.delete(`${getApiUrl()}/ingredient?id=${ingredientId}`);
         fetchIngredients();
       } catch (error) {
         console.error('Error deleting ingredient:', error);

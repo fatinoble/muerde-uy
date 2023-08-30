@@ -8,6 +8,7 @@ import { CircularProgress } from '@mui/material';
 import { isObjectEmpty } from '../../../src/utils';
 import axios from 'axios';
 import WhatsAppServiceButton from './components/WhatsAppServiceButton';
+import { getApiUrl } from '../../../services/utils';
 
 const today = new Date();
 const tomorrow = new Date(today);
@@ -52,7 +53,7 @@ const DetailService = () => {
 
   const fetchService = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/service?id=${serviceId}`);
+      const response = await axios.get(`${getApiUrl()}/service?id=${serviceId}`);
       const serviceResponse = response.data;
       if (serviceResponse && Object.keys(serviceResponse).length > 0) {
         setService(serviceResponse);

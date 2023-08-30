@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { getApiUrl } from '../../../services/utils';
 const WhatsAppButton = ({message}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const encodedMessage = encodeURIComponent(message);
@@ -10,7 +11,7 @@ const WhatsAppButton = ({message}) => {
 
   const fetchSettings = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/setting`);
+      const response = await axios.get(`${getApiUrl()}/setting`);
       const { settings } = response.data;
       const wpp_phone = settings.find(setting => setting.key === 'phone');
       setPhoneNumber(wpp_phone?.value || '');

@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Alert } from '@mui/material';
 import { CircularProgress } from '@mui/material';
 import axios from 'axios';
+import { getApiUrl } from '../../../../services/utils';
 
 const theme = createTheme({
   palette: {
@@ -63,7 +64,7 @@ const ProductCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`);
+      const response = await axios.get(`${getApiUrl()}/product`);
       const data = response.data;
       const catalogProducts = data.Products.filter(product => product.catalog_id !== undefined && product.catalog_id !== null && product.status === 'ENABLED');
       setProducts(catalogProducts);

@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { getApiUrl } from './utils';
 
 const fetchRecipeDetails = (recipe) => {
-  const ingredientsPromise = fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe/ingredients?id=${recipe.id_recipe}`)
+  const ingredientsPromise = fetch(`${getApiUrl()}/recipe/ingredients?id=${recipe.id_recipe}`)
     .then(response => response.json())
     .then(recipeIngredients => {
       const ingredients = recipeIngredients.recipeIngredients.map(ingredient => ({
@@ -14,7 +15,7 @@ const fetchRecipeDetails = (recipe) => {
       return ingredients;
     });
 
-  const productsPromise = fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product/recipe?id=${recipe.id_recipe}`)
+  const productsPromise = fetch(`${getApiUrl()}/product/recipe?id=${recipe.id_recipe}`)
     .then(response => response.json())
     .then(data => {
       const products = data.Products;
@@ -49,7 +50,7 @@ const fetchRecipeDetails = (recipe) => {
 };
 
 export const getAllRecipes = () => {
-  return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe`)
+  return fetch(`${getApiUrl()}/recipe`)
     .then(response => response.json())
     .then(data => {
       const originalRecipes = data.recipes;
@@ -63,7 +64,7 @@ export const getAllRecipes = () => {
 };
 
 export const getSingleRecipe = (id) => {
-  return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?id=${id}`)
+  return fetch(`${getApiUrl()}/recipe?id=${id}`)
     .then(response => response.json())
     .then(fetchRecipeDetails)
     .catch(error => {
@@ -81,7 +82,7 @@ export const modifyRecipe = (editedRecipe) => {
 
   const recipe = { name, instructions, preparationTimeMinutes: Number(preparationTimeMinutes), ingredients: filteredIngredients };
 
-  return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?id=${editedRecipe.id_recipe}`, { recipe })
+  return axios.put(`${getApiUrl()}/recipe?id=${editedRecipe.id_recipe}`, { recipe })
     .then(response => {
       return response.data;
     })
@@ -92,7 +93,7 @@ export const modifyRecipe = (editedRecipe) => {
 }
 
 export const deleteRecipe = (recipe) => {
-  return axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?id=${recipe.id_recipe}`)
+  return axios.delete(`${getApiUrl()}/recipe?id=${recipe.id_recipe}`)
     .then(response => {
       return response.data;
     })
@@ -100,7 +101,7 @@ export const deleteRecipe = (recipe) => {
 }
 
 export const createRecipe = (newRecipe) => {
-  return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe`, { recipe: newRecipe })
+  return axios.post(`${getApiUrl()}/recipe`, { recipe: newRecipe })
     .then(response => {
       return response.data;
     })
@@ -108,7 +109,7 @@ export const createRecipe = (newRecipe) => {
 }
 
 export const getAllRecipesWithProducts = () => {
-  return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe/withoutProducts`)
+  return fetch(`${getApiUrl()}/recipe/withoutProducts`)
     .then(response => {
       return response.json();
     })

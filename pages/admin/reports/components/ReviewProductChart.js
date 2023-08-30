@@ -4,6 +4,7 @@ import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 import { InputLabel, Grid, MenuItem, Select } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import axios from 'axios';
+import { getApiUrl } from '../../../../services/utils';
 
 const ReviewProductChart = ({ getReviewColorFromScore = () => { } }) => {
   const [productsData, setProductsData] = useState([]);
@@ -15,7 +16,7 @@ const ReviewProductChart = ({ getReviewColorFromScore = () => { } }) => {
 
   const fetchProductsData = async () => {
     try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/review/product_review_summary`);
+      const { data } = await axios.get(`${getApiUrl()}/review/product_review_summary`);
       setProductsData(data?.products);
       setSelectedProduct(data?.products[0]);
 

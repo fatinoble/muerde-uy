@@ -1,10 +1,12 @@
+import { getApiUrl } from './utils';
+
 export const getAllIngredients = () => {
-    return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient`)
-      .then(response => {
-        return response.json();
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        throw error;
-      });
-  };  
+  return fetch(`${getApiUrl()}/ingredient`)
+    .then(response => {
+      return response.json();
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      throw error;
+    });
+};  

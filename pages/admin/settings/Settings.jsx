@@ -10,6 +10,7 @@ import { TextField, Button } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 import Switch from '@mui/material/Switch';
 import React, { useState, useRef, useEffect } from 'react';
+import { getApiUrl } from '../../../services/utils';
 
 const Settings = () => {
   const [prefix, setPrefix] = useState('');
@@ -47,7 +48,7 @@ const Settings = () => {
 
   const handleSubmitNumber = async () => {
     try {
-      await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/setting?key=phone`, {
+      await axios.put(`${getApiUrl()}/setting?key=phone`, {
         value: prefix + phoneNumber,
       });
       setEnablePhoneEdit(false);
@@ -59,7 +60,7 @@ const Settings = () => {
 
   const handleSubmitBankAccount = async () => {
     try {
-      await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/setting?key=account_number`, {
+      await axios.put(`${getApiUrl()}/setting?key=account_number`, {
         value: accountNumber,
       });
       setEnableBankEdit(false);
@@ -71,7 +72,7 @@ const Settings = () => {
 
   const fetchSettings = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/setting`);
+      const response = await axios.get(`${getApiUrl()}/setting`);
       const { settings } = response.data;
       const wpp_phone = settings.find(setting => setting.key === 'phone');
       const account_number = settings.find(setting => setting.key === 'account_number');
@@ -100,7 +101,7 @@ const Settings = () => {
 
   const handleToggle = () => {
     setIsEmailEnabled(!isEmailEnabled);
-    axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/toggleEmail`)
+    axios.post(`${getApiUrl()}/toggleEmail`)
       .then(response => {
         console.log('Respuesta del servidor:', response.data);
         setMailLastEnabled(response.data.lastModified);

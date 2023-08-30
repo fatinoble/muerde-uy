@@ -7,6 +7,7 @@ import { findUserByMail } from '../../../services/userService';
 import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
 import { useRouter } from 'next/router';
+import { getApiUrl } from '../../../services/utils';
 
 const Login = () => {
     const [mail, setMail] = useState("");
@@ -29,7 +30,7 @@ const Login = () => {
 
 
     const getTransferNumber = () => {
-        return axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/setting`)
+        return axios.get(`${getApiUrl()}/setting`)
             .then(response => {
                 return response.data;
             })
