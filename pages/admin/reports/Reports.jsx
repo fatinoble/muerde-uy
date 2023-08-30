@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { getApiUrl } from '../../../services/utils';
 import BarChart from "@mui/icons-material/BarChart";
 import dynamic from "next/dynamic";
 import Head from 'next/head';
@@ -37,7 +38,7 @@ const Reports = () => {
 
   const fetchOrderStatusData = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/total_progress_status`);
+      const response = await axios.get(`${getApiUrl()}/sale/total_progress_status`);
       const data = response.data;
       setOrderStatusData(data.total_progress_status);
     } catch (error) {
@@ -47,7 +48,7 @@ const Reports = () => {
 
   const fetchProductsData = async () => {
     try {
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`);
+      const { data } = await axios.get(`${getApiUrl()}/product`);
       setProductsData(data.Products);
 
     } catch (error) {
@@ -57,7 +58,7 @@ const Reports = () => {
 
   const fetchIngredients = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient`);
+      const response = await axios.get(`${getApiUrl()}/ingredient`);
       const data = response.data;
       setIngredients(data.ingredients);
     } catch (error) {

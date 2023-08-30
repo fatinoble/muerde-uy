@@ -3,6 +3,7 @@ import { Container, Grid, Typography, TextField, Button } from '@mui/material';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
 import CSVDownloader from '../../../../src/components/CSVDownloader';
+import { getApiUrl } from '../../../../services/utils';
 
 const SalesByProductChart = ({ initStartDate, initEndDate, tomorrow }) => {
   const [salesData, setSalesData] = useState([]);
@@ -16,7 +17,7 @@ const SalesByProductChart = ({ initStartDate, initEndDate, tomorrow }) => {
   const fetchSalesData = async (start, end, isFromFilter) => {
     try {
       const endDateForFetching = isFromFilter ? end : tomorrow;
-      const { data } = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/total_product?start=${start}&end=${endDateForFetching}`);
+      const { data } = await axios.get(`${getApiUrl()}/sale/total_product?start=${start}&end=${endDateForFetching}`);
       const productWithSales = data.sales_by_product?.filter(product => product.sales_count > 0);
       setSalesData(productWithSales);
     } catch (error) {

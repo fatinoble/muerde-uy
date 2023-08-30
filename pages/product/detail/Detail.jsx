@@ -9,6 +9,7 @@ import { CircularProgress } from '@mui/material';
 import SaleDialog from './components/SaleDialog';
 import { isObjectEmpty } from '../../../src/utils';
 import axios from 'axios';
+import { getApiUrl } from '../../../services/utils';
 
 const today = new Date();
 const tomorrow = new Date(today);
@@ -60,7 +61,7 @@ const Detail = () => {
 
   const fetchProduct = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product?id=${productId}`);
+      const response = await axios.get(`${getApiUrl()}/product?id=${productId}`);
       const productResponse = response.data;
       if (productResponse && Object.keys(productResponse).length > 0) {
         setProduct(productResponse);

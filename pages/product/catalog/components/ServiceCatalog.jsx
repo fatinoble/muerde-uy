@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Snackbar, Typography, Box, } from '@mui/material';
 import { Alert } from '@mui/material';
 import { CircularProgress } from '@mui/material';
+import { getApiUrl } from '../../../../services/utils';
 
 
 const ServiceCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
@@ -52,7 +53,7 @@ const ServiceCatalog = ({ searchQuery = '', setAllTags, selectedTags }) => {
 
   const fetchServices = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/service`);
+      const response = await axios.get(`${getApiUrl()}/service`);
       const data = response.data;
       const catalogService = data.Services.filter(service => service.catalog_id !== undefined && service.catalog_id !== null && service.status === 'ENABLED');
       setServices(catalogService);

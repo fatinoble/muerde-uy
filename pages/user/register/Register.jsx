@@ -7,6 +7,7 @@ import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
 import { useRouter } from 'next/router';
 import Grid from '@mui/material/Grid';
+import { getApiUrl } from '../../../services/utils';
 
 const Register = () => {
     const [name, setName] = useState("");
@@ -31,7 +32,7 @@ const Register = () => {
     };
 
     const getTransferNumber = () => {
-        return axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/setting`)
+        return axios.get(`${getApiUrl()}/setting`)
             .then(response => {
                 return response.data;
             })
@@ -40,7 +41,7 @@ const Register = () => {
 
     const handleSubmit = async event => {
         event.preventDefault();
-        
+
         if (!name || !mail || !address || !phone || !password) {
             handleMessage("Por favor, completa todos los campos.", "error");
             return;

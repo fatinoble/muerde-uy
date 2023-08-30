@@ -12,6 +12,7 @@ import Alert from '@mui/material/Alert';
 import SuccessMessage from '../components/SuccessMessage';
 import TransferDialog from '../components/TransferDialog';
 import { setTransferNumber } from '../../../../services/saleService';
+import { getApiUrl } from '../../../../services/utils';
 
 const OrderScreen = () => {
     const router = useRouter();
@@ -41,7 +42,7 @@ const OrderScreen = () => {
 
     const fetchOrder = async () => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale`, {
+            const response = await axios.get(`${getApiUrl()}/sale`, {
                 params: {
                     id: orderId,
                 },
@@ -124,13 +125,13 @@ const OrderScreen = () => {
 
     const handleCloseTransferModal = () => {
         setTransferModalOpen(false);
-      };
+    };
 
-      const newTransferNumber = (newOrderNumberData) => {
+    const newTransferNumber = (newOrderNumberData) => {
         setTransferNumber(newOrderNumberData.id_sale, newOrderNumberData.transfer_number)
             .then(() => {
                 handleCloseTransferModal();
-                setOrder({...order, transfer_number: newOrderNumberData.transfer_number})
+                setOrder({ ...order, transfer_number: newOrderNumberData.transfer_number })
             })
     }
 

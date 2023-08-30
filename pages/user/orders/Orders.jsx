@@ -8,6 +8,8 @@ import { getOrderStateName, getOrderPaymentMethodName } from '@/utils';
 import OrderCard from './components/OrderCard';
 import TransferDialog from './components/TransferDialog';
 import { setTransferNumber } from '../../../services/saleService';
+import { getApiUrl } from '../../../services/utils';
+
 const Orders = () => {
   const router = useRouter();
 
@@ -20,7 +22,7 @@ const Orders = () => {
 
   useEffect(() => {
     const userId = localStorage.getItem('user_id');
-    if(!userId){
+    if (!userId) {
       router.push('/user/login')
     }
     setUserId(userId);
@@ -29,7 +31,7 @@ const Orders = () => {
 
   const fetchOrders = async (userId) => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/user?id=${userId}`);
+      const response = await axios.get(`${getApiUrl()}/sale/user?id=${userId}`);
       const data = response.data;
       setOrders(data.orders);
     } catch (error) {
@@ -61,25 +63,25 @@ const Orders = () => {
 
   const newTransferNumber = (newOrderNumberData) => {
     setTransferNumber(newOrderNumberData.id_sale, newOrderNumberData.transfer_number)
-    .then(() => {
-      handleCloseTransferModal();
-      fetchOrders(userId);
-    })
+      .then(() => {
+        handleCloseTransferModal();
+        fetchOrders(userId);
+      })
   }
 
   const handleTransferNumberUpdate = (orderId, newTransferNumber) => {
     const updatedOrders = orders.map(order => {
-        if (order.id_sale === orderId) {
-            return {
-                ...order,
-                transfer_number: newTransferNumber,
-            };
-        }
-        return order;
+      if (order.id_sale === orderId) {
+        return {
+          ...order,
+          transfer_number: newTransferNumber,
+        };
+      }
+      return order;
     });
 
     setOrders(updatedOrders); // Update the state with the updated orders
-}
+  }
 
   const handleCloseTransferModal = () => {
     setTransferModalOpen(false);
@@ -109,10 +111,10 @@ const Orders = () => {
         <title>Pedidos</title>
       </Head>
       {orders?.filter((order) => order?.status !== 'FINISHED').map((order) => (
-        <OrderCard 
-        key={order.id_sale}
-        order={order}
-        onTransferNumberUpdate={handleTransferNumberUpdate} />
+        <OrderCard
+          key={order.id_sale}
+          order={order}
+          onTransferNumberUpdate={handleTransferNumberUpdate} />
       ))}
       <TableContainer component={Paper} style={{ maxWidth: '500', margin: '0 auto' }}>
         <Table aria-label="My Table">

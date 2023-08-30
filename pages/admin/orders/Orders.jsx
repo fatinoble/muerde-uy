@@ -30,6 +30,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { getOrderPaymentMethodName, getOrderStateName } from '@/utils';
 import CalendarOrders from '../reports/components/CalendarOrders';
+import { getApiUrl } from '../../../services/utils';
 
 const Orders = () => {
 
@@ -52,7 +53,7 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale`);
+      const response = await axios.get(`${getApiUrl()}/sale`);
       const data = response.data;
       setOrders(data.orders);
     } catch (error) {
@@ -61,7 +62,7 @@ const Orders = () => {
   }
   const fetchOrderState = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/states`);
+      const response = await axios.get(`${getApiUrl()}/sale/states`);
       const data = response.data;
       setOrdersState(data.available_order_states);
     } catch (error) {
@@ -75,7 +76,7 @@ const Orders = () => {
         setOpenPaymentModal(true);
         return;
       }
-      await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale?id=${selectedOrder.id_sale}`, {
+      await axios.put(`${getApiUrl()}/sale?id=${selectedOrder.id_sale}`, {
         state: selectedState,
       });
       fetchOrders();
@@ -87,7 +88,7 @@ const Orders = () => {
 
   const handleConfirmPayment = async () => {
     try {
-      await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale?id=${selectedOrder.id_sale}`, {
+      await axios.put(`${getApiUrl()}/sale?id=${selectedOrder.id_sale}`, {
         state: selectedState,
       });
       fetchOrders();
@@ -133,7 +134,7 @@ const Orders = () => {
     const userDate = new Date(date);
     const timeDiff = userDate.getTime() - today.getTime();
     if (timeDiff < 0) {
-        return -Math.ceil(Math.abs(timeDiff) / (1000 * 3600 * 24));
+      return -Math.ceil(Math.abs(timeDiff) / (1000 * 3600 * 24));
     }
     return Math.ceil(timeDiff / (1000 * 3600 * 24));
   };

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Button, InvertedButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, MenuItem, Select } from '@mui/material';
 import { UNIT_MEASURES } from '../../../../src/utils'
 import { styled } from '@mui/system';
+import { getApiUrl } from '../../../../services/utils';
 
 const AddDialog = ({ fetchIngredients }) => {
   const [existingIngredientError, setexistingIngredientError] = useState('');
@@ -25,7 +26,7 @@ const AddDialog = ({ fetchIngredients }) => {
     const existIngredient = await validateExistingIngredient(newIngredient)
     if (!existIngredient) {
       try {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient`, {
+        await axios.post(`${getApiUrl()}/ingredient`, {
           ingredient: newIngredient,
         });
         fetchIngredients();
@@ -40,12 +41,12 @@ const AddDialog = ({ fetchIngredients }) => {
 
   const validateExistingIngredient = async (newIngredient) => {
     const ingredients = await fetchIngredients();
-    if (ingredients) { 
+    if (ingredients) {
       const existingIngredient = ingredients.find(ing => ing.name.toLowerCase() === newIngredient.name.toLowerCase());
       return existingIngredient != undefined;
     }
-    return false; 
-  };  
+    return false;
+  };
 
   const InvertedButton = styled(Button)(({ theme }) => ({
     marginBottom: theme.spacing(2),
@@ -76,7 +77,7 @@ const AddDialog = ({ fetchIngredients }) => {
             label="Nombre"
             value={newIngredient.name}
             onChange={(e) => {
-              const value = e.target.value;          
+              const value = e.target.value;
               if (/^[a-zA-ZáéíóúÁÉÍÓÚ\s]*$/.test(value)) {
                 setNewIngredient((prevIngredient) => ({
                   ...prevIngredient,

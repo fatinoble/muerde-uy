@@ -4,6 +4,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 import { Tooltip } from '@mui/material';
 import { UNIT_MEASURES_CONVERTER, calculateQuantity } from '@/utils/units_converter/helper';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { getApiUrl } from '../../../../services/utils';
 
 const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
 
@@ -31,7 +32,7 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
         finalPurchase.quantity = calculateQuantity(ingredientUnit, newPurchase.quantity);
       }
 
-      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient/purchase`, {
+      await axios.post(`${getApiUrl()}/ingredient/purchase`, {
         purchase_ingredient: finalPurchase,
       });
       fetchIngredients();

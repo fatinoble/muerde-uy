@@ -1,14 +1,15 @@
 import axios from 'axios';
+import { getApiUrl } from './utils';
 
 export const getAllProducts = () => {
-  return fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`)
+  return fetch(`${getApiUrl()}/product`)
     .then(response => response.json())
     .then(data => {
       const originalProducts = data.Products;
       const productPromises = originalProducts.map(product => {
         return Promise.all([
-          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/recipe?id=${product.recipe_id}`).then(response => response.json()),
-          fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/catalog?id=${product.catalog_id}`).then(response => response.json()),
+          fetch(`${getApiUrl()}/recipe?id=${product.recipe_id}`).then(response => response.json()),
+          fetch(`${getApiUrl()}/catalog?id=${product.catalog_id}`).then(response => response.json()),
         ])
           .then(([recipe, catalog]) => {
             return {
@@ -58,7 +59,7 @@ export const modifyProduct = (editedProduct = {}) => {
   formData.append('catalog_id', catalog_id);
   formData.append('status', status);
 
-  return axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product?id=${editedProduct.id_product}`, formData, {
+  return axios.put(`${getApiUrl()}/product?id=${editedProduct.id_product}`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
@@ -73,7 +74,7 @@ export const modifyProduct = (editedProduct = {}) => {
 }
 
 export const deleteProduct = (product) => {
-  return axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product?id=${product.id_product}`)
+  return axios.delete(`${getApiUrl()}/product?id=${product.id_product}`)
     .then(response => {
       return response.data;
     })
@@ -90,7 +91,7 @@ export const createProduct = (newProduct = {}) => {
   formData.append('recipe_id', newProduct.recipe_id);
   formData.append('catalog_id', newProduct.catalog_id);
 
-  return axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/product`, formData, {
+  return axios.post(`${getApiUrl()}/product`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },

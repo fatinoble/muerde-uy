@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { TextField } from '@mui/material';
 import { isObjectEmpty } from '../../../../src/utils';
 import axios from 'axios';
+import { getApiUrl } from '../../../../services/utils';
 
 const OrderPreparation = () => {
   const [orderPreparationSuggestions, setOrderPreparationSuggestions] = useState([]);
@@ -19,7 +20,7 @@ const OrderPreparation = () => {
 
   const fetchOrderPreparationSuggestions = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale/order_preparation_suggestions`);
+      const response = await axios.get(`${getApiUrl()}/sale/order_preparation_suggestions`);
       const data = response.data;
       setOrderPreparationSuggestions(data.order_preparation_suggestion_per_day);
       setPreparationSuggestionDay(data.order_preparation_suggestion_per_day[0]);

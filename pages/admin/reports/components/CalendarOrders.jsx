@@ -13,6 +13,7 @@ import "./index.css";
 import { Modal } from '@mui/material';
 import { Select, MenuItem } from '@mui/material';
 import { formatDate } from '@/utils';
+import { getApiUrl } from '../../../../services/utils';
 
 const locales = {
     es
@@ -53,7 +54,7 @@ const CalendarOrders = () => {
 
     const fetchOrders = async () => {
         try {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale`);
+            const response = await axios.get(`${getApiUrl()}/sale`);
             const data = response.data;
 
             const updatedDates = data.orders.map((order) => {
@@ -131,34 +132,34 @@ const CalendarOrders = () => {
 
     return (
         <>
-        <div style={{backgroundColor: 'white'}}>
+            <div style={{ backgroundColor: 'white' }}>
 
-        
-            <label className="featuredTitle" id='lbl-filter'>Filtrar por estado</label>
-            <Select
-                labelId="lbl-filter"
-                value={selectedStatusFilter || ''}
-                onChange={handleStatusFilterChange}
-                displayEmpty
-                inputProps={{ 'aria-label': 'Filter by status' }}
-            >
-                <MenuItem value="">Todos</MenuItem>
-                <MenuItem value="TODO">Pendiente</MenuItem>
-                <MenuItem value="WIP">En proceso</MenuItem>
-                <MenuItem value="DONE_PICK_UP">Listo para retiro</MenuItem>
-                <MenuItem value="DONE_DELIVERY">Listo para delivery</MenuItem>
-                <MenuItem value="FINISHED">Finalizado</MenuItem>
-            </Select>
-            <Calendar
-                localizer={localizer}
-                events={selectedEvent ? [] : orders}
-                startAccessor="user_date"
-                endAccessor="user_date"
-                style={{ height: 500 }}
-                messages={customMessages}
-                onSelectEvent={handleEventClick}
-                eventPropGetter={eventStyleGetter}
-            /></div>
+
+                <label className="featuredTitle" id='lbl-filter'>Filtrar por estado</label>
+                <Select
+                    labelId="lbl-filter"
+                    value={selectedStatusFilter || ''}
+                    onChange={handleStatusFilterChange}
+                    displayEmpty
+                    inputProps={{ 'aria-label': 'Filter by status' }}
+                >
+                    <MenuItem value="">Todos</MenuItem>
+                    <MenuItem value="TODO">Pendiente</MenuItem>
+                    <MenuItem value="WIP">En proceso</MenuItem>
+                    <MenuItem value="DONE_PICK_UP">Listo para retiro</MenuItem>
+                    <MenuItem value="DONE_DELIVERY">Listo para delivery</MenuItem>
+                    <MenuItem value="FINISHED">Finalizado</MenuItem>
+                </Select>
+                <Calendar
+                    localizer={localizer}
+                    events={selectedEvent ? [] : orders}
+                    startAccessor="user_date"
+                    endAccessor="user_date"
+                    style={{ height: 500 }}
+                    messages={customMessages}
+                    onSelectEvent={handleEventClick}
+                    eventPropGetter={eventStyleGetter}
+                /></div>
 
             <Modal
                 open={Boolean(selectedEvent)}

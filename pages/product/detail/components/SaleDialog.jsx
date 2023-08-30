@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, RadioGroup, FormControlLabel, Radio, Grid, TextField } from '@mui/material';
+import { getApiUrl } from '../../../../services/utils';
 
 const today = new Date();
 const gmtMinus3Offset = 180;
@@ -24,7 +25,7 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
 
   const handleDoSale = async () => {
     try {
-      const s = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/sale`, {
+      const s = await axios.post(`${getApiUrl()}/sale`, {
         sale: newSale,
       });
       router.push(`/user/orders/order/${s.data.id_sale}?exito=true`);
@@ -59,7 +60,7 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
   };
 
   const handleOpenSaleModal = () => {
-    if(!localStorage.getItem('user_id')){
+    if (!localStorage.getItem('user_id')) {
       router.push('/user/login');
       return;
     }
@@ -123,7 +124,7 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
                 <FormControlLabel value="TRANSFER" control={<Radio />} label="Transferencia bancaria" />
               </RadioGroup>
             </DialogContent>
-            </Grid>
+          </Grid>
         </Grid>
         <DialogActions>
           <Button onClick={handleCloseSaleModal} color="primary">

@@ -8,6 +8,7 @@ import AddDialog from './components/AddDialog';
 import PurchaseDialog from './components/PurchaseDialog';
 import ModifyDialog from './components/ModifyDialog';
 import { formatDate } from '../../../src/utils';
+import { getApiUrl } from '../../../services/utils';
 
 import { useEffect, useState } from 'react';
 
@@ -22,7 +23,7 @@ const Ingredients = () => {
 
   const fetchIngredients = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/ingredient`);
+      const response = await axios.get(`${getApiUrl()}/ingredient`);
       const data = response.data;
       setIngredients(data.ingredients);
       return data.ingredients;
