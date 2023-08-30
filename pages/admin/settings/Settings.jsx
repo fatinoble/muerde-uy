@@ -20,9 +20,8 @@ const Settings = () => {
   const [accountNumber, setAccountNumber] = useState('');
   const [phoneLastModify, setPhoneLastModify] = useState('');
   const [bankLastModify, setBankLastModify] = useState('');
-  const [isEmailEnabled, setIsEmailEnabled] = useState(true);
+  const [isEmailEnabled, setIsEmailEnabled] = useState('');
   const [mailLastEnabled, setMailLastEnabled] = useState('');
-  const [mailSwitchMessage, setMailSwitchMessage] = useState("El envío de correo está habilitado");
   const numberRef = useRef(null);
 
   useEffect(() => {
@@ -69,12 +68,26 @@ const Settings = () => {
     }
   }
 
+  const handleToggle = async () => {
+    try {
+      const newValue = !isEmailEnabled;
+      await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/setting?key=mail_enabled`, {
+        value: newValue ? 'true' : 'false',
+      });
+      setIsEmailEnabled(newValue);
+      fetchSettings();
+    } catch (error) {
+      console.error('Error updating feature status:', error);
+    }
+  };
+
   const fetchSettings = async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/setting`);
       const { settings } = response.data;
       const wpp_phone = settings.find(setting => setting.key === 'phone');
       const account_number = settings.find(setting => setting.key === 'account_number');
+      const mail_enabled = settings.find(setting => setting.key === 'mail_enabled');
       const prefixFromWppPhone = wpp_phone?.value?.substring(0, 3) || '';
       const actualPhoneNumber = wpp_phone?.value?.substring(3) || '';
       setPrefix(prefixFromWppPhone);
@@ -82,6 +95,8 @@ const Settings = () => {
       setAccountNumber(account_number?.value || '');
       setPhoneLastModify(wpp_phone?.last_modified || '');
       setBankLastModify(account_number?.last_modified || '');
+      setIsEmailEnabled(mail_enabled?.value === 'true' || false);
+      setMailLastEnabled(mail_enabled?.last_modified || '');
     } catch (error) {
       console.error('Error fetching settings:', error);
     }
@@ -96,19 +111,6 @@ const Settings = () => {
     const minutes = date.getMinutes().toString().padStart(2, '0');
     const seconds = date.getSeconds().toString().padStart(2, '0');
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-  };
-
-  const handleToggle = () => {
-    setIsEmailEnabled(!isEmailEnabled);
-    axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/toggleEmail`)
-      .then(response => {
-        console.log('Respuesta del servidor:', response.data);
-        setMailLastEnabled(response.data.lastModified);
-        setMailSwitchMessage(response.data.message);
-      })
-      .catch(error => {
-        console.error('Error en la petición:', error);
-      });
   };
 
   return (
@@ -232,9 +234,9 @@ const Settings = () => {
           Activar envío de mails
         </div>
         <div className='setting-content content-mail mail-flex-container'>
-          {mailSwitchMessage &&
-            <span className="setting-text mail-text setting-last-modify mail-margin-right">{mailSwitchMessage}</span>
-          }
+          <span className="setting-text mail-text setting-last-modify mail-margin-right">
+            {isEmailEnabled ? "El envío de mails está activo" : "El envío de mails está inactivo"}
+          </span>
           {mailLastEnabled &&
             <span className="setting-text mail-text setting-last-modify mail-margin-right">Última modificación: {formatDate(mailLastEnabled)}</span>
           }
