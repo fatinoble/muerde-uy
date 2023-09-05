@@ -6,7 +6,7 @@ import { Container, Grid, List, ListItem, ListItemText, MenuItem, Paper, Select,
 import InfoIcon from '@mui/icons-material/Info';
 import { getOrderPaymentMethodName, getOrderStateName } from '@/utils';
 import { getApiUrl } from '../../../../services/utils';
-import { verifyToken } from '../../../services/userService';
+import { verifyToken } from '../../../../services/userService';
 
 function OrderScreen() {
 
