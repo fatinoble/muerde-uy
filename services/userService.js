@@ -41,3 +41,12 @@ export const modifyUser = (user) => {
     })
     .catch(error => console.error('Error:', error.response.data));
 }
+
+export const verifyToken = async (token) => {
+  try {
+    const response = await axios.post(`${getApiUrl()}/user/auth`, {}, { headers: { 'x-token': token } });
+    return { data: response.data };
+  } catch (error) {
+    return { data: error.response.data };
+  }
+}

@@ -11,8 +11,11 @@ import EmailIcon from '@mui/icons-material/Email';
 import Switch from '@mui/material/Switch';
 import React, { useState, useRef, useEffect } from 'react';
 import { getApiUrl } from '../../../services/utils';
+import { verifyToken } from '../../../services/userService';
+import { useRouter } from 'next/router';
 
 const Settings = () => {
+  const router = useRouter();
   const [prefix, setPrefix] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [numberError, setNumberError] = useState('');
@@ -26,6 +29,19 @@ const Settings = () => {
   const numberRef = useRef(null);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token_admin');
+        const response = await verifyToken(token);
+        const user = response.data;
+        if (!user || user.role !== 'ADMIN') {
+          router.push('/admin/login');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchData();
     fetchSettings();
   }, []);
 

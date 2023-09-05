@@ -13,6 +13,7 @@ import SuccessMessage from '../components/SuccessMessage';
 import TransferDialog from '../components/TransferDialog';
 import { setTransferNumber } from '../../../../services/saleService';
 import { getApiUrl } from '../../../../services/utils';
+import { verifyToken } from '../../../../services/userService';
 
 const OrderScreen = () => {
     const router = useRouter();
@@ -29,8 +30,7 @@ const OrderScreen = () => {
     const anchorRef = useRef(null);
 
     useEffect(() => {
-        fetchOrder();
-
+        fetchData();
         const loadReviews = async () => {
             const fetchedReviews = await getAllReviews();
             const reviewExists = fetchedReviews.some(r => r.sale_id === Number(orderId));
@@ -39,6 +39,20 @@ const OrderScreen = () => {
 
         loadReviews();
     }, [])
+
+    const fetchData = async () => {
+        try {
+            const token = localStorage.getItem('token_user');
+            const response = await verifyToken(token);
+          const user = response.data;
+          if (!user) {
+            router.push('/user/login');
+          }
+          fetchOrder();
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
 
     const fetchOrder = async () => {
         try {

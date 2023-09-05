@@ -66,7 +66,7 @@ const Login = () => {
                 }
             }
             if (response.data && response.data.role == "USER") {
-                localStorage.setItem('token_login_user', response.data.token);
+                localStorage.setItem('token_user', response.data.token);
                 localStorage.setItem('user_id', response.data.id_user);
                 localStorage.setItem('user_role', response.data.role);
                 localStorage.setItem('user_name', response.data.name);

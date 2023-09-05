@@ -14,17 +14,33 @@ import ReviewScoreQuantityChart from './components/ReviewScoreQuantityChart';
 import ReviewProductChart from './components/ReviewProductChart';
 import Warnings from './components/Warnings';
 import CSVDownloader from '../../../src/components/CSVDownloader'
+import { useRouter } from 'next/router';
+import { verifyToken } from '../../../services/userService';
 const ProductStockChartWithoutSSR = dynamic(
   import("./components/ProductStockChart"),
   { ssr: false }
 );
 
 const Reports = () => {
+  const router = useRouter();
   const [ingredients, setIngredients] = useState([]);
   const [productsData, setProductsData] = useState([]);
   const [orderStatusData, setOrderStatusData] = useState([]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token_admin');
+        const response = await verifyToken(token);
+        const user = response.data;
+        if (!user || user.role !== 'ADMIN') {
+          router.push('/admin/login');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchData();
     if (!ingredients.length) {
       fetchIngredients();
     }

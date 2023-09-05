@@ -8,8 +8,11 @@ import CreateModal from '../../../src/utils/modals/service_modal/CreateModal';
 import { getAllServices, modifyService, createService } from '../../../services/serviceService';
 import CategoryIcon from '@mui/icons-material/Category';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { verifyToken } from '../../../services/userService';
 
 const Services = () => {
+  const router = useRouter();
   const [services, setServices] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [serviceToEdit, setServiceToEdit] = useState(null);
@@ -20,6 +23,19 @@ const Services = () => {
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token_admin');
+        const response = await verifyToken(token);
+        const user = response.data;
+        if (!user || user.role !== 'ADMIN') {
+          router.push('/admin/login');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchData();
     getAllServices()
       .then(services => {
         setServices(services);

@@ -10,8 +10,11 @@ import Storefront from "@mui/icons-material/Storefront";
 import { getAllProducts, modifyProduct, createProduct } from '../../../services/productService';
 import { Card, CardContent, CardMedia, CardActions } from '@mui/material';
 import { styled } from '@mui/system';
+import { useRouter } from 'next/router';
+import { verifyToken } from '../../../services/userService';
 
 const Products = () => {
+  const router = useRouter();
   const [products, setProducts] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [productToEdit, setProductToEdit] = useState(null);
@@ -21,6 +24,19 @@ const Products = () => {
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token_admin');
+        const response = await verifyToken(token);
+        const user = response.data;
+        if (!user || user.role !== 'ADMIN') {
+          router.push('/admin/login');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchData();
     getAllProducts()
       .then(products => {
         setProducts(products);

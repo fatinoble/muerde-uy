@@ -9,6 +9,7 @@ import OrderCard from './components/OrderCard';
 import TransferDialog from './components/TransferDialog';
 import { setTransferNumber } from '../../../services/saleService';
 import { getApiUrl } from '../../../services/utils';
+import { verifyToken } from '../../../services/userService';
 
 const Orders = () => {
   const router = useRouter();
@@ -21,13 +22,23 @@ const Orders = () => {
   const [isTransferModalOpen, setTransferModalOpen] = useState(false);
 
   useEffect(() => {
-    const userId = localStorage.getItem('user_id');
-    if (!userId) {
-      router.push('/user/login')
-    }
-    setUserId(userId);
-    fetchOrders(userId);
+    fetchData();
   }, [])
+
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem('token_user');
+      const response = await verifyToken(token);
+      const user = response.data;
+      if (!user) {
+        router.push('/user/login');
+      }
+      setUserId(user.id_user);
+      fetchOrders(user.id_user);
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
 
   const fetchOrders = async (userId) => {
     try {
