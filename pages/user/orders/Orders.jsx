@@ -27,7 +27,8 @@ const Orders = () => {
 
   const fetchData = async () => {
     try {
-      const response = await verifyToken(localStorage.getItem('token_user'));
+      const token = localStorage.getItem('token_user');
+      const response = await verifyToken(token);
       const user = response.data;
       if (!user) {
         router.push('/user/login');

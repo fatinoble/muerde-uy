@@ -50,7 +50,8 @@ const Orders = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await verifyToken(localStorage.getItem('token_admin'));
+        const token = localStorage.getItem('token_admin');
+        const response = await verifyToken(token);
         const user = response.data;
         if (!user || user.role !== 'ADMIN') {
           router.push('/admin/login');
