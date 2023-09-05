@@ -8,8 +8,11 @@ import { modifyUser } from '../../../services/userService';
 import Head from 'next/head';
 import People from "@mui/icons-material/People";
 import { formatDate } from '../../../src/utils';
+import { verifyToken } from '../../../services/userService';
+import { useRouter } from 'next/router';
 
 const Clients = () => {
+  const router = useRouter();
   const [users, setUsers] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -19,6 +22,17 @@ const Clients = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await verifyToken(localStorage.getItem('token_admin'));
+        const user = response.data;
+        if (!user || user.role !== 'ADMIN') {
+          router.push('/admin/login');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
     getUsers()
       .then(users => {
         setUsers(users.data);

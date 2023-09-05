@@ -16,20 +16,14 @@ const UserMenu = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const userToken = localStorage.getItem('token_login_user');
+    const userToken = localStorage.getItem('token_user');
     if (userToken) {
       setIsLoggedIn(true);
     }
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('user_name');
-    localStorage.removeItem('user_mail');
-    localStorage.removeItem('user_id');
-    localStorage.removeItem('token_login_user');
-    localStorage.removeItem('user_role');
-    localStorage.removeItem('user_phone');
-    localStorage.removeItem('user_address');
+    localStorage.clear();
     setIsLoggedIn(false);
     router.push('/user/login');
   };

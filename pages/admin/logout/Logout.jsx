@@ -5,10 +5,7 @@ const Logout = () => {
     const router = useRouter();
 
     useEffect(() => {
-        localStorage.removeItem('token_login_admin');
-        localStorage.removeItem('user_role');
-        localStorage.removeItem('user_name');
-        localStorage.removeItem('user_mail');
+        localStorage.clear();
         router.push('/admin/login')
     }, []);
 

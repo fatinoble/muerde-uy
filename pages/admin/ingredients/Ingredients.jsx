@@ -9,13 +9,27 @@ import PurchaseDialog from './components/PurchaseDialog';
 import ModifyDialog from './components/ModifyDialog';
 import { formatDate } from '../../../src/utils';
 import { getApiUrl } from '../../../services/utils';
-
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { verifyToken } from '../../../services/userService';
 
 const Ingredients = () => {
+  const router = useRouter();
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await verifyToken(localStorage.getItem('token_admin'));
+        const user = response.data;
+        if (!user || user.role !== 'ADMIN') {
+          router.push('/admin/login');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchData();
     if (!ingredients.length) {
       fetchIngredients();
     }

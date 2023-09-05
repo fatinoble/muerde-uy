@@ -6,6 +6,7 @@ import { Container, Grid, List, ListItem, ListItemText, MenuItem, Paper, Select,
 import InfoIcon from '@mui/icons-material/Info';
 import { getOrderPaymentMethodName, getOrderStateName } from '@/utils';
 import { getApiUrl } from '../../../../services/utils';
+import { verifyToken } from '../../../services/userService';
 
 function OrderScreen() {
 
@@ -28,6 +29,18 @@ function OrderScreen() {
 
 
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+              const response = await verifyToken(localStorage.getItem('token_admin'));
+              const user = response.data;
+              if (!user || user.role !== 'ADMIN') {
+                router.push('/admin/login');
+              }
+            } catch (error) {
+              console.error('Error fetching user data:', error);
+            }
+          };
+          fetchData();
         fetchOrder();
         fetchOrderState();
 

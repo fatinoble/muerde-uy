@@ -83,7 +83,7 @@ const Register = () => {
                 }
             }
             if (response.data.id_user) {
-                localStorage.setItem('token_registration_user', response.data.token);
+                localStorage.setItem('token_user', response.data.token);
                 localStorage.setItem('user_id', response.data.id_user);
                 localStorage.setItem('user_role', response.data.role);
                 localStorage.setItem('user_name', response.data.name);
