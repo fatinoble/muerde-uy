@@ -18,18 +18,22 @@ const ProductCard = ({ imageSrc, title, price, isOutOfStock }) => {
   return (
     <ThemeProvider theme={theme}>
       <Card sx={{ height: '100%', opacity: isOutOfStock ? '60%' : '100%' }} className="product-card-container">
-        <CardMedia component="img" src={imageSrc} alt={title} className="product-card-image"/>
-        <CardContent>
-          <div className="top-info-card">
-            <Typography variant="h6" component="div" className="product-card-title-box">
-              {title}
+        <div className="product-card-image-container">
+          <CardMedia component="img" src={imageSrc} alt={title} className="product-card-image" />
+        </div>
+        <div className="product-card-info-container">
+          <CardContent className="product-info-container">
+            <div className="top-info-card">
+              <Typography variant="h6" component="div" className="product-card-title-box">
+                {title}
+              </Typography>
+              {isOutOfStock && <span className='oos-pill'>SIN STOCK</span>}
+            </div>
+            <Typography variant="body1" className="product-card-price-box">
+              ${price}
             </Typography>
-            {isOutOfStock && <span className='oos-pill'>SIN STOCK</span>}
-          </div>
-          <Typography variant="body1" className="product-card-price-box">
-            ${price}
-          </Typography>
-        </CardContent>
+          </CardContent>
+        </div>
       </Card>
     </ThemeProvider>
   );

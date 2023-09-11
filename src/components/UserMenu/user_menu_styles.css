@@ -1,3 +1,9 @@
+.user-menu-container {
+  background-color: white;
+  height: 100%;
+  
+}
+
 .user-menu-selector-container {
   height: 64px;
   width: 100%;

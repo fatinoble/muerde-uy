@@ -143,43 +143,49 @@ const Detail = () => {
       <div className="product-detail-main-container">
         <ThemeProvider theme={theme}>
           <Box className="product-detail-container">
-            <img src={image || '/images/unavailable.png'} alt={title} className="product-detail-image" />
-            <div className="product-detail-content">
-              <div className="product-detail-content-left">
-                <Typography variant="h6" className="product-detail-title-box">
-                  {title}
-                </Typography>
-                <Typography variant="h6" className="product-detail-price-box">${price * quantity}</Typography>
-              </div>
-              <div className="product-detail-content-middle">
-                <Typography className="product-detail-description-box">{description}</Typography>
-              </div>
-              <div className="product-detail-content-right">
-                {is_out_of_stock ?
-                  <span className='oos-pill'>SIN STOCK</span>
-                  : (
-                    <Box className="product-detail-quantity-changer">
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        sx={{ marginRight: '0.5rem' }}
-                        onClick={handleDecrease}
-                        disabled={quantity === 1}
-                      >
-                        -
-                      </Button>
-                      <Typography variant="body1" className="product-detail-quantity-label">{quantity}</Typography>
-                      <Button variant="contained" color="primary" sx={{ marginLeft: '0.5rem' }} onClick={handleIncrease}>
-                        +
-                      </Button>
-                    </Box>
-                  )
-                }
-                <SaleDialog product={product} quantity={quantity} setNewSale={setNewSale} newSale={newSale} setError={setError} />
-
-              </div>
-
+            <div className="product-detail-image-container">
+              <img src={image || '/images/unavailable.png'} alt={title} className="product-detail-image" />
             </div>
+            <div className="product-detail-content-container">
+              <div className="product-detail-content">
+                <div className="product-detail-content-left">
+                  <Typography variant="h6" className="product-detail-title-box">
+                    {title}
+                  </Typography>
+                  <Typography className="product-detail-description-box">{description}</Typography>
+                  <Typography variant="h6" className="product-detail-price-box">${price * quantity}</Typography>
+                </div>
+                <div className="product-detail-content-middle">
+
+                </div>
+                <div className="product-detail-content-right">
+                  {is_out_of_stock ?
+                    <span className='oos-pill'>SIN STOCK</span>
+                    : (
+                      <Box className="product-detail-quantity-changer">
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          sx={{ marginRight: '0.5rem' }}
+                          onClick={handleDecrease}
+                          disabled={quantity === 1}
+                        >
+                          -
+                        </Button>
+                        <Typography variant="body1" className="product-detail-quantity-label">{quantity}</Typography>
+                        <Button variant="contained" color="primary" sx={{ marginLeft: '0.5rem' }} onClick={handleIncrease}>
+                          +
+                        </Button>
+                      </Box>
+                    )
+                  }
+                  <SaleDialog product={product} quantity={quantity} setNewSale={setNewSale} newSale={newSale} setError={setError} />
+
+                </div>
+
+              </div>
+            </div>
+
           </Box>
         </ThemeProvider>
       </div>
