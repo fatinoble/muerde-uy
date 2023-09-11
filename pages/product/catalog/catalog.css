@@ -190,3 +190,7 @@ font-weight: 400;
 line-height: normal;
 margin-bottom: 10px;
 }
+
+.switcher-button {
+  border-radius: 28.5px;
+}

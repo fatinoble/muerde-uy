@@ -85,10 +85,10 @@ const Catalog = () => {
               onChange={handleCatalogTypeChange}
               aria-label="catalog type"
             >
-              <ToggleButton value="products" aria-label="products">
+              <ToggleButton value="products" aria-label="products" className="switcher-button">
                 Productos
               </ToggleButton>
-              <ToggleButton value="services" aria-label="services">
+              <ToggleButton value="services" aria-label="services" className="switcher-button">
                 Servicios
               </ToggleButton>
             </ToggleButtonGroup>

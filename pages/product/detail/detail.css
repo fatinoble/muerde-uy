@@ -123,3 +123,83 @@
   flex-direction: column;
   align-items: center;
 }
+
+.dialog-sale-container {
+  min-width: 600px;
+  min-height: 500px;
+}
+
+.image-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.radio-group-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.dialog-text-title-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialog-text-title {
+  color: #606060;
+  text-align: center;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 128%;
+  max-width: 300px;
+}
+
+.radio-group-label {
+  border-radius: 23.5px;
+  border: 3px solid #e578a038;
+  background: rgba(255, 214, 214, 0.17);
+  padding: 2px 5px;
+  color: #37212955;
+  margin-bottom: 10px;
+}
+
+.radio-group-label span{
+  text-align: center;
+  font-size: 18px;
+  font-style: bold;
+  font-weight: 600;
+  line-height: 128%;
+  padding-right: 10px;
+  }
+
+.radio-group-label-checked {
+  border-radius: 23.5px;
+  border: 3px solid #E578A0;
+  background: rgba(255, 214, 214, 0.17);
+  padding: 2px 5px;
+  color: #E578A0;
+  text-align: center;
+  font-size: 18px;
+  font-style: bold;
+  font-weight: 600;
+  line-height: 128%;
+  margin-bottom: 10px;
+}
+
+.radio-group-label-checked span{
+  text-align: center;
+  font-size: 18px;
+  font-style: bold;
+  font-weight: 600;
+  line-height: 128%;
+  padding-right: 10px;
+}
+
+.dialog-sale-header-container {
+  margin-bottom: 10px;
+}
