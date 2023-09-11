@@ -155,7 +155,7 @@ const Orders = () => {
                   <TableCell>{showTransferButton(order)}</TableCell>
                   <TableCell>
                     <Button
-                      style={{ color: 'white', backgroundColor: 'rgba(216, 130, 130, 0.737)' }}
+                      style={{ color: 'white', backgroundColor: '#9F605E' }}
                       variant="contained"
                       onClick={(e) => {
                         e.preventDefault();

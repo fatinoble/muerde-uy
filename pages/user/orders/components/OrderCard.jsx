@@ -21,8 +21,6 @@ const setProgressBar = (status) => {
 }
 
 
-
-
 function OrderCard({ order, onTransferNumberUpdate }) {
     const router = useRouter();
     const [isTransferModalOpen, setTransferModalOpen] = useState(false);
@@ -63,31 +61,59 @@ function OrderCard({ order, onTransferNumberUpdate }) {
 
     return (
         <div className="order-card-container">
-            <Paper style={{ padding: '25px', marginBottom: '25px' }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                        <Typography style={{ marginBottom: '20px' }} variant="h5">Pedido Nro: {order?.id_sale}</Typography>
-                        <Typography style={{ marginBottom: '20px' }} variant="h6">Fecha del pedido: {order?.start_date?.substring(0, 10)}</Typography>
-                        <Typography style={{ marginBottom: '20px' }} variant="h6">Fecha solicitada de entrega: {order?.user_date?.substring(0, 10)}</Typography>
-                        {order?.finish_date && <Typography style={{ marginBottom: '20px' }} variant="h6">Fecha Entregado: {order?.finish_date?.substring(0, 10)}</Typography>}
-                        <Typography style={{ marginBottom: '20px' }} variant="h6">Tipo de entrega: {order?.delivery_type == 'PICK_UP' ? 'Retiro en tienda' : 'Delivery'}</Typography>
-                        <Typography style={{ marginBottom: '20px' }} variant="h6">Tipo de pago: {getOrderPaymentMethodName(order?.payment_method)} {showTransferButton(order)}</Typography>
-                        <Typography style={{ marginBottom: '20px' }} variant="h6">Estado: {getOrderStateName(order?.status)}</Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <Typography variant="h5">Productos de la orden:
-                            <List>
-                                {order?.products?.map((product) => (
-                                    <ListItem key={product?.product?.id_product}>
-                                        <ListItemText primary={`- x${product?.quantity} ${product?.product?.title} `} />
-                                    </ListItem>
-                                ))}
-                            </List>
-                        </Typography>
 
+            <Paper style={{ marginBottom: '25px' }}>
+                <div className="card-header">
+
+                    <Typography variant="h5">
+                        Pedido Nro: {order?.id_sale}
+                    </Typography>
+                </div>
+                <div className="content-card-container" style={{ padding: '25px' }}>
+                    <Grid container spacing={2} >
+                        <Grid item xs={12} sm={6}>
+
+                            <Typography style={{ marginBottom: '20px' }} className="card-title-data" variant="h6">
+                                Fecha del pedido: <span className="card-info-data">{order?.start_date?.substring(0, 10)}</span>
+                            </Typography>
+
+                            <Typography style={{ marginBottom: '20px' }} className="card-title-data" variant="h6">
+                                Fecha solicitada de entrega: <span className="card-info-data">{order?.user_date?.substring(0, 10)}</span>
+                            </Typography>
+
+                            {order?.finish_date && <Typography style={{ marginBottom: '20px' }} className="card-title-data" variant="h6">
+                                Fecha Entregado: <span className="card-info-data">{order?.finish_date?.substring(0, 10)}</span>
+                            </Typography>}
+
+                            <Typography style={{ marginBottom: '20px' }} className="card-title-data" variant="h6">
+                                Tipo de entrega: <span className="card-info-data">{order?.delivery_type == 'PICK_UP' ? 'Retiro en tienda' : 'Delivery'}</span>
+                            </Typography>
+
+                            <Typography style={{ marginBottom: '20px' }} className="card-title-data" variant="h6">
+                                Tipo de pago: <span className="card-info-data">{getOrderPaymentMethodName(order?.payment_method)} {showTransferButton(order)}</span>
+                            </Typography>
+
+                            <Typography style={{ marginBottom: '20px' }} className="card-title-data" variant="h6">
+                                Estado: <span className="card-info-data">{getOrderStateName(order?.status)}</span>
+                            </Typography>
+
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <Typography variant="h5">Productos de la orden:
+                                <List>
+                                    {order?.products?.map((product) => (
+                                        <ListItem key={product?.product?.id_product}>
+                                            <ListItemText primary={`• x${product?.quantity} ${product?.product?.title} `} />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                            </Typography>
+
+                        </Grid>
                     </Grid>
-                </Grid>
-                <LinearProgress variant="buffer" value={setProgressBar(order?.status)} valueBuffer={15} />
+                    <LinearProgress variant="buffer" value={setProgressBar(order?.status)} valueBuffer={15} />
+                </div>
+
                 {isTransferModalOpen ? (
                     <TransferDialog
                         open={isTransferModalOpen}

@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useState, useRef } from "react";
-import { Container, Typography, TextField, Button, Box } from '@mui/material';
+import { Container, Typography, TextField, Button, Box, CircularProgress } from '@mui/material';
 import { createUser } from '../../../services/userService';
 import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
@@ -18,6 +18,7 @@ const Register = () => {
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("success");
+    const [isLoading, setIsLoading] = useState(false);
     const anchorRef = useRef(null);
     const router = useRouter();
 
@@ -72,6 +73,7 @@ const Register = () => {
         };
 
         try {
+            setIsLoading(true);
             const response = await createUser(data);
             const settingsResponse = await getTransferNumber();
             let transferNumber = '';
@@ -100,9 +102,11 @@ const Register = () => {
                     handleMessage("Ya existe un cliente con este teléfono.", "error");
                 }
             }
+            setIsLoading(false);
         } catch (error) {
             console.log('Error with registration:', error);
             handleMessage('Hubo un error al crear la cuenta. Por favor, intenta de nuevo.', "error");
+            setIsLoading(false);
         }
     }
 
@@ -325,7 +329,13 @@ const Register = () => {
                                     },
                                 }}
                             >
-                                Registrarse
+                                {
+                                    isLoading ?
+                                        <CircularProgress
+                                            size={30}
+                                            style={{ position: "absolute", color: "white", bottom: "5px" }}
+                                        /> : "Registrarse"
+                                }
                             </Button>
                             <Popover
                                 open={open}

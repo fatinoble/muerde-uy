@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { useState, useRef } from "react";
-import { Container, Typography, TextField, Button, Box } from '@mui/material';
+import { Container, Typography, TextField, Button, Box, CircularProgress } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { findUserByMail } from '../../../services/userService';
 import Popover from '@mui/material/Popover';
@@ -15,6 +15,7 @@ const Login = () => {
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("success");
+    const [isLoading, setIsLoading] = useState(false);
     const anchorRef = useRef(null);
     const router = useRouter();
 
@@ -55,6 +56,7 @@ const Login = () => {
         };
 
         try {
+            setIsLoading(true);
             const response = await findUserByMail(data);
             const settingsResponse = await getTransferNumber();
             let transferNumber = '';
@@ -83,9 +85,11 @@ const Login = () => {
                     handleMessage("Contraseña incorrecta, por favor intente nuevamente.", "error");
                 }
             }
+            setIsLoading(false);
         } catch (error) {
             console.log(`Error User - Login.jsx :: `, error);
             handleMessage('Hubo un error al iniciar sesión. Por favor, intenta de nuevo.', "error");
+            setIsLoading(false);
         }
     }
 
@@ -210,7 +214,14 @@ const Login = () => {
                                     },
                                 }}
                             >
-                                Ingresar
+                                {
+                                    isLoading ?
+                                        <CircularProgress
+                                            size={30}
+                                            style={{ position: "absolute", color: "white", bottom: "5px" }}
+                                        /> : "Ingresar"
+                                }
+
                             </Button>
                             <Popover
                                 open={open}

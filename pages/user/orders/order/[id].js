@@ -14,6 +14,7 @@ import TransferDialog from '../components/TransferDialog';
 import { setTransferNumber } from '../../../../services/saleService';
 import { getApiUrl } from '../../../../services/utils';
 import { verifyToken } from '../../../../services/userService';
+import "../orders.css";
 
 const OrderScreen = () => {
     const router = useRouter();
@@ -153,7 +154,7 @@ const OrderScreen = () => {
         <Layout>
             <Container style={{ marginTop: '100px', marginBottom: '16px' }} maxWidth="lg">
                 <Button
-                    style={{ marginBottom: '20px', color: 'white', backgroundColor: 'rgba(216, 130, 130, 0.737)' }}
+                    style={{ marginBottom: '20px', color: 'white', backgroundColor: '#9F605E' }}
                     variant="contained"
                     onClick={(e) => {
                         e.preventDefault();
@@ -164,49 +165,71 @@ const OrderScreen = () => {
                 {doneSale === true && (
                     <SuccessMessage message="¡Compra exitosa! Gracias por tu pedido." />
                 )}
-                <Paper style={{ padding: '25px' }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <Typography style={{ marginBottom: '20px' }} variant="h5">Pedido Nro: {order?.id_sale}</Typography>
-                            <Typography style={{ marginBottom: '20px' }} variant="h6">Fecha del pedido: {order?.start_date?.substring(0, 10)}</Typography>
-                            {order.finish_date && <Typography style={{ marginBottom: '20px' }} variant="h6">Fecha Entregado: {order?.finish_date?.substring(0, 10)}</Typography>}
-                            <Typography style={{ marginBottom: '20px' }} variant="h6">Tipo de pedido: {order?.delivery_type}</Typography>
-                            <Typography style={{ marginBottom: '20px' }} variant="h6">Tipo de pago: {getOrderPaymentMethodName(order?.payment_method)} {showTransferButton(order)}</Typography>
-                            <Typography style={{ marginBottom: '20px' }} variant="h6"> Estado: {getOrderStateName(order?.status)}</Typography>
+                <Paper>
+                    <div className="card-header">
+
+                        <Typography variant="h5">
+                            Pedido Nro: {order?.id_sale}
+                        </Typography>
+                    </div>
+                    <div className="content-card-container" style={{ padding: '25px' }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <Typography style={{ marginBottom: '20px' }} className="card-title-data" variant="h6">
+                                    Fecha del pedido: <span className="card-info-data"> {order?.start_date?.substring(0, 10)}</span>
+                                </Typography>
+
+                                {order.finish_date && <Typography style={{ marginBottom: '20px' }} className="card-title-data" variant="h6">
+                                    Fecha Entregado:<span className="card-info-data">{order?.finish_date?.substring(0, 10)}</span>
+                                </Typography>}
+
+                                <Typography style={{ marginBottom: '20px' }} className="card-title-data" variant="h6">
+                                    Tipo de pedido:<span className="card-info-data">{order?.delivery_type}</span>
+                                </Typography>
+
+                                <Typography style={{ marginBottom: '20px' }} className="card-title-data" variant="h6">
+                                    Tipo de pago:<span className="card-info-data">{getOrderPaymentMethodName(order?.payment_method)} {showTransferButton(order)}</span>
+                                </Typography>
+                                <Typography style={{ marginBottom: '20px' }} className="card-title-data" variant="h6">
+                                    Estado:<span className="card-info-data">{getOrderStateName(order?.status)}</span>
+                                </Typography>
+
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Typography variant="h5">Productos de la orden:
+                                    <List>
+                                        {order?.products?.map((product) => (
+                                            <ListItem key={product.product.id_product}>
+                                                <ListItemText primary={`- x${product.quantity} ${product.product.title} `} />
+                                            </ListItem>
+                                        ))}
+                                    </List>
+                                </Typography>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Typography variant="h5">Productos de la orden:
-                                <List>
-                                    {order?.products?.map((product) => (
-                                        <ListItem key={product.product.id_product}>
-                                            <ListItemText primary={`- x${product.quantity} ${product.product.title} `} />
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    <LinearProgress variant="buffer" value={setProgressBar(order?.status)} valueBuffer={15} />
-                    {(order.status == "FINISHED") && (!orderHasReview && showReviewForm) ? <ReviewForm onSubmit={handleReviewSubmit} /> : null}
-                    {orderHasReview ? <Typography style={{ marginBottom: '20px', color: "#A87658", marginTop: '40px', fontSize: '23px' }} variant="h5">¡Gracias por tu reseña!</Typography> : null}
-                    <Popover
-                        open={open}
-                        anchorEl={anchorRef.current}
-                        onClose={handleClose}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                        }}
-                        style={{ transform: 'translateY(10px)' }}
-                    >
-                        <Alert severity={messageType} sx={{ width: '100%' }}>
-                            {message}
-                        </Alert>
-                    </Popover>
+                        <LinearProgress variant="buffer" value={setProgressBar(order?.status)} valueBuffer={15} />
+                        {(order.status == "FINISHED") && (!orderHasReview && showReviewForm) ? <ReviewForm onSubmit={handleReviewSubmit} /> : null}
+                        {orderHasReview ? <Typography style={{ marginBottom: '20px', color: "#A87658", marginTop: '40px', fontSize: '23px' }} variant="h5">¡Gracias por tu reseña!</Typography> : null}
+                        <Popover
+                            open={open}
+                            anchorEl={anchorRef.current}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'center',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'center',
+                            }}
+                            style={{ transform: 'translateY(10px)' }}
+                        >
+                            <Alert severity={messageType} sx={{ width: '100%' }}>
+                                {message}
+                            </Alert>
+                        </Popover>
+
+                    </div>
 
                 </Paper>
             </Container>

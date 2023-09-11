@@ -3,10 +3,22 @@
   margin-top: 100px;
 }
 
-/* .order-cards-container {
-  margin-top: 30px;
-} */
-/* 
-.order-card-container {
-  margin: 40px;
-} */
+.card-header {
+  background-color: rgba(216, 130, 130, 0.737);
+  color: white;
+  padding: 10px 25px;
+}
+
+.card-info-data {
+  font-size: 18px;
+}
+
+.card-title-data {
+  color: #6D6D6D;
+  font-size: 17px;
+}
+
+.card-title-data span{
+  color: #1B1B1B;
+  margin-left: 6px;
+}
