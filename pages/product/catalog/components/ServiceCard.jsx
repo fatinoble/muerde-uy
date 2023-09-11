@@ -17,8 +17,11 @@ const ServiceCard = ({ imageSrc, title, price }) => {
   return (
     <ThemeProvider theme={theme}>
       <Card sx={{ height: '100%', opacity: '100%' }} className="product-card-container">
-        <CardMedia component="img" src={imageSrc} alt={title} className="product-card-image"/>
-        <CardContent>
+        <div className="product-card-image-container">
+          <CardMedia component="img" src={imageSrc} alt={title} className="product-card-image" />
+        </div>
+
+        <CardContent style={{ marginLeft: '5%', paddingLeft: '0' }}>
           <div className="top-info-card">
             <Typography variant="h6" component="div" className="product-card-title-box">
               {title}
@@ -28,8 +31,9 @@ const ServiceCard = ({ imageSrc, title, price }) => {
             ${price}
           </Typography>
         </CardContent>
+
       </Card>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 };
 

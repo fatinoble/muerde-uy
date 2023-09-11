@@ -39,6 +39,7 @@ const UserMenu = () => {
   };
 
   return (
+    <div className="user-menu-container">
     <Box p={2}>
       <div className='logo-container'>
         <img src="/images/muerde_pink.png" alt="Logo" style={{ marginBottom: '1rem' }} />
@@ -94,6 +95,7 @@ const UserMenu = () => {
       )}
       </List>
     </Box>
+    </div>
   );
 };
 

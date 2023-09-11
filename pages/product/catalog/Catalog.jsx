@@ -53,11 +53,12 @@ const Catalog = () => {
       <div className="catalog-main-container">
         <div className="actions-container">
           <div className="actions-filter-container">
-            <Search handleSearchChange={handleSearchChange} searchQuery={searchQuery} />
             < TagFilter
               allTags={selectedCatalog === 'products' ? allTags : allServiceTags}
               selectedTags={selectedCatalog === 'products' ? selectedTags : selectedServiceTags}
               setSelectedTags={selectedCatalog === 'products' ? setSelectedTags : setSelectedServiceTags} />
+            <Search handleSearchChange={handleSearchChange} searchQuery={searchQuery} />
+
             <Button
               variant="contained"
               color="primary"
@@ -67,7 +68,9 @@ const Catalog = () => {
                 textTransform: 'none',
                 fontWeight: 'bold',
                 fontSize: '10px',
-                backgroundColor: '#E28D8D'
+                backgroundColor: '#E28D8D',
+                marginLeft: '55px',
+                marginRight: '70px'
               }}
             >
               Limpiar
@@ -82,10 +85,10 @@ const Catalog = () => {
               onChange={handleCatalogTypeChange}
               aria-label="catalog type"
             >
-              <ToggleButton value="products" aria-label="products">
+              <ToggleButton value="products" aria-label="products" className="switcher-button">
                 Productos
               </ToggleButton>
-              <ToggleButton value="services" aria-label="services">
+              <ToggleButton value="services" aria-label="services" className="switcher-button">
                 Servicios
               </ToggleButton>
             </ToggleButtonGroup>
