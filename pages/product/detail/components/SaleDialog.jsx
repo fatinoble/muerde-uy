@@ -20,7 +20,10 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { getApiUrl } from '../../../../services/utils';
+import { RadioButtonCheckedRounded } from '@mui/icons-material';
 
 const today = new Date();
 const gmtMinus3Offset = 180;
@@ -102,7 +105,7 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
       <Dialog open={openSaleModal} onClose={handleCloseSaleModal}>
         <div className="dialog-sale-container">
           <div className="dialog-sale-header-container">
-            <DialogTitle>Comprar {product.title}</DialogTitle>
+            <DialogTitle className="dialog-title-buy">Comprar {product.title}</DialogTitle>
             <IconButton
               aria-label="close"
               onClick={handleCloseSaleModal}
@@ -147,13 +150,13 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
                     <RadioGroup value={newSale?.delivery_type} onChange={handleDeliveryTypeChange}>
                       <FormControlLabel
                         value="PICK_UP"
-                        control={<Radio color="secondary" />}
+                        control={<Radio />}
                         label="Recoger en local"
                         className={newSale?.delivery_type === "PICK_UP" ? "radio-group-label-checked" : "radio-group-label"} />
 
                       <FormControlLabel
                         value="DELIVERY"
-                        control={<Radio color="secondary" />}
+                        control={<Radio />}
                         label="Envío a domicilio"
                         className={newSale?.delivery_type === "DELIVERY" ? "radio-group-label-checked" : "radio-group-label"}
                       />
@@ -166,24 +169,32 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
 
 
             {activeStep === 1 && (
-              <Grid item xs={12} sm={6}>
+              <Grid >
 
-                <DialogContent>
-                  <DialogContentText>
-                    Seleccione fecha entrega:
-                  </DialogContentText>
-                  <TextField
-                    id="date"
-                    type="date"
-                    onChange={handleDateChange}
-                    defaultValue={tomorrow.toISOString().split('T')[0]}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    inputProps={{
-                      min: tomorrow.toISOString().split('T')[0],
-                    }}
-                  />
+                <DialogContent className="dialog-content">
+                  <div className='image-dialog'>
+                    <img src='/images/ilustration-cake-2.png' />
+                  </div>
+                  <div className='dialog-text-title-container'>
+                    <DialogContentText className="dialog-text-title" >
+                      Seleccione fecha entrega:
+                    </DialogContentText>
+                  </div>
+                  <div className='date-container-dialog'>
+                    <TextField
+                      id="date"
+                      type="date"
+                      onChange={handleDateChange}
+                      defaultValue={tomorrow.toISOString().split('T')[0]}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
+                      inputProps={{
+                        min: tomorrow.toISOString().split('T')[0],
+                      }}
+                      className="date-selector"
+                    />
+                  </div>
                 </DialogContent>
 
               </Grid>
@@ -191,46 +202,66 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
 
 
             {activeStep === 2 && (
-              <Grid item xs={12} sm={12}>
-                <DialogContent>
-                  <DialogContentText>
-                    Seleccione el método de pago:
-                  </DialogContentText>
-                  <RadioGroup value={newSale?.payment_method} onChange={handlePaymentMethodChange}>
-                    <FormControlLabel value="CASH" control={<Radio />} label="Efectivo" />
-                    <FormControlLabel value="TRANSFER" control={<Radio />} label="Transferencia bancaria" />
-                  </RadioGroup>
+              <Grid >
+                <DialogContent className="dialog-content">
+                  <div className='image-dialog'>
+                    <img src='/images/ilustration-cake-3.png' style={{ width: "274px", height: "236px" }} />
+                  </div>
+                  <div className='dialog-text-title-container'>
+                    <DialogContentText className="dialog-text-title">
+                      Seleccione el método de pago:
+                    </DialogContentText>
+                  </div>
+                  <div className='radio-group-dialog'>
+                    <RadioGroup value={newSale?.payment_method} onChange={handlePaymentMethodChange}>
+                      <FormControlLabel
+                        value="CASH"
+                        control={<Radio />}
+                        label="Efectivo"
+                        className={newSale?.payment_method === "CASH" ? "radio-group-label-checked" : "radio-group-label"}
+                      />
+
+                      <FormControlLabel
+                        value="TRANSFER"
+                        control={<Radio />}
+                        label="Transferencia bancaria"
+                        className={newSale?.payment_method === "TRANSFER" ? "radio-group-label-checked" : "radio-group-label"}
+                      />
+                    </RadioGroup>
+                  </div>
                 </DialogContent>
               </Grid>
             )}
 
 
           </Grid>
-          <DialogActions>
+          <DialogActions className="advance-step-container">
 
-            {activeStep > 0 && (
-              <Button onClick={() => {
+            <Button
+              disabled={activeStep < 1}
+              onClick={() => {
                 setActiveStep((prevActiveStep) => (
                   prevActiveStep - 1
                 ))
               }} color="primary">
-                Anterior
+              <ArrowBackIosIcon></ArrowBackIosIcon>
+            </Button>
+
+            {activeStep < 2 && (
+              <Button
+                onClick={() => {
+                  setActiveStep((prevActiveStep) => (
+                    prevActiveStep + 1
+                  ))
+                }} color="primary">
+                <ArrowForwardIosIcon></ArrowForwardIosIcon>
               </Button>
             )}
 
-            {activeStep < 2 && (
-              <Button onClick={() => {
-                setActiveStep((prevActiveStep) => (
-                  prevActiveStep + 1
-                ))
-              }} color="primary">
-                Siguiente
-              </Button>
-            )}
 
 
             {activeStep === 2 && (
-              <Button onClick={handleDoSale} color="primary">
+              <Button onClick={handleDoSale} className="confirm-sale-button">
                 Confirmar compra
               </Button>
             )}
@@ -238,7 +269,6 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
           </DialogActions>
 
         </div>
-
       </Dialog >
     </>
   );

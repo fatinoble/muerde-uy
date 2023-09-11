@@ -126,7 +126,10 @@
 
 .dialog-sale-container {
   min-width: 600px;
-  min-height: 500px;
+}
+
+.dialog-content {
+  min-height: 450px;
 }
 
 .image-dialog {
@@ -143,10 +146,32 @@
   margin-top: 20px;
 }
 
+.date-container-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.date-selector div{
+  border-radius: 23.5px;
+  border: 3px solid #E578A0;
+  background: rgba(255, 214, 214, 0.17);
+
+  text-align: center;
+  font-size: 18px;
+  font-style: bold;
+  font-weight: 600;
+  line-height: 128%;
+  color: #606060;
+}
+
 .dialog-text-title-container {
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 0;
+  margin-bottom: 30px;
 }
 
 .dialog-text-title {
@@ -201,5 +226,29 @@
 }
 
 .dialog-sale-header-container {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+.advance-step-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.confirm-sale-button {
+  background-color: #CC8684;
+  color: white;
+  border-radius: 10px;
+}
+
+.confirm-sale-button:hover {
+  background-color: #9F605E;
+}
+
+.dialog-title-buy {
+  color: #606060;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 128%;
 }
