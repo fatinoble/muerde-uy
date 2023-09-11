@@ -44,15 +44,15 @@ const OrderScreen = () => {
         try {
             const token = localStorage.getItem('token_user');
             const response = await verifyToken(token);
-          const user = response.data;
-          if (!user) {
-            router.push('/user/login');
-          }
-          fetchOrder();
+            const user = response.data;
+            if (!user) {
+                router.push('/user/login');
+            }
+            fetchOrder();
         } catch (error) {
-          console.error('Error fetching user data:', error);
+            console.error('Error fetching user data:', error);
         }
-      };
+    };
 
     const fetchOrder = async () => {
         try {
@@ -151,12 +151,14 @@ const OrderScreen = () => {
 
     return (
         <Layout>
-            <h1>Pedido Nro {orderId}</h1>
-            <Container style={{ marginTop: '16px', marginBottom: '16px' }} maxWidth="lg">
-                <Button style={{ marginBottom: '20px' }} variant="contained" onClick={(e) => {
-                    e.preventDefault();
-                    router.push(`/user/orders`);
-                }}>
+            <Container style={{ marginTop: '100px', marginBottom: '16px' }} maxWidth="lg">
+                <Button
+                    style={{ marginBottom: '20px', color: 'white', backgroundColor: 'rgba(216, 130, 130, 0.737)' }}
+                    variant="contained"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        router.push(`/user/orders`);
+                    }}>
                     Volver
                 </Button>
                 {doneSale === true && (

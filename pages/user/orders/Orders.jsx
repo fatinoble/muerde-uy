@@ -121,47 +121,54 @@ const Orders = () => {
       <Head>
         <title>Pedidos</title>
       </Head>
-      {orders?.filter((order) => order?.status !== 'FINISHED').map((order) => (
-        <OrderCard
-          key={order.id_sale}
-          order={order}
-          onTransferNumberUpdate={handleTransferNumberUpdate} />
-      ))}
-      <TableContainer component={Paper} style={{ maxWidth: '500', margin: '0 auto' }}>
-        <Table aria-label="My Table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Nro Pedido</TableCell>
-              <TableCell>Fecha de compra</TableCell>
-              <TableCell>Fecha de entrega</TableCell>
-              <TableCell>Estado</TableCell>
-              <TableCell>Tipo de pago</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {orders?.map((order, index) => (
-              <TableRow style={{ backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#F0EBEB' }}>
-                <TableCell>{order?.id_sale}</TableCell>
-                <TableCell>{order?.start_date?.substring(0, 10)}</TableCell>
-                <TableCell>{order?.finish_date ? order?.finish_date?.substring(0, 10) : '-'}</TableCell>
-                <TableCell>{getOrderStateName(order?.status)}</TableCell>
-                <TableCell>{getOrderPaymentMethodName(order?.payment_method)}</TableCell>
-                <TableCell>{showTransferButton(order)}</TableCell>
-                <TableCell>
-                  <Button variant="contained" onClick={(e) => {
-                    e.preventDefault();
-                    navigateToPage(order?.id_sale)
-                  }}>
-                    Ver detalle
-                  </Button>
-                </TableCell>
+      <div className="user-orders-container">
+        <div className="order-cards-container">
+          {orders?.filter((order) => order?.status !== 'FINISHED').map((order) => (
+            <OrderCard
+              key={order.id_sale}
+              order={order}
+              onTransferNumberUpdate={handleTransferNumberUpdate} />
+          ))}
+        </div>
+
+        <TableContainer component={Paper} style={{ maxWidth: '500', margin: '0 auto' }}>
+          <Table aria-label="My Table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Nro Pedido</TableCell>
+                <TableCell>Fecha de compra</TableCell>
+                <TableCell>Fecha de entrega</TableCell>
+                <TableCell>Estado</TableCell>
+                <TableCell>Tipo de pago</TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        {/* <TablePagination
+            </TableHead>
+            <TableBody>
+              {orders?.map((order, index) => (
+                <TableRow style={{ backgroundColor: index % 2 === 0 ? '#f9f9f9' : '#F0EBEB' }}>
+                  <TableCell>{order?.id_sale}</TableCell>
+                  <TableCell>{order?.start_date?.substring(0, 10)}</TableCell>
+                  <TableCell>{order?.finish_date ? order?.finish_date?.substring(0, 10) : '-'}</TableCell>
+                  <TableCell>{getOrderStateName(order?.status)}</TableCell>
+                  <TableCell>{getOrderPaymentMethodName(order?.payment_method)}</TableCell>
+                  <TableCell>{showTransferButton(order)}</TableCell>
+                  <TableCell>
+                    <Button
+                      style={{ color: 'white', backgroundColor: 'rgba(216, 130, 130, 0.737)' }}
+                      variant="contained"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigateToPage(order?.id_sale)
+                      }}>
+                      Ver detalle
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          {/* <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
           count={orders.length}
@@ -171,8 +178,8 @@ const Orders = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
           labelRowsPerPage="Pedidos por página"
         /> */}
-      </TableContainer>
-
+        </TableContainer>
+      </div>
       {isTransferModalOpen ? (
         <TransferDialog
           open={isTransferModalOpen}
@@ -181,6 +188,7 @@ const Orders = () => {
           handleAdd={newTransferNumber}
         />
       ) : null}
+
     </Layout>
   );
 };
