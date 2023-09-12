@@ -68,7 +68,7 @@ const UserSettingsMenu = () => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">¿Está seguro que desea cerrar sesión?</DialogTitle>
+            <DialogTitle id="alert-dialog-title">¿Está segurx que desea cerrar sesión?</DialogTitle>
             <DialogActions>
               <Button onClick={() => setLogOutModal(false)} color="primary">
                 No
