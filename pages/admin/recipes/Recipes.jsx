@@ -173,16 +173,26 @@ const Recipes = () => {
             <StyledButton variant="outlined" onClick={() => { setRecipeToEdit(recipe); setEditModalOpen(true); }}>
               Editar receta
             </StyledButton>
-            <StyledButton variant="outlined" onClick={() => { showDeleteModal(recipe) }}>Eliminar receta</StyledButton>
-            {recipe.product == null ?
+            <Tooltip title={recipe.product ? "Esta receta no puede ser eliminada porque está asociada al producto " + recipe.product.title : ""}>
+              <span>
+                <StyledButton
+                  variant="outlined"
+                  onClick={() => { showDeleteModal(recipe) }}
+                  disabled={recipe.product}
+                >
+                  Eliminar receta
+                </StyledButton>
+              </span>
+            </Tooltip>
+            {!recipe.product ? (
               <Tooltip title="Esta receta no se encuentra asociada a ningún producto">
-                <StyledButton variant="outlined" onClick={() => router.push('/admin/products')}>Crear producto</StyledButton>
+                <StyledButton variant="outlined" onClick={() => router.push('/admin/products')}>
+                  Crear producto
+                </StyledButton>
               </Tooltip>
-              :
-              <Tooltip title="Esta receta se encuentra asociada a un producto">
-                <InfoIcon style={{ color: 'rgb(216, 130, 130)' }} />
-              </Tooltip>
-            }
+            ) : (
+              null
+            )}
           </div>
         </ProductPaper>
       ))}

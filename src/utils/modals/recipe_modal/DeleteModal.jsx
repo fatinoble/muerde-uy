@@ -5,7 +5,7 @@ const DeleteModal = ({ open, handleClose, data, handleDelete }) => {
         if (data.product != null) {
             return "No se puede eliminar receta porque está asociada al producto " + data.product.title;
         } else {
-            return "¿Estás seguro de que quieres eliminar" + data.name + "?";
+            return "¿Estás segurx de que quieres eliminar " + data.name + "?";
         }
     };
     return (
