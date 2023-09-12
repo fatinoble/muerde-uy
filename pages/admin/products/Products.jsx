@@ -12,6 +12,7 @@ import { Card, CardContent, CardMedia, CardActions } from '@mui/material';
 import { styled } from '@mui/system';
 import { useRouter } from 'next/router';
 import { verifyToken } from '../../../services/userService';
+import { getAllRecipes } from '../../../services/recipeService';
 
 const Products = () => {
   const router = useRouter();
@@ -22,6 +23,8 @@ const Products = () => {
   const [open, setOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false);
+  const [recipes, setRecipes] = useState([]);
+  const anyRecipeWithoutProduct = recipes.some(recipe => recipe.product === null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +44,10 @@ const Products = () => {
       .then(products => {
         setProducts(products);
         setLoading(false);
+      });
+    getAllRecipes()
+      .then(recipes => {
+        setRecipes(recipes);
       });
   }, []);
 
@@ -64,6 +71,10 @@ const Products = () => {
             setLoading(false);
           });
       })
+    getAllRecipes()
+    .then(recipes => {
+      setRecipes(recipes);
+    });
   }
 
   const handleOpenCreateModal = () => {
@@ -150,7 +161,26 @@ const Products = () => {
         <h1><Storefront className="icon-title" />Productos</h1>
       </div>
       <Box display="flex" justifyContent="center" alignItems="center">
-        <InvertedButton variant="outlined" onClick={handleOpenCreateModal}>Nuevo producto</InvertedButton>
+      <Tooltip title={anyRecipeWithoutProduct ? "" : "No hay recetas disponibles para asociar a un nuevo producto, crea una receta primero"}>
+      <span>
+          <InvertedButton 
+            variant="outlined" 
+            onClick={handleOpenCreateModal}
+            disabled={!anyRecipeWithoutProduct}
+          >
+            Nuevo producto
+          </InvertedButton>
+        </span>
+      </Tooltip>
+      {!anyRecipeWithoutProduct && (
+        <InvertedButton 
+          variant="outlined"
+          color="secondary"
+          onClick={() => router.push('/admin/recipes')}
+        >
+          Ir a recetas
+        </InvertedButton>
+      )}
       </Box>
       <ProductContainer>
         {products.map((product) => (
