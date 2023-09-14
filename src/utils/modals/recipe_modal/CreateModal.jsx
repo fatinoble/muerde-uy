@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import { UNIT_MEASURES_CONVERTER } from '@/utils/units_converter/helper';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
+import { parse } from 'papaparse';
 
 const CreateModal = ({ open, handleClose, handleAdd }) => {
     const [productData, setProductData] = useState({});
@@ -46,36 +47,33 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
             return;
         }
 
-        setProductData({
-            ...productData,
-            [name]: value,
-        });
+        setProductData(prevData => ({ ...prevData, [name]: value }));
     };
 
     const handleQuantityChange = (event, ingredientId) => {
         const quantity = event.target.value;
-      
+
         if (isNaN(quantity) || quantity < 0) {
-          return;
+            return;
         }
-      
+
         setIngredientQuantities(prevState => {
-          const updatedIngredient = {
-            ...prevState[ingredientId],
-            quantity: quantity
-          };
-          const updatedQuantities = {
-            ...prevState,
-            [ingredientId]: updatedIngredient
-          };
-          const updatedIngredients = Object.values(updatedQuantities);
-          setProductData(prevData => ({
-            ...prevData,
-            ingredients: updatedIngredients
-          }));
-          return updatedQuantities;
+            const updatedIngredient = {
+                ...prevState[ingredientId],
+                quantity: quantity
+            };
+            const updatedQuantities = {
+                ...prevState,
+                [ingredientId]: updatedIngredient
+            };
+            const updatedIngredients = Object.values(updatedQuantities);
+            setProductData(prevData => ({
+                ...prevData,
+                ingredients: updatedIngredients
+            }));
+            return updatedQuantities;
         });
-      };      
+    };
 
     const handleUnitChange = (event, ingredientId) => {
         const unit = event.target.value;
@@ -124,7 +122,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
             [name]: errorMessage,
         }));
 
-        return errorMessage === ""; 
+        return errorMessage === "";
     };
 
     const isAnyError = () => {
@@ -137,15 +135,15 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
 
     const isMismatchBetweenQuantityAndUnit = () => {
         for (let id in ingredientQuantities) {
-          const { quantity, unit } = ingredientQuantities[id];
-          if ((quantity && !unit) || (unit && !quantity)) {
-            return true;
-          }
+            const { quantity, unit } = ingredientQuantities[id];
+            if ((quantity && !unit) || (unit && !quantity)) {
+                return true;
+            }
         }
         return false;
     };
-
     return (
+
         <Modal open={open} onClose={handleClose}>
             <Box component="form" onSubmit={handleSubmit}
                 sx={{
@@ -163,20 +161,34 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: 'rgb(216, 130, 130)', marginBottom: 2 }} >
                     Alta de receta
                 </Typography>
-                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} helperText={errors.name} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions} onChange={handleChange} helperText={errors.instructions} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="preparation_time_minutes" label="Tiempo de preparación en minutos" value={productData.preparation_time} onChange={handleChange} helperText={errors.preparation_time_minutes} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} inputProps={{ maxLength: 50 }} helperText={errors.name} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions}  inputProps={{ maxLength: 800 }} onChange={handleChange} helperText={errors.instructions} />
+
+                <TextField variant="outlined" margin="normal" required fullWidth name="preparation_time_minutes" label="Tiempo de preparación en minutos"
+                    value={productData.preparation_time}
+                    onKeyDown={(e) => {
+                        if (e.key === "e" || e.key === "E" || e.key === "-" || e.key === "+" || e.key === "."|| e.key === ",") {
+                            e.preventDefault()
+                        }
+                    }}
+                    type="number"
+                    inputProps={{ min: 1, max: 999, step: 1, pattern: "[0-9]*" }}
+                    onChange={handleChange}
+                    helperText={errors.preparation_time_minutes} />
+
+
+
                 <Box
                     component="form"
                     sx={{
-                        backgroundColor: '#f1f1f1', 
+                        backgroundColor: '#f1f1f1',
                         borderRadius: '20px',
                         padding: '0.5rem',
-                        marginBottom: '1rem', 
+                        marginBottom: '1rem',
                     }}
                 >
                     <InputBase
-                        fullWidth 
+                        fullWidth
                         placeholder="Buscar ingrediente"
                         inputProps={{ 'aria-label': 'Buscar ingrediente' }}
                         value={searchText}

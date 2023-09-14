@@ -55,6 +55,7 @@ const DynamicTags = ({ tags = [], setTags = () => { } }) => {
           fullWidth
           variant='standard'
           size='small'
+          inputProps={{ maxLength: 15 }}
           sx={{ margin: "1rem 0" }}
           margin='none'
           placeholder={tags.length < 3 ? "Agregar tag *" : ""}

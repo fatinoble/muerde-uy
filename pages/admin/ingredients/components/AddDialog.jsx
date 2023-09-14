@@ -76,6 +76,7 @@ const AddDialog = ({ fetchIngredients }) => {
           <TextField
             label="Nombre"
             value={newIngredient.name}
+            inputProps={{ maxLength: 50 }}
             onChange={(e) => {
               const value = e.target.value;
               if (/^[a-zA-ZáéíóúÁÉÍÓÚ\s]*$/.test(value)) {
