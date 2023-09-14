@@ -120,7 +120,7 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
             Cancelar
           </Button>
           <Button onClick={handlePurchaseIngredient} color="primary">
-            Crear
+            Registrar compra
           </Button>
         </DialogActions>
       </Dialog>

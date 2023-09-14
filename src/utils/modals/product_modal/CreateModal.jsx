@@ -71,7 +71,6 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
 
         switch (name) {
             case "title":
-            case "description":
                 if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
                     errorMessage = "Solo se permiten letras";
                 }
