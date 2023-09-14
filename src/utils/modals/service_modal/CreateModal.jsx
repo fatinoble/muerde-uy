@@ -52,8 +52,21 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     p: 3,
                 }}
             >
-                <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title" value={serviceData.title} onChange={handleChange} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price" value={serviceData.price} onChange={handleChange} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title" value={serviceData.title} inputProps={{ maxLength: 50 }} onChange={handleChange} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price"
+                onKeyDown={(e) => {
+                    if (e.key === "e" || e.key === "E" || e.key === "-" || e.key === "+" || e.key === ".") {
+                        e.preventDefault()
+                    }
+                }}
+                type="number"
+                inputProps={{ min: 1, max: 999999, step: 1, pattern: "[0-9]*" }} 
+                value={serviceData.price} 
+                onChange={handleChange} />
+                
+                
+                
+                
                 <label htmlFor="raised-button-file">
                     <input
                         accept="image/*"
@@ -79,7 +92,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     </Button>
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
-                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={serviceData.description} onChange={handleChange} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description"  inputProps={{ maxLength: 150 }}value={serviceData.description} onChange={handleChange} />
                 <DynamicTags tags={tags} setTags={setTags}/>
                 
                 <Button type="submit"

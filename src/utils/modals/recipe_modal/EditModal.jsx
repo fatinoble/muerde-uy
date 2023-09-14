@@ -28,7 +28,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
         const ingredientId = event.target.name; 
         const newQuantity = event.target.value;
 
-        if (newQuantity !== "" && !/^(0(\.\d+)?|[1-9]\d*(\.\d*)?)$/.test(newQuantity)) {
+        if (newQuantity !== "" && !/^((\.\d+)?|[1-9]\d*(\.\d*)?)$/.test(newQuantity)) {
             return;
         }
     
@@ -90,9 +90,16 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: 'rgb(216, 130, 130)', marginBottom: 2 }} >
                     Actualizar receta
                 </Typography>
-                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} helperText={errors.name}/>
-                <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions} onChange={handleChange} helperText={errors.instructions} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="preparationTimeMinutes" label="Tiempo de preparación" value={productData.preparationTimeMinutes} onChange={handleChange} helperText={errors.preparationTimeMinutes}/><br /><br /><br />
+                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange}  inputProps={{ maxLength: 50 }} helperText={errors.name}/>
+                <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions}  inputProps={{ maxLength: 800 }} onChange={handleChange} helperText={errors.instructions} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="preparationTimeMinutes" label="Tiempo de preparación" 
+                type='number'
+                inputProps={{ min: 1, max: 999, step: 1, pattern: "[0-9]*" }} 
+                value={productData.preparationTimeMinutes} 
+                onChange={handleChange} 
+                helperText={errors.preparationTimeMinutes}/>
+                
+                <br /><br /><br />
                 <Typography variant="body1">
                     <strong>Ingredientes:</strong>
                 </Typography><br />
@@ -106,6 +113,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                                     margin="normal"
                                     required
                                     fullWidth
+                                    inputProps={{ min: 1, step: 0.01 }}
                                     name={ingredient.ingredient_id} 
                                     label="Cantidad"
                                     value={ingredient.quantity} 

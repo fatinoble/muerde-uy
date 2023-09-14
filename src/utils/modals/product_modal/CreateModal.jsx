@@ -117,8 +117,16 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     p: 3,
                 }}
             >
-                <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title" value={productData.title} onChange={handleChange} helperText={errors.title} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price" value={productData.price} onChange={handleChange} helperText={errors.price} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title" inputProps={{ maxLength: 50 }} value={productData.title} onChange={handleChange} helperText={errors.title} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price" 
+                onKeyDown={(e) => {
+                    if (e.key === "e" || e.key === "E" || e.key === "-" || e.key === "+" || e.key === ".") {
+                        e.preventDefault()
+                    }
+                }}
+                type="number"
+                inputProps={{ min: 1, max: 999999, step: 1, pattern: "[0-9]*" }} 
+                value={productData.price} onChange={handleChange} helperText={errors.price} />
                 <label htmlFor="raised-button-file">
                     <input
                         accept="image/*"
@@ -146,7 +154,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     </Button>
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
-                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} helperText={errors.description} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" inputProps={{ maxLength: 150 }} value={productData.description} onChange={handleChange} helperText={errors.description} />
                
                <DynamicTags tags={tags} setTags={setTags}/>
                 

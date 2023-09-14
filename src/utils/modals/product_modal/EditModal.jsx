@@ -100,8 +100,16 @@ const EditModal = ({ open, handleClose, data = {}, handleUpdate }) => {
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: 'rgb(216, 130, 130)', marginBottom: 2 }} >
                     Editar Producto
                 </Typography>
-                <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title" value={productData.title} onChange={handleChange} helperText={errors.title}/>
-                <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price" value={productData.price} onChange={handleChange} helperText={errors.price}/>
+                <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title" inputProps={{ maxLength: 50 }} value={productData.title} onChange={handleChange} helperText={errors.title}/>
+                <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price"
+                onKeyDown={(e) => {
+                    if (e.key === "e" || e.key === "E" || e.key === "-" || e.key === "+" || e.key === ".") {
+                        e.preventDefault()
+                    }
+                }}
+                type="number"
+                inputProps={{ min: 1, max: 999999, step: 1, pattern: "[0-9]*" }}
+                value={productData.price} onChange={handleChange} helperText={errors.price}/>
                 <label htmlFor="raised-button-file">
                     <input
                         accept="image/*"
@@ -129,7 +137,7 @@ const EditModal = ({ open, handleClose, data = {}, handleUpdate }) => {
                     </Button>
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
-                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" value={productData.description} onChange={handleChange} helperText={errors.description} />
+                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" inputProps={{ maxLength: 150 }} value={productData.description} onChange={handleChange} helperText={errors.description} />
                 <DynamicTags tags={tags} setTags={setTags}/>
                 <Select value={productData.status || 'ENABLED'} onChange={handleChange} name="status">
                     <MenuItem value={"ENABLED"}>Activo</MenuItem>
