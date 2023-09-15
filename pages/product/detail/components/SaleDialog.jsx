@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import es from 'date-fns/locale/es';
 import {
   Button,
   Dialog,
@@ -23,7 +26,7 @@ import IconButton from '@mui/material/IconButton';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { getApiUrl } from '../../../../services/utils';
-import { RadioButtonCheckedRounded } from '@mui/icons-material';
+import { formatDate } from '@/utils';
 
 const today = new Date();
 const gmtMinus3Offset = 180;
@@ -33,6 +36,8 @@ tomorrow.setDate(newDate.getDate() + 1);
 
 const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
   const [openSaleModal, setOpenSaleModal] = useState(false);
+  const [totalOrderPreparationTimePerDay, setTotalOrderPreparationTimePerDay] = useState([]);
+  const [maxPreparationTimePerDayMinutesEnabled, setMaxPreparationTimePerDayMinutesEnabled] = useState(10000);
   const [activeStep, setActiveStep] = useState(0);
 
   const router = useRouter();
@@ -42,14 +47,83 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
     setActiveStep(0);
     setNewSale(prevSale => ({
       ...prevSale,
+      user_date: tomorrow,
       delivery_type: 'PICK_UP'
     }));
   };
 
+  useEffect(() => {
+    if (!totalOrderPreparationTimePerDay.length) {
+      fetchOrderPreparationInfo();
+    }
+  }, []);
+
+  const fetchOrderPreparationInfo = async () => {
+    try {
+      const response = await axios.get(`${getApiUrl()}/sale/order_preparation_suggestions`);
+      const data = response.data;
+      const totalOrderPreparationTimePerDaySet = calculateTotalPreparationTime(data);
+      setTotalOrderPreparationTimePerDay(totalOrderPreparationTimePerDaySet);
+      setMaxPreparationTimePerDayMinutesEnabled(data?.max_preparation_time_per_day_minutes_enabled);
+
+      const nextAvailableDate = findNextAvailableDate(newSale, getDatesToExclude(totalOrderPreparationTimePerDaySet, data?.max_preparation_time_per_day_minutes_enabled));
+      setNewSale(prevSale => ({
+        ...prevSale,
+        user_date: nextAvailableDate
+      }))
+    } catch (error) {
+      console.error('Error fetching order preparation info:', error);
+    }
+  };
+
+  const formatDateToCompare = (date) => {
+    const currentDate = typeof date === 'string' ? new Date(date) : date;
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  const findNextAvailableDate = (sale = {}, excludeDates = []) => {
+    let currentDate = new Date(sale.user_date);
+
+    while (true) {
+      const formattedDate = formatDateToCompare(currentDate);
+      const excludeDateAsUserDate = excludeDates.find(excludeDate => formatDateToCompare(excludeDate) === formattedDate);
+      if (!excludeDateAsUserDate) {
+        return new Date(
+          getUserDateNumbers(formattedDate)[0],
+          getUserDateNumbers(formattedDate)[1] - 1,
+          getUserDateNumbers(formattedDate)[2]
+        ).getTime();
+
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  }
+
+  const calculateTotalPreparationTime = (data = {}) => {
+    const result = [];
+
+    data.order_preparation_suggestion_per_day.forEach((day) => {
+      const totalPreparationTime = day.preparation_suggestions.reduce(
+        (sum, suggestion) => sum + suggestion.total_preparation_time_minutes,
+        0
+      );
+
+      result.push({
+        day: day.day,
+        total_preparation_time_minutes: totalPreparationTime,
+      });
+    });
+
+    return result;
+  }
+
   const handleDoSale = async () => {
     try {
       const s = await axios.post(`${getApiUrl()}/sale`, {
-        sale: newSale,
+        sale: newSale
       });
       router.push(`/user/orders/order/${s.data.id_sale}?exito=true`);
     } catch (error) {
@@ -75,12 +149,6 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
       payment_method: event.target.value
     }));
   };
-  const handleDateChange = (event) => {
-    setNewSale(prevSale => ({
-      ...prevSale,
-      user_date: event.target.value
-    }));
-  };
 
   const handleOpenSaleModal = () => {
     if (!localStorage.getItem('user_id')) {
@@ -95,6 +163,39 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
     'Fecha de entrega',
     'Método de pago',
   ];
+
+  const getDatesToExclude = (dayOrdersTimePerDay, maxMinConfig) => {
+    const datesToExclude = [];
+
+    const totalOrderPreparation = dayOrdersTimePerDay || totalOrderPreparationTimePerDay;
+    totalOrderPreparation?.forEach(dayOrders => {
+      if (dayOrders.total_preparation_time_minutes > (maxMinConfig || maxPreparationTimePerDayMinutesEnabled)) {
+        const dateParts = dayOrders.day?.split('-');
+        const transformedDate = dateParts?.join(', ');
+        datesToExclude.push(new Date(transformedDate));
+      }
+    });
+
+    return datesToExclude;
+  }
+
+  const getUserDateNumbers = (userDateStr = '') => {
+    if (typeof userDateStr !== 'string') {
+      return userDateStr;
+    }
+    return userDateStr.split('-')?.map(part => parseInt(part));
+  }
+
+  const getSelectedDate = () => {
+    if (typeof newSale.user_date === 'string') {
+      return new Date(
+        getUserDateNumbers(newSale.user_date)[0],
+        getUserDateNumbers(newSale.user_date)[1] - 1,
+        getUserDateNumbers(newSale.user_date)[2]
+      ).getTime();
+    }
+    return newSale.user_date;
+  }
 
   return (
     <>
@@ -180,8 +281,28 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
                       Seleccione fecha entrega:
                     </DialogContentText>
                   </div>
+
                   <div className='date-container-dialog'>
-                    <TextField
+                    <DatePicker
+                      selected={getSelectedDate()}
+                      minDate={tomorrow}
+                      locale={es}
+                      excludeDates={getDatesToExclude()}
+                      onChange={(date) => {
+                        setNewSale(prevSale => ({
+                          ...prevSale,
+                          user_date: date
+                        }))
+                      }
+                      }
+                      placeholderText="Select a date other than today or yesterday"
+                      className="date-selector"
+                      dateFormat="dd/MM/yyyy"
+                    />
+
+
+
+                    {/* <TextField
                       id="date"
                       type="date"
                       onChange={handleDateChange}
@@ -193,7 +314,7 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
                         min: tomorrow.toISOString().split('T')[0],
                       }}
                       className="date-selector"
-                    />
+                    /> */}
                   </div>
                 </DialogContent>
 

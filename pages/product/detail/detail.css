@@ -153,6 +153,32 @@
   margin-top: 20px;
 }
 
+/* .react-datepicker__input-container {
+  border-radius: 23.5px;
+  border: 3px solid #E578A0;
+  background: rgba(255, 214, 214, 0.17);
+
+  text-align: center;
+  font-size: 18px;
+  font-style: bold;
+  font-weight: 600;
+  line-height: 128%;
+  color: #606060;
+} */
+
+.react-datepicker__input-container input{
+  border-radius: 23.5px;
+  border: 3px solid #E578A0;
+  background: rgba(255, 214, 214, 0.17);
+
+  text-align: center;
+  font-size: 18px;
+  font-style: bold;
+  font-weight: 600;
+  line-height: 128%;
+  color: #606060;
+}
+
 .date-selector div{
   border-radius: 23.5px;
   border: 3px solid #E578A0;
