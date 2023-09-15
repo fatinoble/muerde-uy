@@ -7,6 +7,7 @@ import DeleteDialog from './components/DeleteDialog';
 import AddDialog from './components/AddDialog';
 import PurchaseDialog from './components/PurchaseDialog';
 import ModifyDialog from './components/ModifyDialog';
+import DecreaseQuantityDialog from './components/DecreaseQuantityDialog';
 import { formatDate } from '../../../src/utils';
 import { getApiUrl } from '../../../services/utils';
 import { useRouter } from 'next/router';
@@ -106,6 +107,7 @@ const Ingredients = () => {
                   }
                 />
                 <PurchaseDialog fetchIngredients={fetchIngredients} ingredient={ingredient} />
+                <DecreaseQuantityDialog fetchIngredients={fetchIngredients} ingredient={ingredient} />
                 <ModifyDialog fetchIngredients={fetchIngredients} ingredient={ingredient} />
                 <DeleteDialog fetchIngredients={fetchIngredients} ingredientId={ingredient?.id_ingredient} disabled={ingredient.recipie_using_count > 0} />
               </ListItem>
