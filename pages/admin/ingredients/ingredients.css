@@ -29,3 +29,40 @@
   font-weight: bold;
   color: rgb(64, 48, 48);
 }
+
+.stock-info-container-decrease {
+  margin: 10px 0;
+}
+
+.stock-info-decrease{
+  font-weight: bold;
+  color: rgb(162, 98, 98);
+  margin-bottom: 10px;
+}
+
+.textfield-decrease-amount-container {
+  display: inline-block;
+  min-width: 180px;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.textfield-decrease-unit-selector-container {
+  display: inline-block;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.decrease-container {
+  position: relative;
+  height: 100px;
+  width: 100%;
+}

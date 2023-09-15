@@ -27,7 +27,7 @@ const defaultSale = {
   delivery_type: 'PICK_UP',
   payment_method: 'CASH',
   user_id: 1,
-  user_date: tomorrow.toISOString().split('T')[0],
+  user_date: tomorrow,
   products: []
 };
 

@@ -54,7 +54,7 @@ const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
         <DialogTitle>{`Modificar ingrediente ${ingredient.name}`}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Edite los campos del ingrediente para modificarlos:
+            Edite el nombre para modificarlo:
           </DialogContentText>
           <TextField
             label="Nombre"

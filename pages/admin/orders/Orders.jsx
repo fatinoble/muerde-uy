@@ -222,26 +222,37 @@ const Orders = () => {
                   </TableCell>
                 }
                 <TableCell>
-                  <Select
-                    value={order.status}
-                    onChange={(e) => {
-                      if (e.target.value != order.status) {
-                        handleSelectChange(e, order);
-                      }
-                    }
-                    }
-                    fullWidth
-                    margin="normal"
-                    variant="outlined"
-                  >
-                    {ordersState.map((orderState) => {
-                      if ((orderState != 'DONE_DELIVERY' && order.delivery_type != 'DELIVERY') || (orderState != 'DONE_PICK_UP' && order.delivery_type != 'PICK_UP')) {
-                        return <MenuItem key={orderState} value={orderState} autoFocus={order.status == orderState}>
-                          {getOrderStateName(orderState)}
-                        </MenuItem>
-                      }
-                    })}
-                  </Select>
+                  {
+                    order.status !== 'FINISHED' && (
+                      <Select
+                        value={order.status}
+                        onChange={(e) => {
+                          if (e.target.value != order.status) {
+                            handleSelectChange(e, order);
+                          }
+                        }
+                        }
+                        fullWidth
+                        margin="normal"
+                        variant="outlined"
+                      >
+                        {ordersState.map((orderState) => {
+                          if ((orderState != 'DONE_DELIVERY' && order.delivery_type != 'DELIVERY') || (orderState != 'DONE_PICK_UP' && order.delivery_type != 'PICK_UP')) {
+                            return <MenuItem key={orderState} value={orderState} autoFocus={order.status == orderState}>
+                              {getOrderStateName(orderState)}
+                            </MenuItem>
+                          }
+                        })}
+                      </Select>
+                    )
+                  }
+
+                  {
+                    order.status === 'FINISHED' && (
+                      <span style={{ color: 'green', fontWeight: '700' }}> FINALIZADO</span>
+                    )
+                  }
+
                 </TableCell>
                 <TableCell>
                   <Button variant="outlined" onClick={(e) => {
