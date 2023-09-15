@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useRef } from "react";
-import { Container, Typography, TextField, Button, Box } from '@mui/material';
+import { Container, Typography, TextField, Button, Box, CircularProgress } from '@mui/material';
 import { findUserByMail } from '../../../services/userService';
 import Popover from '@mui/material/Popover';
 import Alert from '@mui/material/Alert';
@@ -12,6 +12,7 @@ const Login = () => {
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
     const [messageType, setMessageType] = useState("success");
+    const [isLoading, setIsLoading] = useState(false);
     const anchorRef = useRef(null);
     const router = useRouter();
 
@@ -43,6 +44,7 @@ const Login = () => {
         };
 
         try {
+            setIsLoading(true);
             const response = await findUserByMail(data);
             if (response.data && response.data.role == "ADMIN") {
                 localStorage.setItem('token_admin', response.data.token);
@@ -57,8 +59,11 @@ const Login = () => {
                     handleMessage("No se encontró usuario, por favor verificar mail y contraseña.", "error");
                 } else {
                     handleMessage("Contraseña incorrecta, por favor intente nuevamente.", "error");
-                }            }
+                }
+            }
+            setIsLoading(false);
         } catch (error) {
+            setIsLoading(false);
             console.log(`Error Admin - Login.jsx :: `, error);
             handleMessage('Hubo un error al iniciar sesión. Por favor, intenta de nuevo.', "error");
         }
@@ -114,12 +119,19 @@ const Login = () => {
                             mr: 'auto',
                             backgroundColor: '#EDCBA2',
                             color: '#7B3E19',
+                            minHeight: '40px',
                             '&:hover': {
                                 backgroundColor: '#CCA870',
                             },
                         }}
                     >
-                        Ingresar
+                        {
+                            isLoading ?
+                                <CircularProgress
+                                    size={30}
+                                    style={{ position: "absolute", color: "white", bottom: "5px" }}
+                                /> : "Ingresar"
+                        }
                     </Button>
                     <Popover
                         open={open}
