@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import es from 'date-fns/locale/es';
+import InfoIcon from '../../../../src/svg/Info';
 import {
   Button,
   Dialog,
@@ -15,7 +16,7 @@ import {
   FormControlLabel,
   Radio,
   Grid,
-  TextField,
+  Tooltip,
   Stepper,
   Step,
   StepLabel,
@@ -280,6 +281,23 @@ const SaleDialog = ({ product = {}, setNewSale, newSale, setError }) => {
                     <DialogContentText className="dialog-text-title" >
                       Seleccione fecha entrega:
                     </DialogContentText>
+                    <Tooltip
+                      title={"Puede que hayan fechas deshabilitadas según la demanda."}
+                      placement="top"
+                      arrow
+                      style={{
+                        backgroundColor: '#E28D8D',
+                        color: 'white',
+                        borderRadius: 4,
+                        fontSize: 25,
+                        maxWidth: 200,
+                        textAlign: 'center',
+                      }}
+                    >
+                      <div style={{ display: 'inline-block', marginLeft: '10px' }}>
+                        <InfoIcon className="info-icon" />
+                      </div>
+                    </Tooltip>
                   </div>
 
                   <div className='date-container-dialog'>
