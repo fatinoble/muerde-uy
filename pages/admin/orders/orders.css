@@ -109,5 +109,9 @@
 
 .info-container {
   margin: 40px 0;
-  display: inline-block;
+  /* display: inline-block; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
 }

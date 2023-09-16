@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { TextField } from '@mui/material';
+import { TextField, Tooltip } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 import { isObjectEmpty } from '../../../../src/utils';
 import axios from 'axios';
 import { getApiUrl } from '../../../../services/utils';
@@ -84,7 +85,18 @@ const OrderPreparation = () => {
       const restOfMinutes = minutes % 60;
       const hoursText = hours > 1 ? "horas" : "hora";
       const minutesText = restOfMinutes > 1 ? "minutos" : "minuto";
-      return `${hours} ${hoursText} ${restOfMinutes} ${minutesText}`;
+
+      if (hours > 0 && restOfMinutes > 0)
+        return `${hours} ${hoursText} ${restOfMinutes} ${minutesText}`;
+
+      if (hours > 0)
+        return `${hours} ${hoursText}`;
+
+
+      if (restOfMinutes > 0)
+        return `${restOfMinutes} ${minutesText}`;
+
+      return "";
     }
   };
 
@@ -107,7 +119,9 @@ const OrderPreparation = () => {
         />
         {orderMessage && (
           <div className="info-container">
-            <span className="order-prep-message-info">{orderMessage}</span>
+            <span className="order-prep-message-info">Día bloqueado en calendario de pedidos             <Tooltip title={orderMessage}>
+              <InfoIcon style={{ color: 'red' }} />
+            </Tooltip></span>
           </div>
         )}
       </div>
