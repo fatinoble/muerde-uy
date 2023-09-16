@@ -19,7 +19,7 @@
 
 .product-card-container {
   width: 350px;
-  border-radius: 16px;
+  border-radius: 16px !important;
   background: #FFF;
   box-shadow: 0px 6px 12px -3px rgba(97, 43, 211, 0.10);
   margin: 10px;
@@ -41,7 +41,7 @@
 .product-card-image {
   border-radius: 11px;
   border: 2px solid #FFE8E8;
-  width: 90%;
+  width: 90% !important;
   height: 229px;
   margin-top: 10px;
   flex-shrink: 0;
@@ -116,12 +116,12 @@
 .catalog-switch-toggle {
   width: 499px;
   height: 47px;
-  border-radius: 28.5px;
+  border-radius: 28.5px !important;
   background: #E5E5E5;
 }
 
 .catalog-switch-toggle button {
-  border: none;
+  border: none !important;
   width: 100%;
 }
 
@@ -192,5 +192,5 @@ margin-bottom: 10px;
 }
 
 .switcher-button {
-  border-radius: 28.5px;
+  border-radius: 28.5px !important;
 }

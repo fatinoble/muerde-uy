@@ -18,12 +18,21 @@
 
 .order-preparation-title-container {
   margin-bottom: 10px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .order-preparation-main-title {
   font-weight: 700;
   font-size: 18px;
   color:#936565;
+  margin-right: 5px;
+}
+
+.day-order-selector-textfield div{
+  border-radius: 15px;
 }
 
 .suggestion-container {
@@ -60,12 +69,45 @@
   color:#936565;
 }
 
+.suggestion-title-data {
+  margin-left: 5px;
+  font-size: 15px;
+  color:white;
+  background-color: #936565;
+  padding: 5px;
+  border-radius: 5px;
+}
+
 .suggestion-title-container {
   margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .suggestion-title {
   font-size: 16px;
   font-weight: bold;
   color:#5b4141
+}
+
+.order-prep-message {
+  font-size: 16px;
+  font-weight: bold;
+  color:#5b4141
+}
+
+.order-prep-message-info {
+  font-size: 16px;
+  color:#331818;
+  max-width: 200px;
+
+  background-color: #e0d500;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.info-container {
+  margin: 40px 0;
+  display: inline-block;
 }

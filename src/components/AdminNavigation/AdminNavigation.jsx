@@ -50,6 +50,7 @@ const AdminNavigation = () => {
       width: '250px',
       height: '100%',
       paddingTop: '5px',
+      fontFamily: 'roboto',
     }} onClick={() => setOpen(false)}>
       <Typography variant="h6" style={{
     marginLeft: '5px',
@@ -81,6 +82,7 @@ const AdminNavigation = () => {
     <div className="admin-navigation-container" style={{
       backgroundColor: "#D88282",
       height: "60px",
+      fontFamily: 'roboto',
     }}>
       <Button 
         className='open-navigation-button'
