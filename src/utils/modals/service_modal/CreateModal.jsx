@@ -2,10 +2,11 @@ import { Modal, Box, TextField, Button, Typography } from '@mui/material';
 import React, { useState, useEffect } from "react";
 import DynamicTags from "../../../components/DynamicTags"
 
-const CreateModal = ({ open, handleClose, handleAdd }) => {
+const CreateModal = ({ fetchedServices, open, handleClose, handleAdd }) => {
     const [tags, setTags] = useState([]);
     const [serviceData, setServiceData] = useState([]);
     const [imageFileName, setImageFileName] = useState("");
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
     }, []);
@@ -21,20 +22,80 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
 
     const handleChange = (event) => {
         const { name, value } = event.target;
+
+        if (value !== "" && !validateField(name, value)) {
+            return;
+        }
+
         setServiceData({
             ...serviceData,
             [name]: value,
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const finalServiceData = {
-            ...serviceData,
-            tags: tags?.join(", ") || "",
+        const existService = await validateExistingService(serviceData)
+        if (!existService) {
+            const finalServiceData = {
+                ...serviceData,
+                tags: tags?.join(", ") || "",
+            }
+            setServiceData(finalServiceData);
+            handleAdd(finalServiceData);
         }
-        setServiceData(finalServiceData);
-        handleAdd(finalServiceData);
+        else{
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                title: 'Ya existe un servicio con ese nombre',
+            }));
+        }
+    };
+    const validateExistingService = async (newService) => {
+        const services = await fetchedServices();
+        if (services) {
+            const existingService = services.find(serv => serv.title.toLowerCase() === newService.title.toLowerCase());
+            return existingService != undefined;
+        }
+        return false;
+    };
+
+    const validateField = (name, value) => {
+        let errorMessage = "";
+
+        switch (name) {
+            case "title":
+                if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(value)) {
+                    errorMessage = "Solo se permiten letras";
+                }
+                break;
+            case "price":
+                if (!/^(0(\.\d+)?|[1-9]\d*(\.\d*)?)$/.test(value)) {
+                    errorMessage = "Solo se permiten números mayores o iguales que 0 o números con decimales";
+                }
+                if (value > 9999999) {
+                    errorMessage = "El precio no puede ser mayor a 9999999";
+                }
+                break;
+            case "tags":
+                if (!/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s,]+$/.test(value)) {
+                    errorMessage = "Solo se permiten letras y comas";
+                }
+                break;
+            default:
+                break;
+        }
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: errorMessage,
+        }));
+
+        return errorMessage === "";
+    };
+
+    const isAnyError = () => {
+        return Object.values(errors).some((error) => error !== "") || tags?.length === 0;
     };
 
     return (
@@ -52,21 +113,46 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     p: 3,
                 }}
             >
-                <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title" value={serviceData.title} inputProps={{ maxLength: 50 }} onChange={handleChange} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price"
-                onKeyDown={(e) => {
-                    if (e.key === "e" || e.key === "E" || e.key === "-" || e.key === "+" || e.key === ".") {
-                        e.preventDefault()
+                <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title"
+                    value={serviceData.title}
+                    inputProps={{ maxLength: 50 }}
+                    onChange={handleChange}
+                    helperText={errors.title}
+                    error={errors.title}
+                    onBlur={() => {
+                        if (errors.title !== "") {
+                            setErrors((prevErrors) => ({
+                                ...prevErrors,
+                                title: "",
+                            }))
+                        }
                     }
-                }}
-                type="number"
-                inputProps={{ min: 1, max: 999999, step: 1, pattern: "[0-9]*" }} 
-                value={serviceData.price} 
-                onChange={handleChange} />
-                
-                
-                
-                
+                    }
+                />
+
+                <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price"
+                    onKeyDown={(e) => {
+                        if (e.key === "e" || e.key === "E" || e.key === "-" || e.key === "+" || e.key === ".") {
+                            e.preventDefault()
+                        }
+                    }}
+                    type="number"
+                    inputProps={{ min: 1, max: 9999999, step: 1, pattern: "[0-9]*" }}
+                    value={serviceData.price}
+                    onChange={handleChange} 
+                    helperText={errors.price} 
+                    error={errors.price} 
+                    onBlur={() => {
+                        if (errors.price !== "") {
+                            setErrors((prevErrors) => ({
+                                ...prevErrors,
+                                price: "",
+                            }))
+                        }
+                    }
+                    }
+                    />
+
                 <label htmlFor="raised-button-file">
                     <input
                         accept="image/*"
@@ -77,37 +163,56 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                         onChange={handleImageUpload}
                     />
                     <Button variant="contained" component="span"
-                    sx={{
-                        display: 'block',
-                        mt: 2,
-                        ml: 'auto',
-                        mr: 'auto',
-                        backgroundColor: '#EDCBA2',
-                        color: '#7B3E19',
-                        '&:hover': {
-                            backgroundColor: '#CCA870',
-                        },
-                    }}>
+                        sx={{
+                            display: 'block',
+                            mt: 2,
+                            ml: 'auto',
+                            mr: 'auto',
+                            backgroundColor: 'rgb(216, 130, 130)',
+                            color: 'white',
+                            '&:hover': {
+                                backgroundColor: 'white',
+                                color: 'rgb(216, 130, 130)',
+                            },
+                        }}>
                         Subir imagen
                     </Button>
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
-                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description"  inputProps={{ maxLength: 150 }}value={serviceData.description} onChange={handleChange} />
-                <DynamicTags tags={tags} setTags={setTags}/>
-                
+
+                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" 
+                inputProps={{ maxLength: 150 }} 
+                value={serviceData.description} 
+                onChange={handleChange} 
+                helperText={errors.description} 
+                error={errors.description}
+                onBlur={() => {
+                    if (errors.description !== "") {
+                        setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            description: "",
+                        }))
+                    }
+                }
+                }
+                />
+
+                <DynamicTags tags={tags} setTags={setTags} />
+
                 <Button type="submit"
                     sx={{
                         display: 'block',
                         mt: 2,
                         ml: 'auto',
                         mr: 'auto',
-                        backgroundColor: '#EDCBA2',
-                        color: '#7B3E19',
+                        backgroundColor: 'rgb(216, 130, 130)',
+                        color: 'white',
                         '&:hover': {
-                            backgroundColor: '#CCA870',
+                            backgroundColor: 'white',
+                            color: 'rgb(216, 130, 130)',
                         },
                     }}
-                    disabled={tags?.length === 0}
+                    disabled={isAnyError()}
                 >
                     Dar de alta
                 </Button>

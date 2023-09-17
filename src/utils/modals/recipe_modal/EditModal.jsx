@@ -1,7 +1,7 @@
 import { Modal, Box, TextField, Button, Typography } from '@mui/material';
 import React, { useState, useEffect } from "react";
 
-const EditModal = ({ open, handleClose, data, handleUpdate }) => {
+const EditModal = ({ fetchedRecipes, open, handleClose, data, handleUpdate }) => {
     const [productData, setProductData] = useState(data);
     const [errors, setErrors] = useState({});
 
@@ -9,9 +9,26 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
         setProductData(data);
     }, [data]);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        handleUpdate(productData);
+        const existRecipe = await validateExistingRecipe(productData)
+        if (!existRecipe) {
+            handleUpdate(productData);
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                name: 'Ya existe una receta con ese nombre',
+            }));
+        }
+    };
+
+    const validateExistingRecipe = async (modifiedRecipe) => {
+        const recipes = await fetchedRecipes();
+        if (recipes) {
+            const existingRecipe = recipes.find(rec => rec.name.toLowerCase() === modifiedRecipe.name.toLowerCase());
+            return existingRecipe != undefined;
+        }
+        return false;
     };
 
     const handleChange = (event) => {
@@ -90,7 +107,7 @@ const EditModal = ({ open, handleClose, data, handleUpdate }) => {
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: 'rgb(216, 130, 130)', marginBottom: 2 }} >
                     Actualizar receta
                 </Typography>
-                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange}  inputProps={{ maxLength: 50 }} helperText={errors.name}/>
+                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange}  inputProps={{ maxLength: 50 }} helperText={errors.name}  error={errors.name} />
                 <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions}  inputProps={{ maxLength: 800 }} onChange={handleChange} helperText={errors.instructions} />
                 <TextField variant="outlined" margin="normal" required fullWidth name="preparationTimeMinutes" label="Tiempo de preparación" 
                 type='number'

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, MenuItem, Select } from '@mui/material';
@@ -7,9 +7,16 @@ import { getApiUrl } from '../../../../services/utils';
 const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
   const [existingIngredientError, setexistingIngredientError] = useState('');
   const [openModifyModal, setOpenModifyModal] = useState(false);
+  const [isModifyButtonDisabled, setIsModifyButtonDisabled] = useState(true);
   const [modifyIngredient, setModifyIngredient] = useState({
     name: ingredient.name,
   });
+
+  useEffect(() => {
+    setIsModifyButtonDisabled(
+      modifyIngredient.name.trim() === ''
+    );
+  }, [modifyIngredient],[existingIngredientError]);
 
   const handleCloseModifyModal = () => {
     setOpenModifyModal(false);
@@ -62,6 +69,7 @@ const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
             inputProps={{ maxLength: 50 }}
             onChange={(e) => {
               const value = e.target.value;
+              setexistingIngredientError('');
               if (/^[a-zA-ZáéíóúÁÉÍÓÚ\s]*$/.test(value)) {
                 setModifyIngredient((prevIngredient) => ({
                   ...prevIngredient,
@@ -73,13 +81,14 @@ const ModifyDialog = ({ fetchIngredients, ingredient = {} }) => {
             margin="normal"
             variant="outlined"
             helperText={existingIngredientError}
+            error={existingIngredientError}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModifyModal} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handleModifyIngredient} color="primary">
+          <Button onClick={handleModifyIngredient} color="primary"  disabled={isModifyButtonDisabled}>
             Modificar
           </Button>
         </DialogActions>
