@@ -7,7 +7,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import { parse } from 'papaparse';
 
-const CreateModal = ({ open, handleClose, handleAdd }) => {
+const CreateModal = ({ fetchedRecipes, open, handleClose, handleAdd }) => {
     const [productData, setProductData] = useState({});
     const [ingredients, setIngredients] = useState([]);
     const [ingredientQuantities, setIngredientQuantities] = useState({});
@@ -21,23 +21,40 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
             })
     }, []);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const transformedIngredients = Object.keys(ingredientQuantities).map((ingredientId) => {
-            const ingredient = ingredientQuantities[ingredientId];
-            return {
-                ingredient_id: ingredientId,
-                quantity: ingredient.quantity,
-                unit: ingredient.unit,
+        const existRecipe = await validateExistingRecipe(productData)
+        if (!existRecipe) {
+            const transformedIngredients = Object.keys(ingredientQuantities).map((ingredientId) => {
+                const ingredient = ingredientQuantities[ingredientId];
+                return {
+                    ingredient_id: ingredientId,
+                    quantity: ingredient.quantity,
+                    unit: ingredient.unit,
+                };
+            });
+
+            const transformedProductData = {
+                ...productData,
+                ingredients: transformedIngredients,
             };
-        });
 
-        const transformedProductData = {
-            ...productData,
-            ingredients: transformedIngredients,
-        };
+            handleAdd(transformedProductData);
+        } else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                name: 'Ya existe una receta con ese nombre.',
+            }));
+        }
+    };
 
-        handleAdd(transformedProductData);
+    const validateExistingRecipe = async (newRecipe) => {
+        const recipes = await fetchedRecipes();
+        if (recipes) {
+            const existingRecipe = recipes.find(rec => rec.name.toLowerCase() === newRecipe.name.toLowerCase());
+            return existingRecipe != undefined;
+        }
+        return false;
     };
 
     const handleChange = (event) => {
@@ -53,7 +70,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
     const handleQuantityChange = (event, ingredientId) => {
         const quantity = event.target.value;
 
-        if (isNaN(quantity) || quantity < 0) {
+        if (isNaN(quantity) || quantity < 0 || quantity > 9999) {
             return;
         }
 
@@ -112,6 +129,9 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                 if (!/^(0|[1-9]\d*)$/.test(value)) {
                     errorMessage = "Solo se permiten números";
                 }
+                if (value > 999) {
+                    errorMessage = "El tiempo de preparación no puede ser mayor a 999";
+                }
                 break;
             default:
                 break;
@@ -161,22 +181,53 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: 'rgb(216, 130, 130)', marginBottom: 2 }} >
                     Alta de receta
                 </Typography>
-                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange} inputProps={{ maxLength: 50 }} helperText={errors.name} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions}  inputProps={{ maxLength: 800 }} onChange={handleChange} helperText={errors.instructions} />
+
+                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre"
+                    value={productData.name}
+                    onChange={handleChange}
+                    inputProps={{ maxLength: 50 }}
+                    helperText={errors.name}
+                    error={errors.name}
+                    onBlur={() => {
+                        if (errors.name !== "") {
+                            setErrors((prevErrors) => ({
+                                ...prevErrors,
+                                name: "",
+                            }))
+                        }
+                    }
+                    }
+                />
+
+                <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones"
+                    value={productData.instructions}
+                    inputProps={{ maxLength: 800 }}
+                    onChange={handleChange}
+                    helperText={errors.instructions} />
+
 
                 <TextField variant="outlined" margin="normal" required fullWidth name="preparation_time_minutes" label="Tiempo de preparación en minutos"
-                    value={productData.preparation_time}
                     onKeyDown={(e) => {
-                        if (e.key === "e" || e.key === "E" || e.key === "-" || e.key === "+" || e.key === "."|| e.key === ",") {
+                        if (e.key === "e" || e.key === "E" || e.key === "-" || e.key === "+" || e.key === "." || e.key === ",") {
                             e.preventDefault()
                         }
                     }}
                     type="number"
                     inputProps={{ min: 1, max: 999, step: 1, pattern: "[0-9]*" }}
+                    value={productData.preparation_time_minutes}
                     onChange={handleChange}
-                    helperText={errors.preparation_time_minutes} />
-
-
+                    helperText={errors.preparation_time_minutes}
+                    error={errors.preparation_time_minutes}
+                    onBlur={() => {
+                        if (errors.preparation_time_minutes !== "") {
+                            setErrors((prevErrors) => ({
+                                ...prevErrors,
+                                preparation_time_minutes: "",
+                            }))
+                        }
+                    }
+                    }
+                />
 
                 <Box
                     component="form"

@@ -198,6 +198,7 @@ const Recipes = () => {
       ))}
       {editModalOpen ? (
         <EditModal
+          fetchedRecipes={getAllRecipes}
           open={editModalOpen}
           handleClose={() => setEditModalOpen(false)}
           data={recipeToEdit}
@@ -215,6 +216,7 @@ const Recipes = () => {
       ) : null}
       {isCreateModalOpen ? (
         <CreateModal
+          fetchedRecipes={getAllRecipes}
           open={isCreateModalOpen}
           handleClose={handleCloseCreateModal}
           handleAdd={newRecipe}

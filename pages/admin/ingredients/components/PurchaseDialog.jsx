@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Select, MenuItem } from '@mui/material';
 import { Tooltip } from '@mui/material';
@@ -9,12 +9,19 @@ import { getApiUrl } from '../../../../services/utils';
 const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
 
   const [openPurchaseModal, setOpenPurchaseModal] = useState(false);
+  const [isRegisterButtonDisabled, setIsRegisterButtonDisabled] = useState(true);
   const [ingredientUnit, setIngredientUnit] = useState(ingredient?.unit?.toLowerCase());
   const [newPurchase, setNewPurchase] = useState({
     quantity: 0,
     cost: 0,
     ingredient_id: ingredient?.id_ingredient
   });
+
+  useEffect(() => {
+    setIsRegisterButtonDisabled(
+      newPurchase.quantity === 0 || newPurchase.cost === 0
+    );
+  }, [newPurchase]);
 
   const handleClosePurchaseodal = () => {
     setOpenPurchaseModal(false);
@@ -69,12 +76,15 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
               type="number"
               inputProps={{ min: 0, step: 0.01 }}
               value={newPurchase.quantity}
-              onChange={(e) =>
-                setNewPurchase((prevPurchase) => ({
-                  ...prevPurchase,
-                  quantity: parseFloat(e.target.value),
-                }))
-              }
+              onChange={(e) => {
+                const inputValue = e.target.value;
+                if (!isNaN(inputValue) && inputValue !== '') {
+                  setNewPurchase((prevPurchase) => ({
+                    ...prevPurchase,
+                    quantity: parseFloat(inputValue),
+                  }));
+                }
+              }}
               fullWidth
               margin="normal"
               variant="outlined"
@@ -104,12 +114,15 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
             type="number"
             inputProps={{ min: 0, step: 0.01 }}
             value={newPurchase.cost}
-            onChange={(e) =>
-              setNewPurchase((prevPurchase) => ({
-                ...prevPurchase,
-                cost: parseFloat(e.target.value),
-              }))
-            }
+            onChange={(e) => {
+              const inputValue = e.target.value;
+              if (!isNaN(inputValue) && inputValue !== '') {
+                setNewPurchase((prevPurchase) => ({
+                  ...prevPurchase,
+                  cost: parseFloat(inputValue),
+                }));
+              }
+            }}
             fullWidth
             margin="normal"
             variant="outlined"
@@ -119,7 +132,7 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
           <Button onClick={handleClosePurchaseodal} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handlePurchaseIngredient} color="primary">
+          <Button onClick={handlePurchaseIngredient} color="primary" disabled={isRegisterButtonDisabled}>
             Registrar compra
           </Button>
         </DialogActions>

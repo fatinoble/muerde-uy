@@ -236,6 +236,7 @@ const Products = () => {
       </ProductContainer>
       {editModalOpen ? (
         <EditModal
+          fetchedProducts={getAllProducts}
           open={editModalOpen}
           handleClose={() => setEditModalOpen(false)}
           data={productToEdit}
@@ -245,6 +246,7 @@ const Products = () => {
       ) : null}
       {isCreateModalOpen ? (
         <CreateModal
+          fetchedProducts={getAllProducts}
           open={isCreateModalOpen}
           handleClose={handleCloseCreateModal}
           handleAdd={newProduct}

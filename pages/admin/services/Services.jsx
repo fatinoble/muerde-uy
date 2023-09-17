@@ -1,6 +1,6 @@
 import Layout from '../../../src/components/AdminLayout';
 import React, { useState, useEffect } from "react";
-import { Button, Switch, Card, CardContent, CardMedia, CardActions  } from '@mui/material';
+import { Button, Switch, Card, CardContent, CardMedia, CardActions } from '@mui/material';
 import { styled, Box } from '@mui/system';
 import DetailsModal from '../../../src/utils/modals/service_modal/DetailsModal';
 import EditModal from '../../../src/utils/modals/service_modal/EditModal';
@@ -182,7 +182,7 @@ const Services = () => {
                     status={service.status}
                     variant="outlined"
                     onClick={() => { setServiceToEdit(service); setEditModalOpen(true); }}
-                    >
+                  >
                     Editar servicio
                   </StyledButton>
                   <Switch checked={service.status === 'ENABLED'} onChange={() => toggleServiceStatus(service)} />
@@ -192,24 +192,26 @@ const Services = () => {
             </Box>
           </StyledCard>
         ))}
-          </ServiceContainer>
+      </ServiceContainer>
       {
-            editModalOpen?(
-        <EditModal
-          open = { editModalOpen }
-          handleClose = {() => setEditModalOpen(false)}
-        data={serviceToEdit}
-        handleInputChange={handleInputChange}
-        handleUpdate={editService}
-        />
-      ) : null}
-        {isCreateModalOpen ? (
-          <CreateModal
-            open={isCreateModalOpen}
-            handleClose={handleCloseCreateModal}
-            handleAdd={newService}
+        editModalOpen ? (
+          <EditModal
+            fetchedServices={getAllServices}
+            open={editModalOpen}
+            handleClose={() => setEditModalOpen(false)}
+            data={serviceToEdit}
+            handleInputChange={handleInputChange}
+            handleUpdate={editService}
           />
         ) : null}
+      {isCreateModalOpen ? (
+        <CreateModal
+          fetchedServices={getAllServices}
+          open={isCreateModalOpen}
+          handleClose={handleCloseCreateModal}
+          handleAdd={newService}
+        />
+      ) : null}
     </Layout>
   );
 };

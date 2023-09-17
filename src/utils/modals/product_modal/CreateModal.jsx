@@ -4,12 +4,12 @@ import { getAllRecipesWithProducts } from '../../../../services/recipeService';
 import { useRouter } from 'next/router';
 import DynamicTags from '../../../components/DynamicTags'
 
-const CreateModal = ({ open, handleClose, handleAdd }) => {
+const CreateModal = ({ fetchedProducts, open, handleClose, handleAdd }) => {
     const [productData, setProductData] = useState([]);
     const [tags, setTags] = useState([]);
     const [recipes, setRecipes] = useState({});
     const [imageFileName, setImageFileName] = useState("");
-    const [selectedRecipeId, setSelectedRecipeId] = useState('');
+    const [selectedRecipeId, setSelectedRecipeId] = useState('-1');
     const router = useRouter();
     const [errors, setErrors] = useState({});
 
@@ -56,14 +56,33 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
         }));
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const finalProductData = {
-            ...productData,
-            tags: tags?.join(", ") || "",
+        const existProduct = await validateExistingProduct(productData)
+        if (!existProduct) {
+            const finalProductData = {
+                ...productData,
+                tags: tags?.join(", ") || "",
+            }
+            setProductData(finalProductData);
+            handleAdd(finalProductData);
         }
-        setProductData(finalProductData);
-       handleAdd(finalProductData);
+        else {
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                title: 'Ya existe un producto con ese nombre',
+            }));
+        }
+
+    };
+
+    const validateExistingProduct = async (newProduct) => {
+        const products = await fetchedProducts();
+        if (products) {
+            const existingProduct = products.find(pro => pro.title.toLowerCase() === newProduct.title.toLowerCase());
+            return existingProduct != undefined;
+        }
+        return false;
     };
 
     const validateField = (name, value) => {
@@ -78,6 +97,9 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
             case "price":
                 if (!/^(0(\.\d+)?|[1-9]\d*(\.\d*)?)$/.test(value)) {
                     errorMessage = "Solo se permiten números mayores o iguales que 0 o números con decimales";
+                }
+                if (value > 9999999) {
+                    errorMessage = "El precio no puede ser mayor a 9999999";
                 }
                 break;
             case "tags":
@@ -98,7 +120,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
     };
 
     const isAnyError = () => {
-        return Object.values(errors).some((error) => error !== "") || tags?.length === 0;
+        return Object.values(errors).some((error) => error !== "") || tags?.length === 0 || selectedRecipeId === "-1";
     };
 
     return (
@@ -116,16 +138,45 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     p: 3,
                 }}
             >
-                <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title" inputProps={{ maxLength: 50 }} value={productData.title} onChange={handleChange} helperText={errors.title} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price" 
-                onKeyDown={(e) => {
-                    if (e.key === "e" || e.key === "E" || e.key === "-" || e.key === "+" || e.key === ".") {
-                        e.preventDefault()
+                <TextField variant="outlined" margin="normal" required fullWidth name="title" label="Title"
+                    inputProps={{ maxLength: 50 }}
+                    value={productData.title}
+                    onChange={handleChange}
+                    helperText={errors.title}
+                    error={errors.title}
+                    onBlur={() => {
+                        if (errors.title !== "") {
+                            setErrors((prevErrors) => ({
+                                ...prevErrors,
+                                title: "",
+                            }))
+                        }
                     }
-                }}
-                type="number"
-                inputProps={{ min: 1, max: 999999, step: 1, pattern: "[0-9]*" }} 
-                value={productData.price} onChange={handleChange} helperText={errors.price} />
+                    }
+                />
+
+                <TextField variant="outlined" margin="normal" required fullWidth name="price" label="Price"
+                    onKeyDown={(e) => {
+                        if (e.key === "e" || e.key === "E" || e.key === "-" || e.key === "+" || e.key === ".") {
+                            e.preventDefault()
+                        }
+                    }}
+                    type="number"
+                    inputProps={{ min: 1, max: 9999999, step: 1, pattern: "[0-9]*" }}
+                    value={productData.price} 
+                    onChange={handleChange} 
+                    helperText={errors.price} 
+                    error={errors.price}  
+                    onBlur={() => {
+                        if (errors.price !== "") {
+                            setErrors((prevErrors) => ({
+                                ...prevErrors,
+                                price: "",
+                            }))
+                        }
+                    }
+                    }/>
+
                 <label htmlFor="raised-button-file">
                     <input
                         accept="image/*"
@@ -153,17 +204,33 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     </Button>
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
-                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" inputProps={{ maxLength: 150 }} value={productData.description} onChange={handleChange} helperText={errors.description} />
-               
-               <DynamicTags tags={tags} setTags={setTags}/>
-                
+
+                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" 
+                inputProps={{ maxLength: 150 }} 
+                value={productData.description} 
+                onChange={handleChange} 
+                helperText={errors.description} 
+                error={errors.description}
+                onBlur={() => {
+                    if (errors.description !== "") {
+                        setErrors((prevErrors) => ({
+                            ...prevErrors,
+                            description: "",
+                        }))
+                    }
+                }
+                }
+                />
+
+                <DynamicTags tags={tags} setTags={setTags} />
+
                 <Select
                     required
                     value={selectedRecipeId}
                     onChange={handleChangeSelectedRecipe}
                     name="recipe_id"
                 >
-                    <MenuItem value="" disabled>
+                    <MenuItem value="-1">
                         Elija receta
                     </MenuItem>
                     {filteredRecipes.map((recipe) => (
@@ -172,7 +239,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                         </MenuItem>
                     ))}
                 </Select>
-                {selectedRecipeId == "" ?
+                {selectedRecipeId == "-1" ?
                     <>
                         <Typography variant="h6" sx={{ mt: 2, fontWeight: 'normal', fontSize: '16px' }}>
                             Si la receta no se encuentra en la lista debes crearla para dar de alta el producto
@@ -212,7 +279,7 @@ const CreateModal = ({ open, handleClose, handleAdd }) => {
                     disabled={isAnyError()}
                 >
                     Dar de alta
-                </Button>          
+                </Button>
             </Box>
         </Modal>
     );

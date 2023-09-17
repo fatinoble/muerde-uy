@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, InvertedButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, MenuItem, Select } from '@mui/material';
 import { UNIT_MEASURES } from '../../../../src/utils'
@@ -7,11 +7,18 @@ import { getApiUrl } from '../../../../services/utils';
 
 const AddDialog = ({ fetchIngredients }) => {
   const [existingIngredientError, setexistingIngredientError] = useState('');
+  const [isCreateButtonDisabled, setIsCreateButtonDisabled] = useState(true);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [newIngredient, setNewIngredient] = useState({
     name: '',
-    unit: '',
+    unit: '-1',
   });
+
+  useEffect(() => {
+    setIsCreateButtonDisabled(
+      newIngredient.name.trim() === '' || newIngredient.unit.trim() === '-1'
+    );
+  }, [newIngredient]);
 
   const handleCloseAddModal = () => {
     setOpenAddModal(false);
@@ -78,6 +85,7 @@ const AddDialog = ({ fetchIngredients }) => {
             value={newIngredient.name}
             inputProps={{ maxLength: 50 }}
             onChange={(e) => {
+              setexistingIngredientError('');
               const value = e.target.value;
               if (/^[a-zA-ZáéíóúÁÉÍÓÚ\s]*$/.test(value)) {
                 setNewIngredient((prevIngredient) => ({
@@ -90,6 +98,7 @@ const AddDialog = ({ fetchIngredients }) => {
             margin="normal"
             variant="outlined"
             helperText={existingIngredientError}
+            error={existingIngredientError}
           />
           <Select
             label="Unidad"
@@ -104,6 +113,9 @@ const AddDialog = ({ fetchIngredients }) => {
             margin="normal"
             variant="outlined"
           >
+            <MenuItem key="-1" value="-1" disabled>
+              Seleccione unidad
+            </MenuItem>
             {UNIT_MEASURES.map((unitMeasure) => (
               <MenuItem key={unitMeasure.key} value={unitMeasure.key}>
                 {unitMeasure.text}
@@ -115,7 +127,7 @@ const AddDialog = ({ fetchIngredients }) => {
           <Button onClick={handleCloseAddModal} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handleAddIngredient} color="primary">
+          <Button onClick={handleAddIngredient} color="primary" disabled={isCreateButtonDisabled}>
             Crear
           </Button>
         </DialogActions>
