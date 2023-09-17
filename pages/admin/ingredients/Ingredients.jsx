@@ -83,33 +83,47 @@ const Ingredients = () => {
             const { text: totalQuantityText, color: totalQuantityColor } = getTotalQuantityDisplayData(ingredient.total_quantity, ingredient.unit, ingredient.stock_percentage_status);
             return (
               <ListItem className="ingredient-card" key={ingredient?.id_ingredient}>
-                <ListItemText
-                  primary={<span className="ingredient-main-title">{ingredient.name}</span>}
-                  secondary={
-                    <>
-                      {totalQuantityText && (
-                        <span style={{ color: totalQuantityColor }}>{totalQuantityText}</span>
-                      )}
-                      {ingredient.last_purchase_date && (
+                <div>
+                  <ListItemText
+                    primary={<span className="ingredient-main-title">{ingredient.name}</span>}
+                    secondary={
+                      <>
+
+
+                        {ingredient.last_purchase_date && (
+                          <>
+                            {'Última compra: '}
+                            {formatDate(ingredient.last_purchase_date)}
+                          </>
+                        )}
+                        {ingredient.last_purchase_cost && (
+                          <>
+                            {` • Costo por unidad: $${ingredient.last_purchase_cost.toFixed(2)}`}
+                          </>
+                        )}
+
                         <>
-                          {' • Última compra: '}
-                          {formatDate(ingredient.last_purchase_date)}
+                          {` • ${getRecipieUsingCountText(ingredient.recipie_using_count)}`}
                         </>
-                      )}
-                      {ingredient.last_purchase_cost && (
-                        <>
-                          {` • Costo por unidad: $${ingredient.last_purchase_cost.toFixed(2)}`}
-                        </>
-                      )}
-                      {' • '}
-                      {getRecipieUsingCountText(ingredient.recipie_using_count)}
-                    </>
-                  }
-                />
-                <PurchaseDialog fetchIngredients={fetchIngredients} ingredient={ingredient} />
-                <DecreaseQuantityDialog fetchIngredients={fetchIngredients} ingredient={ingredient} />
-                <ModifyDialog fetchIngredients={fetchIngredients} ingredient={ingredient} />
-                <DeleteDialog fetchIngredients={fetchIngredients} ingredientId={ingredient?.id_ingredient} disabled={ingredient.recipie_using_count > 0} />
+
+                      </>
+                    }
+
+                  >
+
+                  </ListItemText >
+                  <span>
+                    {totalQuantityText && (
+                      <span style={{ color: totalQuantityColor, fontSize: '15px' }}>{totalQuantityText}</span>
+                    )}
+                  </span>
+                </div>
+                <div>
+                  <PurchaseDialog fetchIngredients={fetchIngredients} ingredient={ingredient} />
+                  <DecreaseQuantityDialog fetchIngredients={fetchIngredients} ingredient={ingredient} />
+                  <ModifyDialog fetchIngredients={fetchIngredients} ingredient={ingredient} />
+                  <DeleteDialog fetchIngredients={fetchIngredients} ingredientId={ingredient?.id_ingredient} disabled={ingredient.recipie_using_count > 0} />
+                </div>
               </ListItem>
             )
           }
