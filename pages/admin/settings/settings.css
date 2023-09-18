@@ -46,7 +46,7 @@
 }
 
 .prefix {
-  margin-right: 10px;
+  margin-right: 10px !important;
   width: 90px;
 }
 
@@ -88,7 +88,7 @@
   position: absolute;
   right: 5%;
   top: 0%;
-  font-size: 200px;
+  font-size: 200px !important;
   color:rgba(21, 19, 18, 0.151)
 }
 
