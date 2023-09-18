@@ -12,9 +12,9 @@
 
 .user-menu-selector-container-selected {
   height: 64px;
-  width: 100%;
-  margin-top: 20px;
-  background: #FFE9EE;
+  width: 100% !important;
+  margin-top: 20px !important;
+  background: #FFE9EE !important;
 }
 
 .user-menu-selector {
