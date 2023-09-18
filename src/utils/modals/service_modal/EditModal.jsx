@@ -32,7 +32,7 @@ const EditModal = ({ fetchedServices, open, handleClose, data, handleUpdate }) =
         event.preventDefault();
 
         let existService = false;
-        if(serviceData.title !== data.title) {
+        if(serviceData.title.toLowerCase() !== data.title.toLowerCase()) {
              existService = await validateExistingService(serviceData)
         }
         if (!existService) {

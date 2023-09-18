@@ -31,7 +31,7 @@ const EditModal = ({ fetchedProducts, open, handleClose, data = {}, handleUpdate
     const handleSubmit = async (event) => {
         event.preventDefault();
         let existProduct = false;
-        if(productData.title !== data.title) {
+        if(productData.title.toLowerCase() !== data.title.toLowerCase()) {
             existProduct = await validateExistingProduct(productData)
         }
         if (!existProduct) {
