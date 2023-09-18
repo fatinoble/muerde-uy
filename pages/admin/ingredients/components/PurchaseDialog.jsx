@@ -12,22 +12,22 @@ const PurchaseDialog = ({ fetchIngredients, ingredient }) => {
   const [isRegisterButtonDisabled, setIsRegisterButtonDisabled] = useState(true);
   const [ingredientUnit, setIngredientUnit] = useState(ingredient?.unit?.toLowerCase());
   const [newPurchase, setNewPurchase] = useState({
-    quantity: 0,
-    cost: 0,
+    quantity: null,
+    cost: null,
     ingredient_id: ingredient?.id_ingredient
   });
 
   useEffect(() => {
     setIsRegisterButtonDisabled(
-      newPurchase.quantity === 0 || newPurchase.cost === 0
+      newPurchase.quantity === 0 || newPurchase.quantity === null || newPurchase.cost === 0 || newPurchase.cost === null
     );
   }, [newPurchase]);
 
   const handleClosePurchaseodal = () => {
     setOpenPurchaseModal(false);
     setNewPurchase({
-      quantity: 0,
-      cost: 0,
+      quantity: null,
+      cost: null,
       ingredient_id: ingredient?.id_ingredient
     });
   };

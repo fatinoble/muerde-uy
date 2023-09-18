@@ -30,7 +30,11 @@ const EditModal = ({ fetchedServices, open, handleClose, data, handleUpdate }) =
 
     const handleSubmit = async(event) => {
         event.preventDefault();
-        const existService = await validateExistingService(serviceData)
+
+        let existService = false;
+        if(serviceData.title !== data.title) {
+             existService = await validateExistingService(serviceData)
+        }
         if (!existService) {
             const infoToUpdate = { ...serviceData, tags: tags?.join(", ") || "", }
             if (infoToUpdate.image === data.image) {
