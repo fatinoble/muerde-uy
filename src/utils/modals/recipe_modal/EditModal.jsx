@@ -11,7 +11,10 @@ const EditModal = ({ fetchedRecipes, open, handleClose, data, handleUpdate }) =>
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const existRecipe = await validateExistingRecipe(productData)
+        let existRecipe = false;
+        if(productData.name !== data.name) {
+            existRecipe = await validateExistingRecipe(productData)
+        }
         if (!existRecipe) {
             handleUpdate(productData);
         } else {

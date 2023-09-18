@@ -30,7 +30,10 @@ const EditModal = ({ fetchedProducts, open, handleClose, data = {}, handleUpdate
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const existProduct = await validateExistingProduct(productData)
+        let existProduct = false;
+        if(productData.title !== data.title) {
+            existProduct = await validateExistingProduct(productData)
+        }
         if (!existProduct) {
             const infoToUpdate = { ...productData, tags: tags?.join(", ") || "", }
             if (infoToUpdate.image === data.image) {

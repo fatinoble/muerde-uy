@@ -10,14 +10,14 @@ const DecreaseQuantityDialog = ({ fetchIngredients, ingredient = {} }) => {
   const [existingIngredientError, setexistingIngredientError] = useState('');
   const [ingredientUnit, setIngredientUnit] = useState(ingredient?.unit?.toLowerCase());
   const [openDecreaseModal, setOpenDecreaseModal] = useState(false);
-  const [amountToDecrease, setAmountToDecrease] = useState(0);
+  const [amountToDecrease, setAmountToDecrease] = useState(null);
 
   const tooltipText = "Tenga en cuenta que esta acción puede impactar en el stock actual de los productos. Solo debe utilizarse en casos como vencimiento o pérdida de ingrediente. "
 
   const handleCloseDecreaseModal = () => {
     setOpenDecreaseModal(false);
     setexistingIngredientError('');
-    setAmountToDecrease(0);
+    setAmountToDecrease(null);
   };
 
   useEffect(() => {
