@@ -9,11 +9,11 @@
   background-color: white;
   border-radius: 25px;
   margin-bottom: 15px;
-  padding: 20px;
+  padding: 20px !important;
   -webkit-box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 0px 15px -10px rgba(0, 0, 0, 0.75);
-  display: flex;
-  justify-content: space-between;
+  display: flex !important;
+  justify-content: space-between !important;
 }
 
 .action-button {

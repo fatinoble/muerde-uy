@@ -64,7 +64,7 @@ const Ingredients = () => {
     } else if (stockPercentageStatus > 0 && stockPercentageStatus <= 29) {
       return { text: `Stock disponible: ${totalQuantity} ${unit}`, color: '#e0d500' };
     } else {
-      return { text: `Stock disponible: ${totalQuantity} ${unit}`, color: '' };
+      return { text: `Stock disponible: ${totalQuantity} ${unit}`, color: 'rgba(0, 0, 0, 0.6)' };
     }
   }
 
@@ -114,7 +114,7 @@ const Ingredients = () => {
                   </ListItemText >
                   <span>
                     {totalQuantityText && (
-                      <span style={{ color: totalQuantityColor, fontSize: '15px' }}>{totalQuantityText}</span>
+                      <span style={{ color: totalQuantityColor, fontSize: '14px', fontWeight: '600' }}>{totalQuantityText}</span>
                     )}
                   </span>
                 </div>
