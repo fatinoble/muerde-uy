@@ -64,7 +64,7 @@ const EditModal = ({ fetchedServices, open, handleClose, data, handleUpdate }) =
         setImageFileName(file.name);
         setServiceData({
             ...serviceData,
-            image: file.name,
+            image: file,
         });
     };
 
