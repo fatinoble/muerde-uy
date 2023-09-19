@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { getApiUrl } from '../../../../services/utils';
 import './WhatsAppServiceButton.css';
 
 const WhatsAppServiceButton = ({message}) => {
-  const phoneNumber = '+59899123455'; // TODO agregar el numbero de sofi bien, y tal vez una manera dinamica para que sea editable.
-  const encodedMessage = encodeURIComponent(message);
+  const [phoneNumber, setPhoneNumber] = useState('');
+    const encodedMessage = encodeURIComponent(message);
+
+    useEffect(() => {
+      fetchSettings();
+    }, []);
+
+    const fetchSettings = async () => {
+      try {
+        const response = await axios.get(`${getApiUrl()}/setting`);
+        const { settings } = response.data;
+        const wpp_phone = settings.find(setting => setting.key === 'phone');
+        setPhoneNumber(wpp_phone?.value || '');
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
 
   const handleClick = () => {
     window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
