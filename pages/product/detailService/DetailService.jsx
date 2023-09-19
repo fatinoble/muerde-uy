@@ -22,13 +22,6 @@ const theme = createTheme({
   },
 });
 
-const defaultSale = {
-  delivery_type: 'PICK_UP',
-  user_id: 1,
-  user_date: tomorrow.toISOString().split('T')[0],
-  products: []
-};
-
 const DetailService = () => {
 
   const router = useRouter();
@@ -78,7 +71,7 @@ const DetailService = () => {
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <CircularProgress />
         <Typography variant="body1" sx={{ marginLeft: '0.5rem' }}>
-          Cargando producto...
+          Cargando servicio...
         </Typography>
       </Box>
     );
@@ -104,24 +97,29 @@ const DetailService = () => {
       <div className="product-detail-main-container">
         <ThemeProvider theme={theme}>
           <Box className="product-detail-container">
-            <img src={image || '/images/unavailable.png'} alt={title} className="product-detail-image" />
-            <div className="product-detail-content">
-              <div className="product-detail-content-left">
-                <Typography variant="h6" className="product-detail-title-box">
-                  {title}
-                </Typography>
-                <Typography variant="h6" className="product-detail-price-box">${price}</Typography>
-              </div>
-              <div className="product-detail-content-middle">
-                <Typography className="product-detail-description-box">{description}</Typography>
-              </div>
-              <div className="product-detail-content-right">
-                <div className="service-whatsapp-button-container">
-                  <WhatsAppServiceButton message={whatsappDetailMessage} />
-                </div>
-              </div>
-
+            <div className="product-detail-image-container">
+              <img src={image || '/images/unavailable.png'} alt={title} className="product-detail-image" />
             </div>
+            <div className="product-detail-content-container">
+              <div className="product-detail-content">
+                <div className="product-detail-content-left">
+                  <Typography variant="h6" className="product-detail-title-box">
+                    {title}
+                  </Typography>
+                  <Typography className="product-detail-description-box">{description}</Typography>
+                  <Typography variant="h6" className="product-detail-price-box">${price}</Typography>
+                </div>
+                <div className="product-detail-content-middle">
+                </div>
+                <div className="product-detail-content-right">
+                  <div className="service-whatsapp-button-container">
+                    <WhatsAppServiceButton message={whatsappDetailMessage} />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
           </Box>
         </ThemeProvider>
       </div>
