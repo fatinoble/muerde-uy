@@ -274,6 +274,8 @@ const CreateModal = ({ fetchedRecipes, open, handleClose, handleAdd }) => {
                                         <TableCell>{ingredient.name}</TableCell>
                                         <TableCell>
                                             <TextField
+                                                type="number"
+                                                inputProps={{ min: "1" }}
                                                 value={quantity}
                                                 onChange={(event) => handleQuantityChange(event, ingredient?.id_ingredient)}
                                             />
