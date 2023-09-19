@@ -45,8 +45,8 @@ const Products = () => {
             .then(recipes => {
               setRecipes(recipes);
             });
+            setLoading(false);
         }
-        setLoading(false);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -112,10 +112,6 @@ const Products = () => {
       setProducts(prevProducts => prevProducts.map(product => product.id_product === editedProduct.id_product ? editedProduct : product));
     });
   };
-
-  if (loading) {
-    return <p>Cargando productos...</p>;
-  }
 
   const StyledCard = styled(Card)(({ theme, status }) => ({
     borderRadius: '10px',
