@@ -32,6 +32,7 @@ import { getOrderPaymentMethodName, getOrderStateName } from '@/utils';
 import CalendarOrders from '../reports/components/CalendarOrders';
 import { getApiUrl } from '../../../services/utils';
 import { verifyToken } from '../../../services/userService';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Orders = () => {
 
@@ -41,6 +42,7 @@ const Orders = () => {
   const [ordersState, setOrdersState] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [openStateModal, setOpenStateModal] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [openPaymentModal, setOpenPaymentModal] = useState(false);
   const [selectedState, setSelectedState] = useState('');
   const [page, setPage] = useState(0);
@@ -53,16 +55,19 @@ const Orders = () => {
         const token = localStorage.getItem('token_admin');
         const response = await verifyToken(token);
         const user = response.data;
-        if (!user || user.role !== 'ADMIN') {
+        if (!user.id_user || user.role !== 'ADMIN') {
           router.push('/admin/login');
+        } else {
+          fetchOrders();
+          fetchOrderState();
+          setLoading(false);
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
     fetchData();
-    fetchOrders();
-    fetchOrderState();
+
   }, [])
 
   const fetchOrders = async () => {
@@ -164,7 +169,13 @@ const Orders = () => {
     }
   };
 
-
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <Layout>
       <Head style={{ marginBottom: '10px' }}>

@@ -10,12 +10,14 @@ import People from "@mui/icons-material/People";
 import { formatDate } from '../../../src/utils';
 import { verifyToken } from '../../../services/userService';
 import { useRouter } from 'next/router';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Clients = () => {
   const router = useRouter();
   const [users, setUsers] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [loading, setLoading] = useState(true);
   const [role, setRole] = React.useState('all');
   const filteredUsers = role === 'all' ? users : users.filter(user => user.role === role);
   const [modalOpen, setModalOpen] = useState(false);
@@ -27,17 +29,21 @@ const Clients = () => {
         const token = localStorage.getItem('token_admin');
         const response = await verifyToken(token);
         const user = response.data;
-        if (!user || user.role !== 'ADMIN') {
+        if (!user.id_user || user.role !== 'ADMIN') {
           router.push('/admin/login');
+        } else {
+          getUsers()
+            .then(users => {
+              setUsers(users.data);
+              setLoading(false);
+            });
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
-    getUsers()
-      .then(users => {
-        setUsers(users.data);
-      });
+    fetchData();
+
   }, []);
 
   const handleChangePage = (event, newPage) => {
@@ -94,11 +100,20 @@ const Clients = () => {
       })
   }
 
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
+  }
+
   return (
     <Layout>
       <Head style={{ marginBottom: '10px' }}>
         <title>Clientes</title>
       </Head>
+      
       <div className="title-container">
         <h1><People className="icon-title" />Clientes</h1>
       </div>
@@ -154,7 +169,7 @@ const Clients = () => {
         <EditModal open={modalOpen} handleClose={handleClose} user={currentUser} handleUpdate={editUser} />
       ) : null}
     </Layout>
-  );
+    );
 };
 
 export default Clients;

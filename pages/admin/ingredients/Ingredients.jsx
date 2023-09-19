@@ -13,9 +13,11 @@ import { getApiUrl } from '../../../services/utils';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { verifyToken } from '../../../services/userService';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Ingredients = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
@@ -24,17 +26,20 @@ const Ingredients = () => {
         const token = localStorage.getItem('token_admin');
         const response = await verifyToken(token);
         const user = response.data;
-        if (!user || user.role !== 'ADMIN') {
+        if (!user.id_user || user.role !== 'ADMIN') {
           router.push('/admin/login');
+        } else {
+          if (!ingredients.length) {
+            fetchIngredients();
+            setLoading(false);
+          }
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
     fetchData();
-    if (!ingredients.length) {
-      fetchIngredients();
-    }
+
   }, []);
 
   const fetchIngredients = async () => {
@@ -66,6 +71,13 @@ const Ingredients = () => {
     } else {
       return { text: `Stock disponible: ${totalQuantity} ${unit}`, color: 'rgba(0, 0, 0, 0.6)' };
     }
+  }
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
   }
 
   return (

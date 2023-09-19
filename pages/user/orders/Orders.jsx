@@ -22,23 +22,25 @@ const Orders = () => {
   const [isTransferModalOpen, setTransferModalOpen] = useState(false);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem('token_user');
+        const response = await verifyToken(token);
+        const user = response.data;
+        if (!user.id_user) {
+          router.push('/user/login');
+        }
+        setUserId(user.id_user);
+        
+        fetchOrders(user.id_user);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
     fetchData();
   }, [])
 
-  const fetchData = async () => {
-    try {
-      const token = localStorage.getItem('token_user');
-      const response = await verifyToken(token);
-      const user = response.data;
-      if (!user) {
-        router.push('/user/login');
-      }
-      setUserId(user.id_user);
-      fetchOrders(user.id_user);
-    } catch (error) {
-      console.error('Error fetching user data:', error);
-    }
-  };
+  
 
   const fetchOrders = async (userId) => {
     try {

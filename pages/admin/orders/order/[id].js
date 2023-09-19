@@ -7,6 +7,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import { getOrderPaymentMethodName, getOrderStateName } from '@/utils';
 import { getApiUrl } from '../../../../services/utils';
 import { verifyToken } from '../../../../services/userService';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function OrderScreen() {
 
@@ -24,6 +25,7 @@ function OrderScreen() {
     const [order, setOrder] = useState({});
     const [ordersState, setOrdersState] = useState([]);
     const [openStateModal, setOpenStateModal] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [selectedState, setSelectedState] = useState('');
     const [fetchedOrderState, setFetchedOrderState] = useState('');
 
@@ -33,17 +35,20 @@ function OrderScreen() {
             try {
                 const token = localStorage.getItem('token_admin');
                 const response = await verifyToken(token);
-              const user = response.data;
-              if (!user || user.role !== 'ADMIN') {
-                router.push('/admin/login');
-              }
+                const user = response.data;
+                if (!user.id_user || user.role !== 'ADMIN') {
+                    router.push('/admin/login');
+                } else {
+                    fetchOrder();
+                    fetchOrderState();
+                    setLoading(false);
+                }
             } catch (error) {
-              console.error('Error fetching user data:', error);
+                console.error('Error fetching user data:', error);
             }
-          };
-          fetchData();
-        fetchOrder();
-        fetchOrderState();
+        };
+        fetchData();
+
 
     }, [])
 
@@ -95,7 +100,13 @@ function OrderScreen() {
         setOpenStateModal(true);
     };
 
-
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <CircularProgress />
+            </div>
+        );
+    }
     return (
 
         <Layout>

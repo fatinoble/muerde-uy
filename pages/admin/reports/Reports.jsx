@@ -16,6 +16,7 @@ import Warnings from './components/Warnings';
 import CSVDownloader from '../../../src/components/CSVDownloader'
 import { useRouter } from 'next/router';
 import { verifyToken } from '../../../services/userService';
+import CircularProgress from '@mui/material/CircularProgress';
 const ProductStockChartWithoutSSR = dynamic(
   import("./components/ProductStockChart"),
   { ssr: false }
@@ -24,6 +25,7 @@ const ProductStockChartWithoutSSR = dynamic(
 const Reports = () => {
   const router = useRouter();
   const [ingredients, setIngredients] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [productsData, setProductsData] = useState([]);
   const [orderStatusData, setOrderStatusData] = useState([]);
 
@@ -33,23 +35,26 @@ const Reports = () => {
         const token = localStorage.getItem('token_admin');
         const response = await verifyToken(token);
         const user = response.data;
-        if (!user || user.role !== 'ADMIN') {
+        if (!user.id_user || user.role !== 'ADMIN') {
           router.push('/admin/login');
+        } else {
+          if (!ingredients.length) {
+            fetchIngredients();
+          }
+          if (!productsData.length) {
+            fetchProductsData();
+          }
+          if (!orderStatusData.length) {
+            fetchOrderStatusData();
+          }
+          setLoading(false);
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
     fetchData();
-    if (!ingredients.length) {
-      fetchIngredients();
-    }
-    if (!productsData.length) {
-      fetchProductsData();
-    }
-    if (!orderStatusData.length) {
-      fetchOrderStatusData();
-    }
+
   }, []);
 
   const fetchOrderStatusData = async () => {
@@ -132,7 +137,13 @@ const Reports = () => {
       }
     )
   })
-
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
 
     <Layout>

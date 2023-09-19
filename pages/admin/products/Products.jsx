@@ -13,6 +13,7 @@ import { styled } from '@mui/system';
 import { useRouter } from 'next/router';
 import { verifyToken } from '../../../services/userService';
 import { getAllRecipes } from '../../../services/recipeService';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Products = () => {
   const router = useRouter();
@@ -32,23 +33,26 @@ const Products = () => {
         const token = localStorage.getItem('token_admin');
         const response = await verifyToken(token);
         const user = response.data;
-        if (!user || user.role !== 'ADMIN') {
+        if (!user.id_user || user.role !== 'ADMIN') {
           router.push('/admin/login');
+        } else {
+          getAllProducts()
+            .then(products => {
+              setProducts(products);
+              setLoading(false);
+            });
+          getAllRecipes()
+            .then(recipes => {
+              setRecipes(recipes);
+            });
         }
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
     fetchData();
-    getAllProducts()
-      .then(products => {
-        setProducts(products);
-        setLoading(false);
-      });
-    getAllRecipes()
-      .then(recipes => {
-        setRecipes(recipes);
-      });
+
   }, []);
 
   const editProduct = (editedProduct) => {
@@ -72,9 +76,9 @@ const Products = () => {
           });
       })
     getAllRecipes()
-    .then(recipes => {
-      setRecipes(recipes);
-    });
+      .then(recipes => {
+        setRecipes(recipes);
+      });
   }
 
   const handleOpenCreateModal = () => {
@@ -152,6 +156,13 @@ const Products = () => {
     },
   }));
 
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <Layout>
       <Head style={{ marginBottom: '10px' }}>
@@ -161,26 +172,26 @@ const Products = () => {
         <h1><Storefront className="icon-title" />Productos</h1>
       </div>
       <Box display="flex" justifyContent="center" alignItems="center">
-      <Tooltip title={anyRecipeWithoutProduct ? "" : "No hay recetas disponibles para asociar a un nuevo producto, crea una receta primero"}>
-      <span>
-          <InvertedButton 
-            variant="outlined" 
-            onClick={handleOpenCreateModal}
-            disabled={!anyRecipeWithoutProduct}
+        <Tooltip title={anyRecipeWithoutProduct ? "" : "No hay recetas disponibles para asociar a un nuevo producto, crea una receta primero"}>
+          <span>
+            <InvertedButton
+              variant="outlined"
+              onClick={handleOpenCreateModal}
+              disabled={!anyRecipeWithoutProduct}
+            >
+              Nuevo producto
+            </InvertedButton>
+          </span>
+        </Tooltip>
+        {!anyRecipeWithoutProduct && (
+          <InvertedButton
+            variant="outlined"
+            color="secondary"
+            onClick={() => router.push('/admin/recipes')}
           >
-            Nuevo producto
+            Ir a recetas
           </InvertedButton>
-        </span>
-      </Tooltip>
-      {!anyRecipeWithoutProduct && (
-        <InvertedButton 
-          variant="outlined"
-          color="secondary"
-          onClick={() => router.push('/admin/recipes')}
-        >
-          Ir a recetas
-        </InvertedButton>
-      )}
+        )}
       </Box>
       <ProductContainer>
         {products.map((product) => (
