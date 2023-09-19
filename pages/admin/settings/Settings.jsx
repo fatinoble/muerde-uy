@@ -13,12 +13,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import { getApiUrl } from '../../../services/utils';
 import { verifyToken } from '../../../services/userService';
 import { useRouter } from 'next/router';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Settings = () => {
   const router = useRouter();
   const [prefix, setPrefix] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [numberError, setNumberError] = useState('');
+  const [loading, setLoading] = useState(true);
   const [enablePhoneEdit, setEnablePhoneEdit] = useState(false);
   const [enableBankEdit, setEnableBankEdit] = useState(false);
   const [accountNumber, setAccountNumber] = useState('');
@@ -34,15 +36,18 @@ const Settings = () => {
         const token = localStorage.getItem('token_admin');
         const response = await verifyToken(token);
         const user = response.data;
-        if (!user || user.role !== 'ADMIN') {
+        if (!user.id_user || user.role !== 'ADMIN') {
           router.push('/admin/login');
+        } else {
+          fetchSettings();
+          setLoading(false);
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
     fetchData();
-    fetchSettings();
+
   }, []);
 
   useEffect(() => {
@@ -130,6 +135,13 @@ const Settings = () => {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   };
 
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <Layout>
       <Head style={{ marginBottom: '10px' }}>

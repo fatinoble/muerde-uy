@@ -10,6 +10,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { verifyToken } from '../../../services/userService';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Services = () => {
   const router = useRouter();
@@ -28,19 +29,21 @@ const Services = () => {
         const token = localStorage.getItem('token_admin');
         const response = await verifyToken(token);
         const user = response.data;
-        if (!user || user.role !== 'ADMIN') {
+        if (!user.id_user || user.role !== 'ADMIN') {
           router.push('/admin/login');
+        } else {
+          getAllServices()
+            .then(services => {
+              setServices(services);
+            });
+            setLoading(false);
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
     fetchData();
-    getAllServices()
-      .then(services => {
-        setServices(services);
-        setLoading(false);
-      });
+
   }, []);
 
   const editService = (editedService) => {
@@ -99,7 +102,11 @@ const Services = () => {
   };
 
   if (loading) {
-    return <p>Cargando servicios...</p>;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
   }
 
   const ServiceContainer = styled('div')({

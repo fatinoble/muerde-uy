@@ -14,12 +14,14 @@ import { useRouter } from 'next/router';
 import { Tooltip } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import { verifyToken } from '../../../services/userService';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [recipeToEdit, setRecipeToEdit] = useState(null);
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [recipeToDelete, setRecipeToDelete] = useState(null);
@@ -32,18 +34,21 @@ const Recipes = () => {
         const token = localStorage.getItem('token_admin');
         const response = await verifyToken(token);
         const user = response.data;
-        if (!user || user.role !== 'ADMIN') {
+        if (!user.id_user || user.role !== 'ADMIN') {
           router.push('/admin/login');
+        } else {
+          getAllRecipes()
+            .then(recipes => {
+              setRecipes(recipes);
+            });
+          setLoading(false);
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
     };
     fetchData();
-    getAllRecipes()
-      .then(recipes => {
-        setRecipes(recipes);
-      });
+
   }, []);
 
   const editRecipe = (editedRecipe) => {
@@ -146,7 +151,13 @@ const Recipes = () => {
       borderColor: 'rgb(216, 130, 130)',
     },
   }));
-
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <CircularProgress />
+      </div>
+    );
+  }
   return (
     <Layout>
       <Head style={{ marginBottom: '10px' }}>

@@ -46,7 +46,8 @@ const OrderScreen = () => {
             const token = localStorage.getItem('token_user');
             const response = await verifyToken(token);
             const user = response.data;
-            if (!user) {
+            console.log(user.id_user)
+            if (!user.id_user) {
                 router.push('/user/login');
             }
             fetchOrder();
