@@ -34,11 +34,12 @@ const CreateModal = ({ fetchedRecipes, open, handleClose, handleAdd }) => {
                 };
             });
 
-            const transformedProductData = {
+            let transformedProductData = {
                 ...productData,
                 ingredients: transformedIngredients,
             };
 
+            transformedProductData = sanitizeIngredients(transformedProductData);
             handleAdd(transformedProductData);
         } else {
             setErrors((prevErrors) => ({
@@ -46,6 +47,17 @@ const CreateModal = ({ fetchedRecipes, open, handleClose, handleAdd }) => {
                 name: 'Ya existe una receta con ese nombre.',
             }));
         }
+    };
+
+    const sanitizeIngredients = (productData) => {
+        const sanitizedIngredients = productData.ingredients.filter(ingredient => {
+            return ingredient.quantity && ingredient.unit;
+        });
+    
+        return {
+            ...productData,
+            ingredients: sanitizedIngredients,
+        };
     };
 
     const validateExistingRecipe = async (newRecipe) => {
@@ -156,7 +168,7 @@ const CreateModal = ({ fetchedRecipes, open, handleClose, handleAdd }) => {
     const isMismatchBetweenQuantityAndUnit = () => {
         for (let id in ingredientQuantities) {
             const { quantity, unit } = ingredientQuantities[id];
-            if ((quantity && !unit) || (unit && !quantity)) {
+            if ((quantity && !unit)) {
                 return true;
             }
         }
@@ -318,7 +330,7 @@ const CreateModal = ({ fetchedRecipes, open, handleClose, handleAdd }) => {
                             borderColor: 'rgb(216, 130, 130)',
                         },
                     }}
-                    disabled={isAnyError() || !isAnyQuantity() || isMismatchBetweenQuantityAndUnit()}
+                    disabled={isAnyError() || !isAnyQuantity() || isMismatchBetweenQuantityAndUnit() || sanitizeIngredients(productData)?.ingredients?.length == 0}
                 >
                     Dar de alta
                 </Button>

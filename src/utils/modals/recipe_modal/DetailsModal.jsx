@@ -37,7 +37,7 @@ const DetailsModal = ({ open, handleClose, data }) => {
                     <strong>Nombre: </strong>
                     <span>{data.name}</span>
                 </Typography>
-                <Typography variant="body1">
+                <Typography variant="body1" style={{ wordWrap: 'break-word', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     <strong>Instrucciones: </strong>
                     <span>{data.instructions}</span>
                 </Typography>
