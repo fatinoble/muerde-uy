@@ -12,7 +12,7 @@ const EditModal = ({ fetchedRecipes, open, handleClose, data, handleUpdate }) =>
     const handleSubmit = async (event) => {
         event.preventDefault();
         let existRecipe = false;
-        if(productData.name.toLowerCase() !== data.name.toLowerCase()) {
+        if (productData.name.toLowerCase() !== data.name.toLowerCase()) {
             existRecipe = await validateExistingRecipe(productData)
         }
         if (!existRecipe) {
@@ -45,19 +45,19 @@ const EditModal = ({ fetchedRecipes, open, handleClose, data, handleUpdate }) =>
     };
 
     const handleIngredientChange = (event) => {
-        const ingredientId = event.target.name; 
+        const ingredientId = event.target.name;
         const newQuantity = event.target.value;
 
-        if (newQuantity !== "" && !/^((\.\d+)?|[1-9]\d*(\.\d*)?)$/.test(newQuantity)) {
+        if (isNaN(newQuantity) || newQuantity < 0 || newQuantity > 9999) {
             return;
         }
-    
+
         setProductData(prevData => ({
-            ...prevData, 
+            ...prevData,
             ingredients: prevData.ingredients.map(ingredient =>
                 ingredient.ingredient_id === parseInt(ingredientId) ?
-                { ...ingredient, quantity: newQuantity } :
-                ingredient
+                    { ...ingredient, quantity: newQuantity } :
+                    ingredient
             )
         }));
     };
@@ -85,7 +85,7 @@ const EditModal = ({ fetchedRecipes, open, handleClose, data, handleUpdate }) =>
             [name]: errorMessage,
         }));
 
-        return errorMessage === ""; 
+        return errorMessage === "";
     };
 
     const isAnyError = () => {
@@ -110,34 +110,49 @@ const EditModal = ({ fetchedRecipes, open, handleClose, data, handleUpdate }) =>
                 <Typography variant="h5" align="center" sx={{ fontWeight: 'bold', color: 'rgb(216, 130, 130)', marginBottom: 2 }} >
                     Actualizar receta
                 </Typography>
-                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre" value={productData.name} onChange={handleChange}  inputProps={{ maxLength: 50 }} helperText={errors.name}  error={errors.name} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones" value={productData.instructions}  inputProps={{ maxLength: 800 }} onChange={handleChange} helperText={errors.instructions} />
-                <TextField variant="outlined" margin="normal" required fullWidth name="preparationTimeMinutes" label="Tiempo de preparación" 
-                type='number'
-                inputProps={{ min: 1, max: 999, step: 1, pattern: "[0-9]*" }} 
-                value={productData.preparationTimeMinutes} 
-                onChange={handleChange} 
-                helperText={errors.preparationTimeMinutes}/>
-                
+
+                <TextField variant="outlined" margin="normal" required fullWidth name="name" label="Nombre"
+                    value={productData.name}
+                    onChange={handleChange}
+                    inputProps={{ maxLength: 50 }}
+                    helperText={errors.name}
+                    error={errors.name} />
+
+                <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones"
+                    value={productData.instructions}
+                    multiline
+                    rows={4}
+                    inputProps={{ maxLength: 2500 }}
+                    onChange={handleChange}
+                    helperText={errors.instructions} />
+
+                <TextField variant="outlined" margin="normal" required fullWidth name="preparationTimeMinutes" label="Tiempo de preparación"
+                    type='number'
+                    inputProps={{ min: 1, max: 999, step: 1, pattern: "[0-9]*" }}
+                    value={productData.preparationTimeMinutes}
+                    onChange={handleChange}
+                    helperText={errors.preparationTimeMinutes} />
+
                 <br /><br /><br />
                 <Typography variant="body1">
                     <strong>Ingredientes:</strong>
                 </Typography><br />
-                <div style={{maxHeight: '300px', overflowY: 'auto'}}>
+                <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
                     {productData.ingredients.map((ingredient) => (
                         <div key={ingredient.ingredient_id}>
                             <Typography variant="body1">{ingredient.name}</Typography>
                             <Typography variant="body1">
                                 <TextField
+                                type='number'
                                     variant="outlined"
                                     margin="normal"
                                     required
                                     fullWidth
-                                    inputProps={{ min: 1, step: 0.01 }}
-                                    name={ingredient.ingredient_id} 
+                                    inputProps={{ min: 0.1, step: 0.1 }}
+                                    name={ingredient.ingredient_id}
                                     label="Cantidad"
-                                    value={ingredient.quantity} 
-                                    onChange={handleIngredientChange} 
+                                    value={ingredient.quantity}
+                                    onChange={handleIngredientChange}
                                 />
                             </Typography>
                         </div>

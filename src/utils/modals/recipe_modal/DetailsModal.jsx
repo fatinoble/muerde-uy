@@ -11,6 +11,8 @@ const DetailsModal = ({ open, handleClose, data }) => {
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     width: '80%',
+                    maxHeight: '85%',
+                    overflowY: 'scroll',
                     maxWidth: '500px',
                     bgcolor: 'background.paper',
                     borderRadius: '10px',
@@ -37,7 +39,7 @@ const DetailsModal = ({ open, handleClose, data }) => {
                     <strong>Nombre: </strong>
                     <span>{data.name}</span>
                 </Typography>
-                <Typography variant="body1" style={{ wordWrap: 'break-word', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                <Typography variant="body1" style={{ wordWrap: 'break-word', overflowY: 'scroll', maxHeight: '200px', textOverflow: 'ellipsis' }}>
                     <strong>Instrucciones: </strong>
                     <span>{data.instructions}</span>
                 </Typography>
@@ -72,7 +74,7 @@ const DetailsModal = ({ open, handleClose, data }) => {
                             <span>Nombre: {data.product.title}</span><br />
                             <span>Precio: {data.product.price}</span><br />
                             <span>Foto: {data.product.image}</span><br />
-                            <span>Descripción: {data.product.description}</span><br />
+                            <span style={{ wordWrap: 'break-word', overflow: 'hidden', textOverflow: 'ellipsis' }}>Descripción: {data.product.description}</span><br />
                             <span>Tags: {data.product.tags}</span><br />
                             <span>Id del catálogo: {data.product.catalog.catalog_id}</span><br />
                             <span>Nombre del catálogo: {data.product.catalog.type}</span><br />
