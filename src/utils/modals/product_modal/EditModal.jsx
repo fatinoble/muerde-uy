@@ -191,7 +191,14 @@ const EditModal = ({ fetchedProducts, open, handleClose, data = {}, handleUpdate
                     </Button>
                     {imageFileName && <Typography variant="body1">{imageFileName}</Typography>}
                 </label>
-                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" inputProps={{ maxLength: 150 }} value={productData.description} onChange={handleChange} helperText={errors.description} error={errors.description} />
+                
+                <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" 
+                inputProps={{ maxLength: 150 }} 
+                multiline
+                rows={2} 
+                value={productData.description} 
+                onChange={handleChange} helperText={errors.description} error={errors.description} />
+
                 <DynamicTags tags={tags} setTags={setTags} />
                 <Select value={productData.status || 'ENABLED'} onChange={handleChange} name="status">
                     <MenuItem value={"ENABLED"}>Activo</MenuItem>

@@ -213,7 +213,9 @@ const CreateModal = ({ fetchedRecipes, open, handleClose, handleAdd }) => {
 
                 <TextField variant="outlined" margin="normal" required fullWidth name="instructions" label="Instrucciones"
                     value={productData.instructions}
-                    inputProps={{ maxLength: 800 }}
+                    inputProps={{ maxLength: 2500 }}
+                    multiline
+                    rows={4}
                     onChange={handleChange}
                     helperText={errors.instructions} />
 
@@ -287,7 +289,7 @@ const CreateModal = ({ fetchedRecipes, open, handleClose, handleAdd }) => {
                                         <TableCell>
                                             <TextField
                                                 type="number"
-                                                inputProps={{ min: "1" }}
+                                                inputProps={{ min: 0.1, step: 0.1 }}
                                                 value={quantity}
                                                 onChange={(event) => handleQuantityChange(event, ingredient?.id_ingredient)}
                                             />

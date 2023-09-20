@@ -198,6 +198,8 @@ const EditModal = ({ fetchedServices, open, handleClose, data, handleUpdate }) =
                 <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" 
                 inputProps={{ maxLength: 150 }} 
                 value={serviceData.description} 
+                multiline
+                rows={2}
                 onChange={handleChange} 
                 helperText={errors.description} 
                 error={errors.description} 

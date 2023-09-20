@@ -208,6 +208,8 @@ const CreateModal = ({ fetchedProducts, open, handleClose, handleAdd }) => {
                 <TextField variant="outlined" margin="normal" required fullWidth name="description" label="Description" 
                 inputProps={{ maxLength: 150 }} 
                 value={productData.description} 
+                multiline
+                rows={2}
                 onChange={handleChange} 
                 helperText={errors.description} 
                 error={errors.description}
