@@ -87,6 +87,9 @@ const SalesByDateChart = ({ initStartDate, initEndDate, tomorrow }) => {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                inputProps={{
+                  max: endDate,
+                }}
               />
             </Grid>
             <Grid item>
@@ -97,6 +100,9 @@ const SalesByDateChart = ({ initStartDate, initEndDate, tomorrow }) => {
                 onChange={(e) => setEndDate(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
+                }}
+                inputProps={{
+                  min: startDate,
                 }}
               />
             </Grid>
