@@ -73,6 +73,9 @@ const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow, getRev
             InputLabelProps={{
               shrink: true,
             }}
+            inputProps={{
+              max: endDate,
+            }}
           />
         </Grid>
         <Grid item>
@@ -83,6 +86,9 @@ const ReviewScoreQuantityChart = ({ initStartDate, initEndDate, tomorrow, getRev
             onChange={(e) => setEndDate(e.target.value)}
             InputLabelProps={{
               shrink: true,
+            }}
+            inputProps={{
+              min: startDate,
             }}
           />
         </Grid>
