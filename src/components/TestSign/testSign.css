@@ -1,0 +1,29 @@
+.test-sign {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 1.5%;
+  left: 5%;
+  height: 20px;
+  background-color: rgba(223, 90, 212, 0.481);
+  padding: 5px;
+  border-radius: 15%;
+  font-family: 'roboto';
+  border: 1px solid;
+}
+
+.test-sign-user {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 1.5%;
+  left: 1%;
+  height: 20px;
+  background-color: rgba(223, 90, 212, 0.481);
+  padding: 5px;
+  border-radius: 15%;
+  font-family: 'roboto';
+  border: 1px solid;
+}
