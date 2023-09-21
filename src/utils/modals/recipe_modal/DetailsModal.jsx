@@ -73,7 +73,6 @@ const DetailsModal = ({ open, handleClose, data }) => {
                             <span>Id: {data.product.id_product}</span><br />
                             <span>Nombre: {data.product.title}</span><br />
                             <span>Precio: {data.product.price}</span><br />
-                            <span>Foto: {data.product.image}</span><br />
                             <span style={{ wordWrap: 'break-word', overflow: 'hidden', textOverflow: 'ellipsis' }}>Descripción: {data.product.description}</span><br />
                             <span>Tags: {data.product.tags}</span><br />
                             <span>Id del catálogo: {data.product.catalog.catalog_id}</span><br />
